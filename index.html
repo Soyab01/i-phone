@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Store Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background: #f0f2f5; font-family: 'Segoe UI', sans-serif; padding: 20px; color: #1e293b; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .header h1 { font-size: 22px; color: #1a202c; }
+        .menu-btn { background: #1a202c; color: white; padding: 10px 20px; text-decoration: none; border-radius: 8px; font-weight: bold; }
+        
+        .box { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        .box h2 { font-size: 18px; margin-bottom: 15px; color: #0071e3; border-bottom: 2px solid #f0f2f5; padding-bottom: 10px; }
+
+        .file-upload-wrapper { display: flex; gap: 15px; align-items: center; }
+        input[type="file"] { border: 1px dashed #cbd5e1; padding: 10px; border-radius: 8px; width: 100%; cursor: pointer; }
+        .btn-upload { background: #0071e3; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; white-space: nowrap; }
+
+        .admin-form { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .admin-form input[type="text"], .admin-form select, .admin-form textarea { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; }
+        .admin-form textarea { grid-column: span 2; height: 80px; resize: none; }
+        .file-group { display: flex; flex-direction: column; gap: 5px; }
+        .file-group label { font-size: 12px; font-weight: bold; color: #64748b; }
+        .add-btn { grid-column: span 2; background: #34c759; border: none; padding: 15px; color: white; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; }
+
+        table { width: 100%; border-collapse: collapse; min-width: 800px; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        td img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; }
+        .stock-btn { padding: 8px 12px; border-radius: 6px; border: none; cursor: pointer; font-weight: bold; font-size: 12px; }
+        .btn-in { background: #e3f8e8; color: #166534; }
+        .btn-out { background: #ffebeb; color: #991b1b; }
+        .del-btn { background: #fee2e2; color: #ef4444; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        #loading { display: none; color: #0071e3; font-weight: bold; text-align: center; grid-column: span 2; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1><i class="fa-solid fa-server"></i> Firebase Admin Panel</h1>
+        <a href="index.html" class="menu-btn"><i class="fa-solid fa-shop"></i> View Shop</a>
+    </div>
+
+    <!-- UPDATE BANNER -->
+    <div class="box">
+        <h2><i class="fa-solid fa-image"></i> Update Slider Banner</h2>
+        <div class="file-upload-wrapper">
+            <input type="file" id="banner-input" accept="image/*">
+            <button class="btn-upload" id="banner-btn">Upload Banner</button>
+        </div>
+    </div>
+
+    <!-- ADD PRODUCT -->
+    <div class="box">
+        <h2><i class="fa-solid fa-box-open"></i> Add New Product to Firebase</h2>
+        <div class="admin-form">
+            <input type="text" id="p-title" placeholder="Item Name" required>
+            <select id="p-cat">
+                <option value="Phone">Phone</option><option value="Cooler">Cooler</option>
+                <option value="AC">AC</option><option value="Fan">Fan</option>
+            </select>
+            <input type="text" id="p-price" value="लगभग ₹15,000 - ₹20,000 तक" required>
+            <textarea id="p-desc" placeholder="Product Details..."></textarea>
+            
+            <div class="file-group"><label>Main Image</label><input type="file" id="p-img1" accept="image/*" required></div>
+            <div class="file-group"><label>Image 2 (Opt)</label><input type="file" id="p-img2" accept="image/*"></div>
+            <div class="file-group"><label>Image 3 (Opt)</label><input type="file" id="p-img3" accept="image/*"></div>
+
+            <div id="loading">Uploading to Firebase...</div>
+            <button class="add-btn" id="submit-btn">Save to Live Shop</button>
+        </div>
+    </div>
+
+    <!-- MANAGE -->
+    <div class="box" style="overflow-x: auto;">
+        <h2><i class="fa-solid fa-database"></i> Live Database Items</h2>
+        <table>
+            <thead><tr><th>Image</th><th>Details</th><th>Price</th><th>Stock</th><th>Action</th></tr></thead>
+            <tbody id="table-body"></tbody>
+        </table>
+    </div>
+
+    <!-- FIREBASE INTEGRATION -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+        import { getDatabase, ref, set, get, onValue, remove } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD3-x1FoIvtx3XlztXeAFOnF3KuEcBJcSI",
+            authDomain: "soyfa-education.firebaseapp.com",
+            databaseURL: "https://soyfa-education-default-rtdb.firebaseio.com",
+            projectId: "soyfa-education",
+            storageBucket: "soyfa-education.firebasestorage.app",
+            messagingSenderId: "1073874852270",
+            appId: "1:1073874852270:web:ce97dbace15fee50c1d03f",
+            measurementId: "G-0S5XC7DBXB"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Compress Image
+        const compressImage = (file, maxWidth = 800) => {
+            return new Promise((resolve) => {
+                if (!file) return resolve(null);
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = e => {
+                    const img = new Image(); img.src = e.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let w = img.width, h = img.height;
+                        if (w > maxWidth) { h = Math.round((h * maxWidth) / w); w = maxWidth; }
+                        canvas.width = w; canvas.height = h;
+                        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                        resolve(canvas.toDataURL('image/jpeg', 0.6));
+                    };
+                };
+            });
+        };
+
+        // SEED DEMO DATA IF DB IS EMPTY
+        const seedDemoData = async () => {
+            const snapshot = await get(ref(db, 'store/products'));
+            if(!snapshot.exists()) {
+                const demoItems =[
+                    { id: Date.now()+1, title: "Apple iPhone 14 Pro", category: "Phone", price: "लगभग ₹15,000 - ₹20,000 तक", desc: "Premium quality.", inStock: true, images:["https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500"] },
+                    { id: Date.now()+2, title: "Voltas Window AC", category: "AC", price: "लगभग ₹15,000 - ₹20,000 तक", desc: "Best cooling.", inStock: true, images:["https://images.unsplash.com/photo-1620916297397-a4a5402a3c6c?w=500"] },
+                    { id: Date.now()+3, title: "Bajaj Cooler", category: "Cooler", price: "लगभग ₹15,000 - ₹20,000 तक", desc: "Desert cooler.", inStock: false, images:["https://images.unsplash.com/photo-1688647037599-46726257d77b?w=500"] }
+                ];
+                demoItems.forEach(item => set(ref(db, 'store/products/' + item.id), item));
+                set(ref(db, 'store/banner'), "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1200");
+            }
+        };
+        seedDemoData();
+
+        // READ LIVE DATA
+        onValue(ref(db, 'store/products'), (snapshot) => {
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = '';
+            const items =[];
+            snapshot.forEach(child => { items.push({ id: child.key, ...child.val() }); });
+            
+            items.reverse().forEach(p => {
+                const stockClass = p.inStock ? 'btn-in' : 'btn-out';
+                const stockText = p.inStock ? 'In Stock' : 'Out of Stock';
+                tbody.innerHTML += `
+                    <tr>
+                        <td><img src="${p.images[0]}" alt=""></td>
+                        <td><strong>${p.title}</strong><br><small>${p.category}</small></td>
+                        <td>${p.price}</td>
+                        <td><button class="stock-btn ${stockClass}" onclick="window.toggleStock('${p.id}', ${p.inStock})">${stockText}</button></td>
+                        <td><button class="del-btn" onclick="window.deleteProduct('${p.id}')"><i class="fa-solid fa-trash"></i></button></td>
+                    </tr>
+                `;
+            });
+        });
+
+        // ADD PRODUCT
+        document.getElementById('submit-btn').addEventListener('click', async () => {
+            const title = document.getElementById('p-title').value;
+            const file1 = document.getElementById('p-img1').files[0];
+            if(!title || !file1) return alert("Name aur 1st Image lagana zaroori hai!");
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('submit-btn').style.display = 'none';
+
+            const img1 = await compressImage(file1);
+            const img2 = await compressImage(document.getElementById('p-img2').files[0]);
+            const img3 = await compressImage(document.getElementById('p-img3').files[0]);
+
+            const id = Date.now().toString();
+            await set(ref(db, 'store/products/' + id), {
+                title, category: document.getElementById('p-cat').value,
+                price: document.getElementById('p-price').value,
+                desc: document.getElementById('p-desc').value,
+                inStock: true, images: [img1, img2, img3].filter(i => i)
+            });
+
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('submit-btn').style.display = 'block';
+            alert("✅ Uploaded to Firebase!");
+        });
+
+        // BANNER UPLOAD
+        document.getElementById('banner-btn').addEventListener('click', async () => {
+            const file = document.getElementById('banner-input').files[0];
+            if(!file) return alert("Select image!");
+            document.getElementById('banner-btn').innerText = "Uploading...";
+            const img = await compressImage(file, 1200);
+            await set(ref(db, 'store/banner'), img);
+            document.getElementById('banner-btn').innerText = "Upload Banner";
+            alert("✅ Banner Updated Live!");
+        });
+
+        // GLOBAL ACTIONS
+        window.toggleStock = (id, currentStatus) => {
+            set(ref(db, `store/products/${id}/inStock`), !currentStatus);
+        };
+        window.deleteProduct = (id) => {
+            if(confirm("Permanently Delete?")) remove(ref(db, `store/products/${id}`));
+        };
+    </script>
+</body>
+</html>
