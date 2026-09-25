@@ -1,285 +1,603 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>I Phone Center, Ladnun - Live Menu</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        /* ====== ULTRA PREMIUM 3D APPLE UI ====== */
-        :root {
-            --primary: #0071e3;
-            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
-            --glass-bg: rgba(255, 255, 255, 0.6);
-            --glass-border: 1px solid rgba(255, 255, 255, 0.8);
-            --text-dark: #1d1d1f;
-            --shadow-3d: 0 20px 40px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05), inset 0 2px 0 rgba(255,255,255,0.6);
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Royal Dine | Artisanal Dine-in Menu</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-        
-        body { background: var(--bg-gradient); color: var(--text-dark); overflow-x: hidden; min-height: 100vh; }
+  <style>
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: #080c14;
+      color: #f8fafc;
+    }
+    .font-serif { font-family: 'Playfair Display', serif; }
 
-        /* ====== LOADER ====== */
-        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-gradient); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .spinner { width: 50px; height: 50px; border: 5px solid rgba(0,113,227,0.2); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
+    /* Custom Unique Smooth Rounded Scrollbar */
+    ::-webkit-scrollbar { width: 7px; height: 7px; }
+    ::-webkit-scrollbar-track { background: #080c14; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 9999px;
+      transition: background 0.3s;
+    }
+    ::-webkit-scrollbar-thumb:hover { background: #f59e0b; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* ====== NAVBAR ====== */
-        nav {
-            display: flex; justify-content: center; align-items: center; padding: 15px;
-            background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border-bottom: var(--glass-border); position: sticky; top: 0; z-index: 100;
-        }
-
-        .logo { 
-            font-size: 22px; font-weight: 900; color: #000; text-transform: uppercase; letter-spacing: 1.5px;
-            display: flex; align-items: center; gap: 8px; text-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .logo i { font-size: 28px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2)); }
-
-        /* ====== BANNER ====== */
-        .banner-container { width: 100%; max-width: 1200px; margin: 20px auto; padding: 0 15px; perspective: 1000px; }
-        .banner-container img {
-            width: 100%; max-height: 400px; object-fit: cover; border-radius: 24px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.15); transform-style: preserve-3d;
-            animation: floatBanner 6s ease-in-out infinite; border: var(--glass-border);
-        }
-        @keyframes floatBanner { 0%, 100% { transform: translateY(0) rotateX(0); } 50% { transform: translateY(-10px) rotateX(2deg); } }
-
-        /* ====== CATEGORIES ====== */
-        .categories-wrapper { padding: 0 15px; margin: 30px 0 20px; }
-        .categories { display: flex; gap: 15px; overflow-x: auto; scrollbar-width: none; padding-bottom: 10px; }
-        .categories::-webkit-scrollbar { display: none; }
-        .cat-btn {
-            background: var(--glass-bg); backdrop-filter: blur(10px); border: var(--glass-border);
-            padding: 12px 28px; color: #333; border-radius: 30px; cursor: pointer; font-size: 15px;
-            font-weight: 700; box-shadow: 0 4px 15px rgba(0,0,0,0.05); white-space: nowrap; transition: 0.4s ease;
-        }
-        .cat-btn.active, .cat-btn:hover { background: #000; color: #fff; transform: translateY(-4px); box-shadow: 0 15px 25px rgba(0,0,0,0.2); }
-
-        /* ====== 3D PRODUCT GRID ====== */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; padding: 0 15px 60px; perspective: 1200px; }
-        @media (min-width: 768px) { .grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 30px; padding: 0 30px 60px; } }
-
-        .card {
-            background: var(--glass-bg); backdrop-filter: blur(15px); border: var(--glass-border);
-            border-radius: 24px; padding: 15px; cursor: pointer; box-shadow: var(--shadow-3d);
-            display: flex; flex-direction: column; transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-            transform-style: preserve-3d; animation: popUp 0.6s ease-out forwards; opacity: 0;
-        }
-        @keyframes popUp { 0% { opacity: 0; transform: translateY(40px) scale(0.9); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
-        .card:hover { transform: translateY(-12px) scale(1.02) rotateX(4deg); box-shadow: 0 30px 60px rgba(0,0,0,0.12); border-color: rgba(255,255,255,1); }
-
-        .card-img-wrapper { width: 100%; aspect-ratio: 1; border-radius: 18px; overflow: hidden; margin-bottom: 15px; background: rgba(255,255,255,0.8); position: relative; }
-        .card img { width: 100%; height: 100%; object-fit: contain; padding: 10px; transition: transform 0.6s ease; }
-        .card:hover img { transform: scale(1.15) translateZ(20px); }
-        
-        .card h3 { font-size: 16px; font-weight: 800; margin-bottom: 8px; color: #1d1d1f; }
-        .card .price { font-size: 14px; color: #166534; font-weight: 800; background: #dcfce7; padding: 6px 12px; border-radius: 10px; display: inline-block; margin-top: auto; border: 1px solid #bbf7d0; box-shadow: 0 4px 10px rgba(22,101,52,0.1); }
-
-        .out-of-stock-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.7); backdrop-filter: blur(4px); display: flex; justify-content: center; align-items: center; z-index: 5; }
-        .badge { background: #ff3b30; color: white; padding: 6px 15px; border-radius: 20px; font-size: 12px; font-weight: 900; box-shadow: 0 10px 20px rgba(255,59,48,0.4); text-transform: uppercase; }
-
-        /* ====== MODAL ====== */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; backdrop-filter: blur(10px); justify-content: center; align-items: center; padding: 15px; }
-        .modal-content { background: rgba(255,255,255,0.9); backdrop-filter: blur(25px); width: 100%; max-width: 900px; max-height: 95vh; border-radius: 30px; display: flex; flex-direction: column; position: relative; overflow-y: auto; box-shadow: 0 40px 100px rgba(0,0,0,0.5); border: var(--glass-border); }
-        @media (min-width: 768px) { .modal-content { flex-direction: row; height: 500px; overflow: hidden; } }
-
-        .close-btn { position: absolute; top: 15px; right: 15px; width: 40px; height: 40px; background: rgba(0,0,0,0.05); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 20px; cursor: pointer; z-index: 10; transition: 0.3s; }
-        .close-btn:hover { background: #ff3b30; color: white; transform: rotate(90deg); }
-
-        .modal-left { width: 100%; padding: 25px; background: rgba(255,255,255,0.5); }
-        @media (min-width: 768px) { .modal-left { width: 50%; border-right: 1px solid rgba(0,0,0,0.05); } }
-
-        .main-img-box { width: 100%; height: 280px; border-radius: 20px; overflow: hidden; position: relative; background: #fff; box-shadow: inset 0 0 15px rgba(0,0,0,0.05); }
-        .main-img-box img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.3s ease; padding: 10px; }
-        
-        .zoom-controls { position: absolute; bottom: 10px; right: 10px; display: flex; gap: 10px; }
-        .zoom-controls button { background: rgba(255,255,255,0.9); border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 18px; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-
-        .thumbnails { display: flex; gap: 12px; margin-top: 15px; overflow-x: auto; padding-bottom: 5px; }
-        .thumbnails img { width: 70px; height: 70px; object-fit: contain; border-radius: 15px; cursor: pointer; border: 3px solid transparent; opacity: 0.6; transition: 0.3s; background: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .thumbnails img.active { border-color: var(--primary); opacity: 1; transform: translateY(-3px); }
-
-        .modal-right { padding: 35px; display: flex; flex-direction: column; justify-content: center; }
-        @media (min-width: 768px) { .modal-right { width: 50%; } }
-
-        .modal-right h2 { font-size: 28px; color: #000; margin-bottom: 10px; font-weight: 900; }
-        .modal-right .status { display: inline-block; padding: 6px 15px; border-radius: 10px; font-size: 13px; font-weight: 800; margin-bottom: 15px; text-transform: uppercase; }
-        .status.in-stock { background: #dcfce7; color: #166534; }
-        .status.out-of-stock { background: #fee2e2; color: #991b1b; }
-        .modal-right .price { font-size: 24px; color: var(--primary); font-weight: 900; margin-bottom: 20px; }
-        .modal-right p { font-size: 16px; color: #444; line-height: 1.6; }
-    </style>
+    /* Luxury Glass Cards */
+    .luxury-card {
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .luxury-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(245, 158, 11, 0.45);
+      box-shadow: 0 20px 40px -12px rgba(245, 158, 11, 0.2);
+    }
+  </style>
 </head>
-<body>
+<body class="min-h-screen pb-36">
 
-    <!-- LOADER -->
-    <div id="loader">
-        <div class="spinner"></div>
-        <p style="margin-top: 15px; font-weight: bold; color: var(--primary);">Loading Store...</p>
-    </div>
-
-    <!-- NAVBAR -->
-    <nav>
-        <div class="logo"><i class="fa-brands fa-apple"></i> I Phone Center, Ladnun</div>
-    </nav>
-
-    <!-- BANNER -->
-    <div class="banner-container" id="banner-area"></div>
-
-    <!-- CATEGORIES -->
-    <div class="categories-wrapper">
-        <div class="categories">
-            <button class="cat-btn active" onclick="switchCategory('All')">All Items</button>
-            <button class="cat-btn" onclick="switchCategory('Phone')">Phones</button>
-            <button class="cat-btn" onclick="switchCategory('Cooler')">Coolers</button>
-            <button class="cat-btn" onclick="switchCategory('AC')">ACs</button>
-            <button class="cat-btn" onclick="switchCategory('Fan')">Fans</button>
+  <!-- ================= TOP NAVIGATION (CLEAN LUXURY) ================= -->
+  <header class="sticky top-0 z-40 bg-[#080c14]/90 backdrop-blur-2xl border-b border-amber-500/20 px-4 py-3.5">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-600 via-amber-500 to-yellow-400 flex items-center justify-center shadow-lg shadow-amber-500/25">
+          <i data-lucide="utensils" class="text-slate-950 stroke-[2.5] w-6 h-6"></i>
         </div>
+        <div>
+          <h1 class="font-serif text-2xl font-bold tracking-wide text-amber-400">THE ROYAL DINE</h1>
+          <p class="text-[9px] tracking-[0.25em] text-slate-400 uppercase font-medium">Fine Dining & Artisanal Kitchen</p>
+        </div>
+      </div>
+
+      <!-- Quick Cart Preview Button -->
+      <button onclick="openCartModal()" class="flex items-center gap-2.5 bg-slate-900 border border-slate-700/80 hover:border-amber-500/50 px-3.5 py-2 rounded-2xl text-xs font-semibold text-slate-200 transition shadow">
+        <div class="relative">
+          <i data-lucide="shopping-bag" class="w-4 h-4 text-amber-400"></i>
+          <span id="nav-cart-badge" class="hidden absolute -top-2 -right-2 w-4 h-4 bg-amber-500 text-slate-950 text-[10px] font-black rounded-full flex items-center justify-center">0</span>
+        </div>
+        <span class="hidden sm:inline">Aapka Cart</span>
+      </button>
+
+    </div>
+  </header>
+
+  <!-- ================= SEARCH & CATEGORY BAR ================= -->
+  <section class="max-w-6xl mx-auto px-4 pt-6">
+    <div class="flex flex-col md:flex-row gap-4 justify-between items-center mb-6">
+      
+      <!-- Search Box -->
+      <div class="relative w-full md:w-96">
+        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-3.5"></i>
+        <input id="search-input" onkeyup="filterMenu()" type="text" placeholder="Dishes, beverages search karein..." 
+          class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl pl-11 pr-4 py-3 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-500 transition shadow-inner" />
+      </div>
+
+      <!-- Veg / Non-Veg Filters -->
+      <div class="flex items-center gap-2 self-start md:self-auto">
+        <button onclick="setTypeFilter('all')" id="btn-all" class="px-4 py-2 rounded-full text-xs font-bold border border-amber-500 bg-amber-500 text-slate-950 transition">All Items</button>
+        <button onclick="setTypeFilter('veg')" id="btn-veg" class="px-4 py-2 rounded-full text-xs font-semibold border border-emerald-500/40 bg-emerald-950/30 text-emerald-400 hover:bg-emerald-900/40 transition flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Pure Veg
+        </button>
+        <button onclick="setTypeFilter('nonveg')" id="btn-nonveg" class="px-4 py-2 rounded-full text-xs font-semibold border border-rose-500/40 bg-rose-950/30 text-rose-400 hover:bg-rose-900/40 transition flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-rose-500"></span> Non-Veg
+        </button>
+      </div>
     </div>
 
-    <!-- PRODUCT GRID -->
-    <div class="grid" id="product-grid"></div>
+    <!-- Category Pills Slider (Rounded Scrollbar) -->
+    <div id="category-bar" class="flex gap-2.5 overflow-x-auto pb-3 mb-6 no-scrollbar">
+      <!-- Populated dynamically via JS -->
+    </div>
+  </section>
 
-    <!-- PRODUCT MODAL -->
-    <div class="modal" id="product-modal">
-        <div class="modal-content">
-            <div class="close-btn" onclick="triggerBack()"><i class="fa-solid fa-xmark"></i></div>
-            <div class="modal-left">
-                <div class="main-img-box">
-                    <img id="modal-main-img" src="" alt="Product">
-                    <div class="zoom-controls">
-                        <button onclick="zoomIn()"><i class="fa-solid fa-plus"></i></button>
-                        <button onclick="zoomOut()"><i class="fa-solid fa-minus"></i></button>
-                    </div>
+  <!-- ================= DISHES GRID ================= -->
+  <main class="max-w-6xl mx-auto px-4">
+    <div class="flex justify-between items-center mb-5">
+      <h2 id="category-title" class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+        Royal Specialties
+      </h2>
+      <span id="dish-count" class="text-xs text-slate-400 font-medium"></span>
+    </div>
+
+    <div id="dishes-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Big Food Cards Injected Dynamically -->
+    </div>
+  </main>
+
+  <!-- ================= STICKY FLOATING CART BAR ================= -->
+  <div id="cart-bar" class="fixed bottom-5 left-4 right-4 max-w-xl mx-auto z-40 hidden transition-all duration-300">
+    <button onclick="openCartModal()" class="w-full bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 font-bold p-4 rounded-2xl flex items-center justify-between shadow-2xl hover:scale-[1.01] transition-transform">
+      <div class="flex items-center gap-3">
+        <div class="bg-black/20 w-10 h-10 rounded-xl flex items-center justify-center font-extrabold text-sm" id="cart-bar-qty">
+          0
+        </div>
+        <div class="text-left">
+          <p class="text-[10px] uppercase tracking-wider text-slate-950/80 font-bold">Selected Items</p>
+          <p class="text-base font-black">₹<span id="cart-bar-total">0</span></p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 text-xs font-black bg-slate-950 text-white px-4 py-2 rounded-xl">
+        <span>Table Chuney & Order Karein</span>
+        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+      </div>
+    </button>
+  </div>
+
+  <!-- ================= CART & TABLE SELECTION MODAL ================= -->
+  <div id="cart-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-t-3xl sm:rounded-3xl w-full max-w-md overflow-hidden flex flex-col max-h-[92vh]">
+      
+      <!-- Modal Header -->
+      <div class="p-5 border-b border-slate-800 flex justify-between items-center bg-slate-950/60">
+        <div>
+          <h3 class="text-lg font-bold text-white font-serif">Aapka Order Cart</h3>
+          <p class="text-[11px] text-slate-400">Order confirm karne ke liye table select karein</p>
+        </div>
+        <button onclick="closeCartModal()" class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 hover:text-white">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Selected Items List -->
+      <div id="cart-items-container" class="p-5 overflow-y-auto space-y-3 flex-1">
+        <!-- Injected via JS -->
+      </div>
+
+      <!-- TABLE SELECTION (Cart ke andar) -->
+      <div class="px-5 py-3.5 bg-slate-950/80 border-t border-b border-slate-800">
+        <label class="block text-xs font-bold text-amber-400 mb-1.5 flex items-center gap-1.5">
+          <i data-lucide="armchair" class="w-4 h-4"></i>
+          Aap Kaunsi Table Par Baithe Hain? (Select Table)
+        </label>
+        <select id="cart-table-select" class="w-full bg-slate-900 border border-amber-500/40 rounded-xl px-3.5 py-2.5 text-xs text-amber-300 font-bold focus:outline-none focus:ring-2 focus:ring-amber-500">
+          <option value="Table 01">Table 01 - Window View</option>
+          <option value="Table 02">Table 02 - Cozy Corner</option>
+          <option value="Table 03">Table 03 - Family Dining</option>
+          <option value="Table 04" selected>Table 04 - Center Hall</option>
+          <option value="Table 05">Table 05 - Center Hall</option>
+          <option value="Table 06">Table 06 - Patio Garden</option>
+          <option value="VIP Lounge 1">VIP Lounge 01</option>
+          <option value="VIP Lounge 2">VIP Lounge 02</option>
+        </select>
+      </div>
+
+      <!-- Cooking Instruction Note -->
+      <div class="px-5 py-3">
+        <label class="block text-[11px] font-medium text-slate-400 mb-1">Chef ke liye koi note? (Optional):</label>
+        <input type="text" id="order-note" placeholder="e.g. Kam spicy, extra onions, bina butter..." 
+          class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-amber-500" />
+      </div>
+
+      <!-- Billing & Confirm Button -->
+      <div class="p-5 bg-slate-950 border-t border-slate-800">
+        <div class="flex justify-between text-xs text-slate-400 mb-1">
+          <span>Subtotal</span>
+          <span>₹<span id="bill-subtotal">0</span></span>
+        </div>
+        <div class="flex justify-between text-xs text-slate-400 mb-2">
+          <span>GST & Service Charge (5%)</span>
+          <span>₹<span id="bill-tax">0</span></span>
+        </div>
+        <div class="flex justify-between text-base font-bold text-white mb-4 border-t border-slate-800/80 pt-2">
+          <span>Payable Bill</span>
+          <span class="text-amber-400">₹<span id="bill-grand-total">0</span></span>
+        </div>
+
+        <button onclick="confirmOrder()" class="w-full bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black py-3.5 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20">
+          <i data-lucide="check-circle" class="w-5 h-5"></i>
+          <span>Table Se Order Confirm Karein</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= SUCCESS POPUP ================= -->
+  <div id="success-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="bg-slate-900 border border-amber-500/40 rounded-3xl p-6 text-center max-w-sm w-full shadow-2xl">
+      <div class="w-16 h-16 bg-amber-500/20 text-amber-400 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
+        <i data-lucide="chef-hat" class="w-8 h-8"></i>
+      </div>
+      <h3 class="text-2xl font-bold text-white font-serif">Order Kitchen Me Pahuncha!</h3>
+      <p class="text-xs text-slate-400 mt-2">Aapka khana hamare chef ne banana shuru kar diya hai. Table par baithiye, hum jaldi layenge.</p>
+      <div class="my-4 p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs text-amber-400 font-mono font-bold" id="order-success-id">
+        ORD-101 • Table 04
+      </div>
+      <button onclick="closeSuccessModal()" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl transition text-xs">
+        Theek Hai, Menu Par Wapas Jayein
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Demo Dishes Setup
+    const DEFAULT_DISHES = [
+      {
+        id: 1,
+        name: "Shahi Paneer Tikka Angara",
+        category: "Starters",
+        price: 380,
+        veg: true,
+        badge: "Chef Special",
+        spicy: "Medium",
+        image: "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?auto=format&fit=crop&w=700&q=80",
+        desc: "Fresh cottage cheese soaked in royal Awadhi herbs, skewered & charcoal grilled to smoky perfection.",
+        inStock: true
+      },
+      {
+        id: 2,
+        name: "Murgh Dum Biryani Royale",
+        category: "Main Course",
+        price: 490,
+        veg: false,
+        badge: "Bestseller",
+        spicy: "High",
+        image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=700&q=80",
+        desc: "Fragrant saffron basmati rice layered with succulent chicken pieces, slow-cooked in handi seal.",
+        inStock: true
+      },
+      {
+        id: 3,
+        name: "Truffle Burrata Margherita",
+        category: "Pizza",
+        price: 560,
+        veg: true,
+        badge: "Woodfired",
+        spicy: "Mild",
+        image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=700&q=80",
+        desc: "Crisp thin crust sourdough, San Marzano tomato coulis, fresh Italian burrata & basil drizzle.",
+        inStock: true
+      },
+      {
+        id: 4,
+        name: "Dal Bukhara Gold Simmered",
+        category: "Main Course",
+        price: 410,
+        veg: true,
+        badge: "Classic",
+        spicy: "Mild",
+        image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=700&q=80",
+        desc: "Black lentils slow-cooked overnight for 18 hours over clay embers with churned fresh white butter.",
+        inStock: true
+      },
+      {
+        id: 5,
+        name: "Blue Curacao Citrus Mojito",
+        category: "Drinks",
+        price: 220,
+        veg: true,
+        badge: "Chilled",
+        spicy: "Refreshing",
+        image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=700&q=80",
+        desc: "Muddled mint leaves, Persian limes, sparkling soda water, and vibrant curacao blend.",
+        inStock: true
+      }
+    ];
+
+    let dishes = JSON.parse(localStorage.getItem('restaurant_menu')) || DEFAULT_DISHES;
+    if (!localStorage.getItem('restaurant_menu')) {
+      localStorage.setItem('restaurant_menu', JSON.stringify(DEFAULT_DISHES));
+    }
+
+    let cart = {}; 
+    let activeCategory = "All";
+    let activeType = "all";
+
+    // Auto-sync if admin updates menu
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'restaurant_menu') {
+        dishes = JSON.parse(localStorage.getItem('restaurant_menu')) || [];
+        renderMenu();
+      }
+    });
+
+    function setTypeFilter(type) {
+      activeType = type;
+      ['all', 'veg', 'nonveg'].forEach(t => {
+        const b = document.getElementById(`btn-${t}`);
+        if (t === type) {
+          b.className = "px-4 py-2 rounded-full text-xs font-bold border border-amber-500 bg-amber-500 text-slate-950 transition";
+        } else {
+          b.className = "px-4 py-2 rounded-full text-xs font-semibold border border-slate-700 bg-slate-900/60 text-slate-300 transition";
+        }
+      });
+      renderMenu();
+    }
+
+    function renderCategories() {
+      const cats = ["All", ...new Set(dishes.map(d => d.category))];
+      const bar = document.getElementById('category-bar');
+      bar.innerHTML = cats.map(cat => `
+        <button onclick="selectCategory('${cat}')" class="px-5 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap transition border ${
+          activeCategory === cat 
+            ? 'bg-amber-500 text-slate-950 border-amber-500 shadow-lg shadow-amber-500/20' 
+            : 'bg-slate-900/80 text-slate-400 border-slate-800 hover:border-slate-700 hover:text-white'
+        }">
+          ${cat}
+        </button>
+      `).join('');
+    }
+
+    function selectCategory(cat) {
+      activeCategory = cat;
+      renderCategories();
+      renderMenu();
+    }
+
+    function renderMenu() {
+      renderCategories();
+      const search = document.getElementById('search-input').value.toLowerCase();
+      const container = document.getElementById('dishes-container');
+
+      const filtered = dishes.filter(item => {
+        const matchesCat = activeCategory === "All" || item.category === activeCategory;
+        const matchesType = (activeType === "all") || (activeType === "veg" ? item.veg : !item.veg);
+        const matchesSearch = item.name.toLowerCase().includes(search) || item.desc.toLowerCase().includes(search);
+        return matchesCat && matchesType && matchesSearch;
+      });
+
+      document.getElementById('category-title').innerText = activeCategory === "All" ? "Royal Specialties" : activeCategory;
+      document.getElementById('dish-count').innerText = `${filtered.length} Dishes`;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full text-center py-16 text-slate-500">
+            <i data-lucide="soup" class="w-12 h-12 mx-auto mb-2 opacity-40"></i>
+            <p class="font-medium text-sm">Koi item nahi mila!</p>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      container.innerHTML = filtered.map(dish => {
+        const qty = cart[dish.id] || 0;
+        return `
+          <div class="luxury-card rounded-3xl overflow-hidden flex flex-col justify-between group">
+            
+            <!-- Large Image Section -->
+            <div class="relative h-56 w-full overflow-hidden bg-slate-950">
+              <img src="${dish.image}" alt="${dish.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              
+              <!-- Veg / Non-Veg Indicator -->
+              <div class="absolute top-3 left-3 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-full flex items-center gap-1.5 border border-white/10">
+                <span class="w-2.5 h-2.5 rounded-full ${dish.veg ? 'bg-emerald-500' : 'bg-rose-500'}"></span>
+                <span class="text-[10px] font-bold uppercase tracking-wider ${dish.veg ? 'text-emerald-400' : 'text-rose-400'}">
+                  ${dish.veg ? 'Veg' : 'Non-Veg'}
+                </span>
+              </div>
+
+              <!-- Badge Tag -->
+              ${dish.badge ? `
+                <div class="absolute top-3 right-3 bg-amber-500 text-slate-950 text-[10px] font-extrabold px-3 py-1 rounded-full shadow-lg">
+                  ${dish.badge}
                 </div>
-                <div class="thumbnails" id="modal-thumbnails"></div>
+              ` : ''}
+
+              <!-- Out of Stock Overlay -->
+              ${!dish.inStock ? `
+                <div class="absolute inset-0 bg-black/85 backdrop-blur-[2px] flex items-center justify-center">
+                  <span class="bg-red-500/90 text-white font-bold text-xs uppercase tracking-wider px-3.5 py-1.5 rounded-full border border-red-400/40">Currently Unavailable</span>
+                </div>
+              ` : ''}
             </div>
-            <div class="modal-right">
-                <h2 id="modal-title">Product</h2>
-                <div id="modal-status" class="status">In Stock</div>
-                <div class="price" id="modal-price">₹0</div>
-                <p id="modal-desc">Description</p>
-            </div>
-        </div>
-    </div>
 
-    <!-- FIREBASE INTEGRATION (Type Module is Important) -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
+            <!-- Card Content -->
+            <div class="p-5 flex flex-col justify-between flex-1">
+              <div>
+                <div class="flex justify-between items-start gap-2 mb-2">
+                  <h3 class="text-base font-bold text-white group-hover:text-amber-400 transition-colors font-serif tracking-wide">${dish.name}</h3>
+                  <span class="text-base font-black text-amber-400 font-sans whitespace-nowrap">₹${dish.price}</span>
+                </div>
+                <p class="text-slate-400 text-xs line-clamp-2 leading-relaxed mb-4">${dish.desc}</p>
+              </div>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyD3-x1FoIvtx3XlztXeAFOnF3KuEcBJcSI",
-            authDomain: "soyfa-education.firebaseapp.com",
-            databaseURL: "https://soyfa-education-default-rtdb.firebaseio.com",
-            projectId: "soyfa-education",
-            storageBucket: "soyfa-education.firebasestorage.app",
-            messagingSenderId: "1073874852270",
-            appId: "1:1073874852270:web:ce97dbace15fee50c1d03f",
-            measurementId: "G-0S5XC7DBXB"
-        };
+              <!-- Action Bar -->
+              <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between">
+                <span class="text-[11px] text-slate-400 bg-slate-950 px-2.5 py-1 rounded-lg border border-slate-800 flex items-center gap-1">
+                  🔥 ${dish.spicy || 'Mild'}
+                </span>
 
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-
-        let allProducts =[];
-        window.currentCat = 'All';
-
-        // LIVE BANNER SYNC
-        const bannerRef = ref(db, 'store/banner');
-        onValue(bannerRef, (snapshot) => {
-            const bannerUrl = snapshot.val();
-            const bannerArea = document.getElementById('banner-area');
-            if(bannerUrl) {
-                bannerArea.innerHTML = `<img src="${bannerUrl}" alt="Shop Banner">`;
-            } else {
-                bannerArea.innerHTML = `<div style="padding:40px; background:#fff; border-radius:20px; text-align:center; font-weight:bold;">Admin Panel se Banner lagayein.</div>`;
-            }
-        });
-
-        // LIVE PRODUCTS SYNC
-        const productsRef = ref(db, 'store/products');
-        onValue(productsRef, (snapshot) => {
-            allProducts =[];
-            snapshot.forEach(childSnapshot => {
-                allProducts.push({ id: childSnapshot.key, ...childSnapshot.val() });
-            });
-            allProducts.reverse(); // Newest first
-            document.getElementById('loader').style.display = 'none'; // Hide Loader
-            window.renderGrid(window.currentCat);
-        });
-
-        // GLOBALS FOR UI
-        window.switchCategory = (cat) => {
-            window.currentCat = cat;
-            document.querySelectorAll('.cat-btn').forEach(b => {
-                b.classList.remove('active');
-                if(b.innerText.includes(cat) || (cat === 'All' && b.innerText === 'All Items')) b.classList.add('active');
-            });
-            window.renderGrid(cat);
-        };
-
-        window.renderGrid = (cat) => {
-            const grid = document.getElementById('product-grid');
-            grid.innerHTML = '';
-            let filtered = cat === 'All' ? allProducts : allProducts.filter(p => p.category === cat);
-
-            if(filtered.length === 0) {
-                grid.innerHTML = `<h3 style="grid-column: 1/-1; text-align:center; color:gray; padding:20px;">Abhi koi item nahi hai.</h3>`;
-                return;
-            }
-
-            filtered.forEach((p, index) => {
-                const outOfStock = !p.inStock ? `<div class="out-of-stock-overlay"><span class="badge">Out of Stock</span></div>` : '';
-                const animDelay = index * 0.05; 
-                grid.innerHTML += `
-                    <div class="card" onclick="openModal('${p.id}')" style="animation-delay: ${animDelay}s">
-                        <div class="card-img-wrapper">
-                            ${outOfStock}
-                            <img src="${p.images[0]}" alt="${p.title}" style="${!p.inStock ? 'filter: grayscale(100%); opacity:0.6;' : ''}">
-                        </div>
-                        <h3>${p.title}</h3>
-                        <div class="price">${p.price}</div>
+                ${dish.inStock ? (
+                  qty === 0 ? `
+                    <button onclick="addToCart(${dish.id})" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs px-4 py-2 rounded-xl transition flex items-center gap-1.5 shadow-md shadow-amber-500/20 active:scale-95">
+                      <i data-lucide="plus" class="w-3.5 h-3.5 stroke-[3]"></i> Add
+                    </button>
+                  ` : `
+                    <div class="flex items-center bg-slate-900 border border-slate-700 rounded-xl p-0.5 shadow-inner">
+                      <button onclick="changeQty(${dish.id}, -1)" class="w-7 h-7 flex items-center justify-center text-slate-300 hover:text-white font-bold hover:bg-slate-800 rounded-lg transition">-</button>
+                      <span class="w-6 text-center text-xs font-bold text-amber-400">${qty}</span>
+                      <button onclick="changeQty(${dish.id}, 1)" class="w-7 h-7 flex items-center justify-center text-slate-300 hover:text-white font-bold hover:bg-slate-800 rounded-lg transition">+</button>
                     </div>
-                `;
-            });
-        };
+                  `
+                ) : `
+                  <span class="text-xs text-slate-500 italic">Sold Out</span>
+                `}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
 
-        let currentZoom = 1;
-        window.openModal = (id) => {
-            const p = allProducts.find(x => x.id === id);
-            if(!p) return;
-            
-            document.getElementById('modal-title').innerText = p.title;
-            document.getElementById('modal-desc').innerText = p.desc;
-            document.getElementById('modal-price').innerText = p.price;
-            
-            const statusBadge = document.getElementById('modal-status');
-            statusBadge.className = p.inStock ? 'status in-stock' : 'status out-of-stock';
-            statusBadge.innerText = p.inStock ? 'In Stock' : 'Out of Stock';
-            
-            currentZoom = 1; 
-            const mainImg = document.getElementById('modal-main-img');
-            mainImg.style.transform = `scale(1)`;
-            mainImg.src = p.images[0];
+    function addToCart(id) {
+      cart[id] = 1;
+      updateCartUI();
+      renderMenu();
+    }
 
-            const thumbDiv = document.getElementById('modal-thumbnails');
-            thumbDiv.innerHTML = '';
-            p.images.forEach((img, i) => {
-                if(img) { thumbDiv.innerHTML += `<img src="${img}" class="${i===0?'active':''}" onclick="changeImg(this, '${img}')">`; }
-            });
+    function changeQty(id, delta) {
+      if (!cart[id]) return;
+      cart[id] += delta;
+      if (cart[id] <= 0) delete cart[id];
+      updateCartUI();
+      renderMenu();
+    }
 
-            document.getElementById('product-modal').style.display = 'flex';
-        };
+    function updateCartUI() {
+      const ids = Object.keys(cart);
+      const totalQty = ids.reduce((acc, id) => acc + cart[id], 0);
+      let totalPrice = 0;
+      ids.forEach(id => {
+        const item = dishes.find(d => d.id == id);
+        if (item) totalPrice += item.price * cart[id];
+      });
 
-        window.closeModalUI = () => { document.getElementById('product-modal').style.display = 'none'; }
-        window.triggerBack = () => { window.closeModalUI(); }
-        window.changeImg = (el, src) => { document.getElementById('modal-main-img').src = src; document.querySelectorAll('.thumbnails img').forEach(i => i.classList.remove('active')); el.classList.add('active'); currentZoom=1; document.getElementById('modal-main-img').style.transform='scale(1)'; }
-        window.zoomIn = () => { if(currentZoom < 3) { currentZoom += 0.4; document.getElementById('modal-main-img').style.transform = `scale(${currentZoom})`; } }
-        window.zoomOut = () => { if(currentZoom > 1) { currentZoom -= 0.4; document.getElementById('modal-main-img').style.transform = `scale(${currentZoom})`; } }
-    </script>
+      // Update Nav Badge
+      const navBadge = document.getElementById('nav-cart-badge');
+      if (totalQty > 0) {
+        navBadge.innerText = totalQty;
+        navBadge.classList.remove('hidden');
+      } else {
+        navBadge.classList.add('hidden');
+      }
+
+      // Update Bottom Bar
+      const bar = document.getElementById('cart-bar');
+      if (totalQty > 0) {
+        document.getElementById('cart-bar-qty').innerText = totalQty;
+        document.getElementById('cart-bar-total').innerText = totalPrice;
+        bar.classList.remove('hidden');
+      } else {
+        bar.classList.add('hidden');
+      }
+    }
+
+    function openCartModal() {
+      const container = document.getElementById('cart-items-container');
+      const ids = Object.keys(cart);
+
+      if (ids.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-8 text-slate-500">
+            <i data-lucide="shopping-bag" class="w-10 h-10 mx-auto mb-2 opacity-30"></i>
+            <p class="text-xs">Aapka cart khali hai. Menu se dish add karein!</p>
+          </div>
+        `;
+        document.getElementById('bill-subtotal').innerText = 0;
+        document.getElementById('bill-tax').innerText = 0;
+        document.getElementById('bill-grand-total').innerText = 0;
+        document.getElementById('cart-modal').classList.remove('hidden');
+        document.getElementById('cart-modal').classList.add('flex');
+        lucide.createIcons();
+        return;
+      }
+
+      let subtotal = 0;
+      container.innerHTML = ids.map(id => {
+        const item = dishes.find(d => d.id == id);
+        const qty = cart[id];
+        subtotal += item.price * qty;
+        return `
+          <div class="flex items-center justify-between bg-slate-950 p-2.5 rounded-2xl border border-slate-800">
+            <div class="flex items-center gap-2.5">
+              <img src="${item.image}" class="w-11 h-11 rounded-xl object-cover">
+              <div>
+                <h4 class="text-xs font-bold text-white font-serif">${item.name}</h4>
+                <p class="text-[10px] text-amber-400 font-sans">₹${item.price} x ${qty}</p>
+              </div>
+            </div>
+            <div class="flex items-center bg-slate-900 rounded-xl border border-slate-800">
+              <button onclick="changeQty(${item.id}, -1); openCartModal();" class="w-7 h-7 text-slate-400 hover:text-white font-bold text-xs">-</button>
+              <span class="w-5 text-center text-xs font-bold text-white">${qty}</span>
+              <button onclick="changeQty(${item.id}, 1); openCartModal();" class="w-7 h-7 text-slate-400 hover:text-white font-bold text-xs">+</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const tax = Math.round(subtotal * 0.05);
+      document.getElementById('bill-subtotal').innerText = subtotal;
+      document.getElementById('bill-tax').innerText = tax;
+      document.getElementById('bill-grand-total').innerText = subtotal + tax;
+
+      const modal = document.getElementById('cart-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      lucide.createIcons();
+    }
+
+    function closeCartModal() {
+      const modal = document.getElementById('cart-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function confirmOrder() {
+      const ids = Object.keys(cart);
+      if (ids.length === 0) {
+        alert("Cart me koi item nahi hai!");
+        return;
+      }
+
+      const selectedTable = document.getElementById('cart-table-select').value;
+      const note = document.getElementById('order-note').value;
+
+      const orderItems = ids.map(id => {
+        const d = dishes.find(x => x.id == id);
+        return { name: d.name, price: d.price, qty: cart[id] };
+      });
+
+      const subtotal = orderItems.reduce((acc, i) => acc + (i.price * i.qty), 0);
+      const total = subtotal + Math.round(subtotal * 0.05);
+
+      const newOrder = {
+        orderId: 'ORD-' + Math.floor(1000 + Math.random() * 9000),
+        table: selectedTable,
+        items: orderItems,
+        note: note || 'None',
+        total: total,
+        status: 'Pending',
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+
+      // Live Save into LocalStorage for Admin Panel
+      let currentOrders = JSON.parse(localStorage.getItem('restaurant_orders')) || [];
+      currentOrders.unshift(newOrder);
+      localStorage.setItem('restaurant_orders', JSON.stringify(currentOrders));
+
+      // Reset
+      cart = {};
+      document.getElementById('order-note').value = '';
+      updateCartUI();
+      closeCartModal();
+      renderMenu();
+
+      // Show Success Dialog
+      document.getElementById('order-success-id').innerText = `${newOrder.orderId} • ${newOrder.table}`;
+      const successModal = document.getElementById('success-modal');
+      successModal.classList.remove('hidden');
+      successModal.classList.add('flex');
+      lucide.createIcons();
+    }
+
+    function closeSuccessModal() {
+      document.getElementById('success-modal').classList.add('hidden');
+      document.getElementById('success-modal').classList.remove('flex');
+    }
+
+    function filterMenu() {
+      renderMenu();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderMenu();
+      lucide.createIcons();
+    });
+  </script>
 </body>
 </html>
