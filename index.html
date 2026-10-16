@@ -1,603 +1,1305 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Royal Dine | Artisanal Dine-in Menu</title>
-  
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Soyfa Super App - User</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { --nav-blue: #2563eb; --nav-height: 65px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        body { background: #f8fafc; min-height: 100vh; padding-bottom: calc(var(--nav-height) + 20px); -webkit-tap-highlight-color: transparent; }
+        .hidden { display: none !important; }
+        .universal-modal { z-index: 10005; }
+        .qmart-hide-scroll::-webkit-scrollbar { display: none; }
+        .qmart-hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+        .uniform-title { font-size: 25px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
 
-  <style>
-    body {
-      font-family: 'Outfit', sans-serif;
-      background-color: #080c14;
-      color: #f8fafc;
-    }
-    .font-serif { font-family: 'Playfair Display', serif; }
+        /* Gradients */
+        .bg-mart-grad { background: linear-gradient(180deg, #ecfdf5 0%, #f0fdf4 25%, #ffffff 80%); }
+        .bg-food-grad { background: linear-gradient(180deg, #fff7ed 0%, #fff1f2 30%, #ffffff 85%); }
+        .bg-serv-grad { background: linear-gradient(180deg, #f0fdfa 0%, #f0fdf4 30%, #ffffff 85%); }
+        .bg-teach-grad { background: linear-gradient(180deg, #eef2ff 0%, #faf5ff 35%, #ffffff 85%); }
+        .bg-sch-grad { background: linear-gradient(180deg, #faf5ff 0%, #f3e8ff 35%, #ffffff 85%); }
+        .bg-dir-grad { background: linear-gradient(180deg, #eff6ff 0%, #f0f9ff 35%, #ffffff 85%); }
+        .bg-book-grad { background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 40%, #ffffff 85%); }
+        .bg-order-grad { background: linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 35%, #ffffff 85%); }
+        .bg-prof-grad { background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 35%, #ffffff 85%); }
 
-    /* Custom Unique Smooth Rounded Scrollbar */
-    ::-webkit-scrollbar { width: 7px; height: 7px; }
-    ::-webkit-scrollbar-track { background: #080c14; border-radius: 9999px; }
-    ::-webkit-scrollbar-thumb {
-      background: #1e293b;
-      border-radius: 9999px;
-      transition: background 0.3s;
-    }
-    ::-webkit-scrollbar-thumb:hover { background: #f59e0b; }
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        /* Blue Bottom Nav */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: var(--nav-height); background: #ffffff; box-shadow: 0 -4px 25px rgba(37, 99, 235, 0.12); display: flex; justify-content: space-around; align-items: center; z-index: 9000; border-top: 1.5px solid #e0e7ff; border-radius: 22px 22px 0 0; max-width: 650px; margin: 0 auto; padding: 0 6px; }
+        .nav-item { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #94a3b8; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.3s; padding: 4px 0; }
+        .nav-item i { font-size: 20px; margin-bottom: 2px; display: block; }
+        .nav-item.active { color: var(--nav-blue); transform: translateY(-5px); }
+        .nav-item.active i { transform: scale(1.2); filter: drop-shadow(0 4px 8px rgba(37,99,235,0.4)); color: var(--nav-blue); }
 
-    /* Luxury Glass Cards */
-    .luxury-card {
-      background: rgba(15, 23, 42, 0.65);
-      backdrop-filter: blur(18px);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .luxury-card:hover {
-      transform: translateY(-6px);
-      border-color: rgba(245, 158, 11, 0.45);
-      box-shadow: 0 20px 40px -12px rgba(245, 158, 11, 0.2);
-    }
-  </style>
+        /* 4 Floating Buttons - All Blue & Always Visible */
+        .floating-right-nav { position: fixed; right: 15px; bottom: 80px; z-index: 9999 !important; display: flex !important; flex-direction: column; gap: 10px; }
+        .float-btn { width: 48px; height: 48px; background: rgba(255,255,255,0.96); backdrop-filter: blur(6px); border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 8px 20px rgba(37,99,235,0.22); cursor: pointer; font-size: 19px; transition: 0.3s; border: 2.5px solid var(--nav-blue); color: var(--nav-blue); }
+        .float-btn:hover { transform: scale(1.1); }
+
+        .track-line { position: relative; height: 5px; background: #e2e8f0; margin: 26px 10px 12px 10px; border-radius: 4px; }
+        .track-fill { position: absolute; left: 0; top: 0; height: 100%; border-radius: 4px; transition: width 0.8s ease-in-out; }
+        .track-bike { position: absolute; top: -16px; margin-left: -12px; font-size: 22px; transition: left 0.8s ease-in-out; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2)); }
+    </style>
 </head>
-<body class="min-h-screen pb-36">
+<body>
 
-  <!-- ================= TOP NAVIGATION (CLEAN LUXURY) ================= -->
-  <header class="sticky top-0 z-40 bg-[#080c14]/90 backdrop-blur-2xl border-b border-amber-500/20 px-4 py-3.5">
-    <div class="max-w-6xl mx-auto flex items-center justify-between">
-      
-      <!-- Brand Logo -->
-      <div class="flex items-center gap-3">
-        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-600 via-amber-500 to-yellow-400 flex items-center justify-center shadow-lg shadow-amber-500/25">
-          <i data-lucide="utensils" class="text-slate-950 stroke-[2.5] w-6 h-6"></i>
-        </div>
-        <div>
-          <h1 class="font-serif text-2xl font-bold tracking-wide text-amber-400">THE ROYAL DINE</h1>
-          <p class="text-[9px] tracking-[0.25em] text-slate-400 uppercase font-medium">Fine Dining & Artisanal Kitchen</p>
-        </div>
-      </div>
+    <audio id="order-done-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-positive-notification-951.mp3" preload="auto"></audio>
 
-      <!-- Quick Cart Preview Button -->
-      <button onclick="openCartModal()" class="flex items-center gap-2.5 bg-slate-900 border border-slate-700/80 hover:border-amber-500/50 px-3.5 py-2 rounded-2xl text-xs font-semibold text-slate-200 transition shadow">
-        <div class="relative">
-          <i data-lucide="shopping-bag" class="w-4 h-4 text-amber-400"></i>
-          <span id="nav-cart-badge" class="hidden absolute -top-2 -right-2 w-4 h-4 bg-amber-500 text-slate-950 text-[10px] font-black rounded-full flex items-center justify-center">0</span>
-        </div>
-        <span class="hidden sm:inline">Aapka Cart</span>
-      </button>
-
-    </div>
-  </header>
-
-  <!-- ================= SEARCH & CATEGORY BAR ================= -->
-  <section class="max-w-6xl mx-auto px-4 pt-6">
-    <div class="flex flex-col md:flex-row gap-4 justify-between items-center mb-6">
-      
-      <!-- Search Box -->
-      <div class="relative w-full md:w-96">
-        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-3.5"></i>
-        <input id="search-input" onkeyup="filterMenu()" type="text" placeholder="Dishes, beverages search karein..." 
-          class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl pl-11 pr-4 py-3 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-500 transition shadow-inner" />
-      </div>
-
-      <!-- Veg / Non-Veg Filters -->
-      <div class="flex items-center gap-2 self-start md:self-auto">
-        <button onclick="setTypeFilter('all')" id="btn-all" class="px-4 py-2 rounded-full text-xs font-bold border border-amber-500 bg-amber-500 text-slate-950 transition">All Items</button>
-        <button onclick="setTypeFilter('veg')" id="btn-veg" class="px-4 py-2 rounded-full text-xs font-semibold border border-emerald-500/40 bg-emerald-950/30 text-emerald-400 hover:bg-emerald-900/40 transition flex items-center gap-1.5">
-          <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Pure Veg
-        </button>
-        <button onclick="setTypeFilter('nonveg')" id="btn-nonveg" class="px-4 py-2 rounded-full text-xs font-semibold border border-rose-500/40 bg-rose-950/30 text-rose-400 hover:bg-rose-900/40 transition flex items-center gap-1.5">
-          <span class="w-2 h-2 rounded-full bg-rose-500"></span> Non-Veg
-        </button>
-      </div>
-    </div>
-
-    <!-- Category Pills Slider (Rounded Scrollbar) -->
-    <div id="category-bar" class="flex gap-2.5 overflow-x-auto pb-3 mb-6 no-scrollbar">
-      <!-- Populated dynamically via JS -->
-    </div>
-  </section>
-
-  <!-- ================= DISHES GRID ================= -->
-  <main class="max-w-6xl mx-auto px-4">
-    <div class="flex justify-between items-center mb-5">
-      <h2 id="category-title" class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
-        Royal Specialties
-      </h2>
-      <span id="dish-count" class="text-xs text-slate-400 font-medium"></span>
-    </div>
-
-    <div id="dishes-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Big Food Cards Injected Dynamically -->
-    </div>
-  </main>
-
-  <!-- ================= STICKY FLOATING CART BAR ================= -->
-  <div id="cart-bar" class="fixed bottom-5 left-4 right-4 max-w-xl mx-auto z-40 hidden transition-all duration-300">
-    <button onclick="openCartModal()" class="w-full bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 font-bold p-4 rounded-2xl flex items-center justify-between shadow-2xl hover:scale-[1.01] transition-transform">
-      <div class="flex items-center gap-3">
-        <div class="bg-black/20 w-10 h-10 rounded-xl flex items-center justify-center font-extrabold text-sm" id="cart-bar-qty">
-          0
-        </div>
-        <div class="text-left">
-          <p class="text-[10px] uppercase tracking-wider text-slate-950/80 font-bold">Selected Items</p>
-          <p class="text-base font-black">₹<span id="cart-bar-total">0</span></p>
-        </div>
-      </div>
-      <div class="flex items-center gap-2 text-xs font-black bg-slate-950 text-white px-4 py-2 rounded-xl">
-        <span>Table Chuney & Order Karein</span>
-        <i data-lucide="chevron-right" class="w-4 h-4"></i>
-      </div>
-    </button>
-  </div>
-
-  <!-- ================= CART & TABLE SELECTION MODAL ================= -->
-  <div id="cart-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-end sm:items-center justify-center p-0 sm:p-4">
-    <div class="bg-slate-900 border border-slate-800 rounded-t-3xl sm:rounded-3xl w-full max-w-md overflow-hidden flex flex-col max-h-[92vh]">
-      
-      <!-- Modal Header -->
-      <div class="p-5 border-b border-slate-800 flex justify-between items-center bg-slate-950/60">
-        <div>
-          <h3 class="text-lg font-bold text-white font-serif">Aapka Order Cart</h3>
-          <p class="text-[11px] text-slate-400">Order confirm karne ke liye table select karein</p>
-        </div>
-        <button onclick="closeCartModal()" class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 hover:text-white">
-          <i data-lucide="x" class="w-4 h-4"></i>
-        </button>
-      </div>
-
-      <!-- Selected Items List -->
-      <div id="cart-items-container" class="p-5 overflow-y-auto space-y-3 flex-1">
-        <!-- Injected via JS -->
-      </div>
-
-      <!-- TABLE SELECTION (Cart ke andar) -->
-      <div class="px-5 py-3.5 bg-slate-950/80 border-t border-b border-slate-800">
-        <label class="block text-xs font-bold text-amber-400 mb-1.5 flex items-center gap-1.5">
-          <i data-lucide="armchair" class="w-4 h-4"></i>
-          Aap Kaunsi Table Par Baithe Hain? (Select Table)
-        </label>
-        <select id="cart-table-select" class="w-full bg-slate-900 border border-amber-500/40 rounded-xl px-3.5 py-2.5 text-xs text-amber-300 font-bold focus:outline-none focus:ring-2 focus:ring-amber-500">
-          <option value="Table 01">Table 01 - Window View</option>
-          <option value="Table 02">Table 02 - Cozy Corner</option>
-          <option value="Table 03">Table 03 - Family Dining</option>
-          <option value="Table 04" selected>Table 04 - Center Hall</option>
-          <option value="Table 05">Table 05 - Center Hall</option>
-          <option value="Table 06">Table 06 - Patio Garden</option>
-          <option value="VIP Lounge 1">VIP Lounge 01</option>
-          <option value="VIP Lounge 2">VIP Lounge 02</option>
-        </select>
-      </div>
-
-      <!-- Cooking Instruction Note -->
-      <div class="px-5 py-3">
-        <label class="block text-[11px] font-medium text-slate-400 mb-1">Chef ke liye koi note? (Optional):</label>
-        <input type="text" id="order-note" placeholder="e.g. Kam spicy, extra onions, bina butter..." 
-          class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-amber-500" />
-      </div>
-
-      <!-- Billing & Confirm Button -->
-      <div class="p-5 bg-slate-950 border-t border-slate-800">
-        <div class="flex justify-between text-xs text-slate-400 mb-1">
-          <span>Subtotal</span>
-          <span>₹<span id="bill-subtotal">0</span></span>
-        </div>
-        <div class="flex justify-between text-xs text-slate-400 mb-2">
-          <span>GST & Service Charge (5%)</span>
-          <span>₹<span id="bill-tax">0</span></span>
-        </div>
-        <div class="flex justify-between text-base font-bold text-white mb-4 border-t border-slate-800/80 pt-2">
-          <span>Payable Bill</span>
-          <span class="text-amber-400">₹<span id="bill-grand-total">0</span></span>
-        </div>
-
-        <button onclick="confirmOrder()" class="w-full bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black py-3.5 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20">
-          <i data-lucide="check-circle" class="w-5 h-5"></i>
-          <span>Table Se Order Confirm Karein</span>
-        </button>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ================= SUCCESS POPUP ================= -->
-  <div id="success-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4">
-    <div class="bg-slate-900 border border-amber-500/40 rounded-3xl p-6 text-center max-w-sm w-full shadow-2xl">
-      <div class="w-16 h-16 bg-amber-500/20 text-amber-400 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
-        <i data-lucide="chef-hat" class="w-8 h-8"></i>
-      </div>
-      <h3 class="text-2xl font-bold text-white font-serif">Order Kitchen Me Pahuncha!</h3>
-      <p class="text-xs text-slate-400 mt-2">Aapka khana hamare chef ne banana shuru kar diya hai. Table par baithiye, hum jaldi layenge.</p>
-      <div class="my-4 p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs text-amber-400 font-mono font-bold" id="order-success-id">
-        ORD-101 • Table 04
-      </div>
-      <button onclick="closeSuccessModal()" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl transition text-xs">
-        Theek Hai, Menu Par Wapas Jayein
-      </button>
-    </div>
-  </div>
-
-  <script>
-    // Demo Dishes Setup
-    const DEFAULT_DISHES = [
-      {
-        id: 1,
-        name: "Shahi Paneer Tikka Angara",
-        category: "Starters",
-        price: 380,
-        veg: true,
-        badge: "Chef Special",
-        spicy: "Medium",
-        image: "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?auto=format&fit=crop&w=700&q=80",
-        desc: "Fresh cottage cheese soaked in royal Awadhi herbs, skewered & charcoal grilled to smoky perfection.",
-        inStock: true
-      },
-      {
-        id: 2,
-        name: "Murgh Dum Biryani Royale",
-        category: "Main Course",
-        price: 490,
-        veg: false,
-        badge: "Bestseller",
-        spicy: "High",
-        image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=700&q=80",
-        desc: "Fragrant saffron basmati rice layered with succulent chicken pieces, slow-cooked in handi seal.",
-        inStock: true
-      },
-      {
-        id: 3,
-        name: "Truffle Burrata Margherita",
-        category: "Pizza",
-        price: 560,
-        veg: true,
-        badge: "Woodfired",
-        spicy: "Mild",
-        image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=700&q=80",
-        desc: "Crisp thin crust sourdough, San Marzano tomato coulis, fresh Italian burrata & basil drizzle.",
-        inStock: true
-      },
-      {
-        id: 4,
-        name: "Dal Bukhara Gold Simmered",
-        category: "Main Course",
-        price: 410,
-        veg: true,
-        badge: "Classic",
-        spicy: "Mild",
-        image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=700&q=80",
-        desc: "Black lentils slow-cooked overnight for 18 hours over clay embers with churned fresh white butter.",
-        inStock: true
-      },
-      {
-        id: 5,
-        name: "Blue Curacao Citrus Mojito",
-        category: "Drinks",
-        price: 220,
-        veg: true,
-        badge: "Chilled",
-        spicy: "Refreshing",
-        image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=700&q=80",
-        desc: "Muddled mint leaves, Persian limes, sparkling soda water, and vibrant curacao blend.",
-        inStock: true
-      }
-    ];
-
-    let dishes = JSON.parse(localStorage.getItem('restaurant_menu')) || DEFAULT_DISHES;
-    if (!localStorage.getItem('restaurant_menu')) {
-      localStorage.setItem('restaurant_menu', JSON.stringify(DEFAULT_DISHES));
-    }
-
-    let cart = {}; 
-    let activeCategory = "All";
-    let activeType = "all";
-
-    // Auto-sync if admin updates menu
-    window.addEventListener('storage', (e) => {
-      if (e.key === 'restaurant_menu') {
-        dishes = JSON.parse(localStorage.getItem('restaurant_menu')) || [];
-        renderMenu();
-      }
-    });
-
-    function setTypeFilter(type) {
-      activeType = type;
-      ['all', 'veg', 'nonveg'].forEach(t => {
-        const b = document.getElementById(`btn-${t}`);
-        if (t === type) {
-          b.className = "px-4 py-2 rounded-full text-xs font-bold border border-amber-500 bg-amber-500 text-slate-950 transition";
-        } else {
-          b.className = "px-4 py-2 rounded-full text-xs font-semibold border border-slate-700 bg-slate-900/60 text-slate-300 transition";
-        }
-      });
-      renderMenu();
-    }
-
-    function renderCategories() {
-      const cats = ["All", ...new Set(dishes.map(d => d.category))];
-      const bar = document.getElementById('category-bar');
-      bar.innerHTML = cats.map(cat => `
-        <button onclick="selectCategory('${cat}')" class="px-5 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap transition border ${
-          activeCategory === cat 
-            ? 'bg-amber-500 text-slate-950 border-amber-500 shadow-lg shadow-amber-500/20' 
-            : 'bg-slate-900/80 text-slate-400 border-slate-800 hover:border-slate-700 hover:text-white'
-        }">
-          ${cat}
-        </button>
-      `).join('');
-    }
-
-    function selectCategory(cat) {
-      activeCategory = cat;
-      renderCategories();
-      renderMenu();
-    }
-
-    function renderMenu() {
-      renderCategories();
-      const search = document.getElementById('search-input').value.toLowerCase();
-      const container = document.getElementById('dishes-container');
-
-      const filtered = dishes.filter(item => {
-        const matchesCat = activeCategory === "All" || item.category === activeCategory;
-        const matchesType = (activeType === "all") || (activeType === "veg" ? item.veg : !item.veg);
-        const matchesSearch = item.name.toLowerCase().includes(search) || item.desc.toLowerCase().includes(search);
-        return matchesCat && matchesType && matchesSearch;
-      });
-
-      document.getElementById('category-title').innerText = activeCategory === "All" ? "Royal Specialties" : activeCategory;
-      document.getElementById('dish-count').innerText = `${filtered.length} Dishes`;
-
-      if (filtered.length === 0) {
-        container.innerHTML = `
-          <div class="col-span-full text-center py-16 text-slate-500">
-            <i data-lucide="soup" class="w-12 h-12 mx-auto mb-2 opacity-40"></i>
-            <p class="font-medium text-sm">Koi item nahi mila!</p>
-          </div>
-        `;
-        lucide.createIcons();
-        return;
-      }
-
-      container.innerHTML = filtered.map(dish => {
-        const qty = cart[dish.id] || 0;
-        return `
-          <div class="luxury-card rounded-3xl overflow-hidden flex flex-col justify-between group">
-            
-            <!-- Large Image Section -->
-            <div class="relative h-56 w-full overflow-hidden bg-slate-950">
-              <img src="${dish.image}" alt="${dish.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-              
-              <!-- Veg / Non-Veg Indicator -->
-              <div class="absolute top-3 left-3 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-full flex items-center gap-1.5 border border-white/10">
-                <span class="w-2.5 h-2.5 rounded-full ${dish.veg ? 'bg-emerald-500' : 'bg-rose-500'}"></span>
-                <span class="text-[10px] font-bold uppercase tracking-wider ${dish.veg ? 'text-emerald-400' : 'text-rose-400'}">
-                  ${dish.veg ? 'Veg' : 'Non-Veg'}
-                </span>
-              </div>
-
-              <!-- Badge Tag -->
-              ${dish.badge ? `
-                <div class="absolute top-3 right-3 bg-amber-500 text-slate-950 text-[10px] font-extrabold px-3 py-1 rounded-full shadow-lg">
-                  ${dish.badge}
-                </div>
-              ` : ''}
-
-              <!-- Out of Stock Overlay -->
-              ${!dish.inStock ? `
-                <div class="absolute inset-0 bg-black/85 backdrop-blur-[2px] flex items-center justify-center">
-                  <span class="bg-red-500/90 text-white font-bold text-xs uppercase tracking-wider px-3.5 py-1.5 rounded-full border border-red-400/40">Currently Unavailable</span>
-                </div>
-              ` : ''}
+    <!-- AUTH PANEL (SIGNUP DEFAULT) -->
+    <div id="auth-panel" class="flex justify-center items-center min-h-screen flex-col p-5 bg-gradient-to-br from-blue-100 via-blue-200 to-indigo-200">
+        <div class="bg-white p-7 rounded-3xl shadow-xl w-full max-w-sm text-center" id="signup-box">
+            <h1 class="uniform-title justify-center text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 mb-2">Join Soyfa</h1>
+            <p class="text-xs text-gray-500 mb-4 font-medium">Food • Mart • Teachers • Services • Books</p>
+            <input type="text" id="reg-name" placeholder="Full Name" class="w-full p-3 mb-2 border rounded-xl text-xs outline-none">
+            <input type="email" id="reg-email" placeholder="Email Address" class="w-full p-3 mb-2 border rounded-xl text-xs outline-none">
+            <input type="password" id="reg-password" placeholder="Create Password" class="w-full p-3 mb-2 border rounded-xl text-xs outline-none">
+            <input type="number" id="reg-phone" placeholder="Phone Number" class="w-full p-3 mb-2 border rounded-xl text-xs outline-none">
+            <div class="flex gap-2">
+                <input type="text" id="reg-city" placeholder="City" class="w-1/2 p-3 mb-2 border rounded-xl text-xs outline-none">
+                <input type="number" id="reg-pincode" placeholder="Pincode" class="w-1/2 p-3 mb-2 border-blue-300 bg-blue-50/50 rounded-xl text-xs outline-none">
             </div>
+            <input type="text" id="reg-address" placeholder="Full Address" class="w-full p-3 mb-3 border rounded-xl text-xs outline-none">
+            <button class="w-full bg-blue-600 text-white p-3 rounded-xl font-bold text-xs shadow-md" onclick="registerUser()">SIGN UP NOW</button>
+            <p id="signup-error" class="text-red-500 text-xs font-bold mt-2 hidden"></p>
+            <button class="w-full bg-gray-50 text-gray-700 p-2.5 rounded-xl font-bold text-xs mt-3 border" onclick="switchAuth('login')">Already a member? Login</button>
+        </div>
 
-            <!-- Card Content -->
-            <div class="p-5 flex flex-col justify-between flex-1">
-              <div>
-                <div class="flex justify-between items-start gap-2 mb-2">
-                  <h3 class="text-base font-bold text-white group-hover:text-amber-400 transition-colors font-serif tracking-wide">${dish.name}</h3>
-                  <span class="text-base font-black text-amber-400 font-sans whitespace-nowrap">₹${dish.price}</span>
-                </div>
-                <p class="text-slate-400 text-xs line-clamp-2 leading-relaxed mb-4">${dish.desc}</p>
-              </div>
+        <div class="bg-white p-7 rounded-3xl shadow-xl w-full max-w-sm text-center hidden" id="login-box">
+            <h1 class="uniform-title justify-center text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600 mb-2">Soyfa Login</h1>
+            <input type="email" id="login-email" placeholder="Email Address" class="w-full p-3 mb-2 border rounded-xl text-xs outline-none">
+            <input type="password" id="login-password" placeholder="Password" class="w-full p-3 mb-3 border rounded-xl text-xs outline-none">
+            <button class="w-full bg-blue-600 text-white p-3 rounded-xl font-bold text-xs shadow-md" onclick="loginUser()">LOGIN SECURELY</button>
+            <p id="login-error" class="text-red-500 text-xs font-bold mt-2 hidden"></p>
+            <button class="w-full bg-gray-50 text-gray-700 p-2.5 rounded-xl font-bold text-xs mt-3 border" onclick="switchAuth('signup')">New here? Create Account</button>
+        </div>
+    </div>
 
-              <!-- Action Bar -->
-              <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between">
-                <span class="text-[11px] text-slate-400 bg-slate-950 px-2.5 py-1 rounded-lg border border-slate-800 flex items-center gap-1">
-                  🔥 ${dish.spicy || 'Mild'}
-                </span>
+    <!-- MAIN APP PANEL -->
+    <div id="app-panel" class="hidden">
+        
+        <!-- 4 FLOATING BUTTONS (ALL BLUE) -->
+        <div class="floating-right-nav" id="floating-actions-stack">
+            <div class="float-btn" onclick="showPanel('ladnun-directory-view')" title="लाडनूं निर्देशिका (अधिकारी एवं वार्ड)"><i class="fa-solid fa-landmark"></i></div>
+            <div class="float-btn" onclick="showPanel('school-vacancies-view')" title="स्कूल वैकेंसी (Requirements)"><i class="fa-solid fa-school"></i></div>
+            <div class="float-btn" onclick="showPanel('teachers-view')" title="लाडनूं टीचर्स"><i class="fa-solid fa-chalkboard-user"></i></div>
+            <div class="float-btn" onclick="showPanel('books-view')" title="Books Store"><i class="fa-solid fa-book-open"></i></div>
+        </div>
 
-                ${dish.inStock ? (
-                  qty === 0 ? `
-                    <button onclick="addToCart(${dish.id})" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs px-4 py-2 rounded-xl transition flex items-center gap-1.5 shadow-md shadow-amber-500/20 active:scale-95">
-                      <i data-lucide="plus" class="w-3.5 h-3.5 stroke-[3]"></i> Add
-                    </button>
-                  ` : `
-                    <div class="flex items-center bg-slate-900 border border-slate-700 rounded-xl p-0.5 shadow-inner">
-                      <button onclick="changeQty(${dish.id}, -1)" class="w-7 h-7 flex items-center justify-center text-slate-300 hover:text-white font-bold hover:bg-slate-800 rounded-lg transition">-</button>
-                      <span class="w-6 text-center text-xs font-bold text-amber-400">${qty}</span>
-                      <button onclick="changeQty(${dish.id}, 1)" class="w-7 h-7 flex items-center justify-center text-slate-300 hover:text-white font-bold hover:bg-slate-800 rounded-lg transition">+</button>
+        <!-- 1. Q-MART (AUTO SLIDER) -->
+        <div id="grocery-view" class="p-4 max-w-xl mx-auto bg-mart-grad min-h-screen">
+            <header class="bg-white/95 sticky top-0 z-40 border border-emerald-100 p-3 rounded-2xl flex justify-between items-center shadow-xs mb-4">
+                <div class="flex items-center gap-2">
+                    <h1 class="text-2xl font-black text-emerald-600 tracking-tighter">Q-Mart</h1>
+                    <div>
+                        <p class="font-bold text-xs text-gray-800">⚡ 12 Mins Delivery</p>
+                        <p class="text-[11px] text-gray-500 truncate max-w-[150px]" id="mart-top-addr">Location...</p>
                     </div>
-                  `
-                ) : `
-                  <span class="text-xs text-slate-500 italic">Sold Out</span>
-                `}
-              </div>
+                </div>
+            </header>
+            
+            <div class="relative mb-4 flex items-center">
+                <span class="absolute left-3.5 text-gray-400"><i class="fa-solid fa-magnifying-glass"></i></span>
+                <input type="text" id="mart-search" placeholder="Search groceries..." onkeyup="filterMart(this.value);" class="w-full p-3 rounded-xl border border-emerald-100 text-sm pl-10 pr-10 bg-white shadow-xs outline-none">
+                <button onclick="startVoiceSearch('mart-search', filterMart)" class="absolute right-3 text-emerald-600 bg-emerald-50 w-7 h-7 rounded-full flex items-center justify-center text-sm shadow-xs"><i class="fa-solid fa-microphone"></i></button>
             </div>
-          </div>
-        `;
-      }).join('');
-      lucide.createIcons();
-    }
 
-    function addToCart(id) {
-      cart[id] = 1;
-      updateCartUI();
-      renderMenu();
-    }
+            <!-- Auto-sliding Mart Banners Carousel -->
+            <div id="mart-banners" class="flex gap-3 overflow-x-auto qmart-hide-scroll snap-x mb-4 scroll-smooth"></div>
+            <div id="groc-categories" class="flex gap-4 overflow-x-auto qmart-hide-scroll mb-6 pb-1"></div>
+            <div id="groc-products-container" class="space-y-6"></div>
 
-    function changeQty(id, delta) {
-      if (!cart[id]) return;
-      cart[id] += delta;
-      if (cart[id] <= 0) delete cart[id];
-      updateCartUI();
-      renderMenu();
-    }
-
-    function updateCartUI() {
-      const ids = Object.keys(cart);
-      const totalQty = ids.reduce((acc, id) => acc + cart[id], 0);
-      let totalPrice = 0;
-      ids.forEach(id => {
-        const item = dishes.find(d => d.id == id);
-        if (item) totalPrice += item.price * cart[id];
-      });
-
-      // Update Nav Badge
-      const navBadge = document.getElementById('nav-cart-badge');
-      if (totalQty > 0) {
-        navBadge.innerText = totalQty;
-        navBadge.classList.remove('hidden');
-      } else {
-        navBadge.classList.add('hidden');
-      }
-
-      // Update Bottom Bar
-      const bar = document.getElementById('cart-bar');
-      if (totalQty > 0) {
-        document.getElementById('cart-bar-qty').innerText = totalQty;
-        document.getElementById('cart-bar-total').innerText = totalPrice;
-        bar.classList.remove('hidden');
-      } else {
-        bar.classList.add('hidden');
-      }
-    }
-
-    function openCartModal() {
-      const container = document.getElementById('cart-items-container');
-      const ids = Object.keys(cart);
-
-      if (ids.length === 0) {
-        container.innerHTML = `
-          <div class="text-center py-8 text-slate-500">
-            <i data-lucide="shopping-bag" class="w-10 h-10 mx-auto mb-2 opacity-30"></i>
-            <p class="text-xs">Aapka cart khali hai. Menu se dish add karein!</p>
-          </div>
-        `;
-        document.getElementById('bill-subtotal').innerText = 0;
-        document.getElementById('bill-tax').innerText = 0;
-        document.getElementById('bill-grand-total').innerText = 0;
-        document.getElementById('cart-modal').classList.remove('hidden');
-        document.getElementById('cart-modal').classList.add('flex');
-        lucide.createIcons();
-        return;
-      }
-
-      let subtotal = 0;
-      container.innerHTML = ids.map(id => {
-        const item = dishes.find(d => d.id == id);
-        const qty = cart[id];
-        subtotal += item.price * qty;
-        return `
-          <div class="flex items-center justify-between bg-slate-950 p-2.5 rounded-2xl border border-slate-800">
-            <div class="flex items-center gap-2.5">
-              <img src="${item.image}" class="w-11 h-11 rounded-xl object-cover">
-              <div>
-                <h4 class="text-xs font-bold text-white font-serif">${item.name}</h4>
-                <p class="text-[10px] text-amber-400 font-sans">₹${item.price} x ${qty}</p>
-              </div>
+            <div id="groc-checkout-bar" class="fixed bottom-[75px] left-4 right-4 bg-emerald-700 text-white p-3.5 rounded-2xl shadow-xl z-40 hidden flex justify-between items-center cursor-pointer max-w-xl mx-auto" onclick="openUniversalCheckout('GROCERY')">
+                <div><p class="text-sm font-extrabold"><span id="groc-item-count">0</span> Items | ₹<span id="groc-final-total">0</span></p><p class="text-[10px] opacity-90">Extra charges may apply</p></div>
+                <div class="font-bold text-sm flex items-center gap-2">View Cart <i class="fa-solid fa-arrow-right"></i></div>
             </div>
-            <div class="flex items-center bg-slate-900 rounded-xl border border-slate-800">
-              <button onclick="changeQty(${item.id}, -1); openCartModal();" class="w-7 h-7 text-slate-400 hover:text-white font-bold text-xs">-</button>
-              <span class="w-5 text-center text-xs font-bold text-white">${qty}</span>
-              <button onclick="changeQty(${item.id}, 1); openCartModal();" class="w-7 h-7 text-slate-400 hover:text-white font-bold text-xs">+</button>
+        </div>
+
+        <!-- 2. FOOD DELIVERY -->
+        <div id="home-view" class="container-food p-4 hidden max-w-xl mx-auto bg-food-grad min-h-screen">
+            <h1 class="uniform-title text-red-500"><i class="fa-solid fa-burger text-orange-500"></i> Soyfa Food</h1>
+            <div class="relative mb-4 flex items-center">
+                <span class="absolute left-3.5 text-red-400"><i class="fa-solid fa-utensils"></i></span>
+                <input type="text" id="restaurant-search" placeholder="Search restaurants..." onkeyup="filterRestaurants(this.value);" class="w-full p-3 rounded-xl border border-red-100 text-sm pl-10 pr-10 bg-white shadow-xs outline-none">
+                <button onclick="startVoiceSearch('restaurant-search', filterRestaurants)" class="absolute right-3 text-red-500 bg-red-50 w-7 h-7 rounded-full flex items-center justify-center text-sm shadow-xs"><i class="fa-solid fa-microphone"></i></button>
             </div>
-          </div>
-        `;
-      }).join('');
+            <!-- Restored 3-Image Carousel -->
+            <div class="overflow-hidden rounded-2xl mb-5 shadow-sm border border-red-100 h-40">
+                <div id="banner-slider" class="flex w-[300%] transition-transform duration-500 h-full">
+                    <img loading="lazy" class="w-1/3 h-full object-cover" src="https://b.zmtcdn.com/data/dish_photos/0f7/7c9e90b66dabd5aa5bb51ee96ac6d0f7.jpg">
+                    <img loading="lazy" class="w-1/3 h-full object-cover" src="https://i.ndtvimg.com/i/2017-08/indian-food_650x400_81501923865.jpg">
+                    <img loading="lazy" class="w-1/3 h-full object-cover" src="https://b.zmtcdn.com/data/dish_photos/a2e/1bd19d0b97ed99e76bf590573bd43a2e.jpeg">
+                </div>
+            </div>
+            <div id="restaurants-list" class="space-y-4"></div>
+        </div>
 
-      const tax = Math.round(subtotal * 0.05);
-      document.getElementById('bill-subtotal').innerText = subtotal;
-      document.getElementById('bill-tax').innerText = tax;
-      document.getElementById('bill-grand-total').innerText = subtotal + tax;
+        <!-- Food Menu Details -->
+        <div id="menu-view" class="container-food p-4 hidden max-w-xl mx-auto bg-food-grad min-h-screen">
+            <button class="bg-white px-3 py-1.5 rounded-full text-xs font-bold shadow mb-3 text-gray-600 flex items-center gap-1.5" onclick="showPanel('home-view')"><i class="fa-solid fa-arrow-left"></i> Back</button>
+            <img id="menu-restaurant-image" src="" class="w-full h-44 object-cover rounded-2xl shadow mb-3">
+            <h2 id="menu-restaurant-name" class="text-xl font-bold text-gray-800">Restaurant</h2>
+            <p id="menu-restaurant-cuisine" class="text-xs text-gray-500 mb-4"></p>
+            <div id="menu-items-list" class="space-y-3 mb-20"></div>
+            <div id="food-checkout-bar" class="fixed bottom-[75px] left-4 right-4 bg-red-500 text-white p-3.5 rounded-2xl shadow-xl z-40 hidden flex justify-between items-center cursor-pointer max-w-xl mx-auto" onclick="openUniversalCheckout('FOOD')">
+                <p class="text-sm font-extrabold"><i class="fa-solid fa-burger"></i> Cart (₹<span id="food-cart-total-display">0</span>)</p>
+                <div class="font-bold text-sm flex items-center gap-2">Proceed <i class="fa-solid fa-arrow-right"></i></div>
+            </div>
+        </div>
 
-      const modal = document.getElementById('cart-modal');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-      lucide.createIcons();
-    }
+        <!-- 3. LOCAL SERVICES -->
+        <div id="services-view" class="p-4 max-w-xl mx-auto hidden bg-serv-grad min-h-screen">
+            <h1 class="uniform-title text-emerald-700"><i class="fa-solid fa-briefcase"></i> Local Services</h1>
+            <button onclick="document.getElementById('addServiceModal').classList.remove('hidden')" class="w-full bg-emerald-600 text-white p-3 rounded-xl font-bold shadow-md mb-4 flex justify-center items-center gap-2 text-xs">+ Register Your Service Free</button>
+            <div class="mb-3">
+                <span class="text-xs font-bold text-gray-500 block mb-2 uppercase">Select Category:</span>
+                <div id="srv-categories-chips" class="flex gap-2.5 overflow-x-auto qmart-hide-scroll pb-2"></div>
+            </div>
+            <div id="srv-providers-list" class="space-y-3.5 pb-20"></div>
+        </div>
 
-    function closeCartModal() {
-      const modal = document.getElementById('cart-modal');
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
-    }
+        <!-- 4. LADNUN TEACHERS (ONLY TEACHERS) -->
+        <div id="teachers-view" class="p-4 max-w-xl mx-auto hidden pb-24 bg-teach-grad min-h-screen">
+            <div class="flex justify-between items-center mb-3">
+                <h1 class="uniform-title text-indigo-700 mb-0"><i class="fa-solid fa-chalkboard-user"></i> Ladnun Teachers</h1>
+                <button onclick="showPanel('grocery-view')" class="bg-white w-8 h-8 rounded-full flex items-center justify-center text-gray-600 shadow-xs"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <p class="text-xs text-gray-500 mb-3">लाडनूं के योग्य शिक्षक सूची एवं उपलब्धता (Free/Busy)</p>
+            <button onclick="openTeacherRegModal()" class="w-full bg-indigo-600 text-white p-3 rounded-xl font-bold shadow-md mb-4 text-xs">+ शिक्षक के रूप में खुद को रजिस्टर करें</button>
+            <div class="mb-3">
+                <span class="text-xs font-bold text-gray-500 block mb-2 uppercase">विषय अनुसार शिक्षक:</span>
+                <div id="teacher-categories" class="flex gap-2 overflow-x-auto qmart-hide-scroll pb-1"></div>
+            </div>
+            <div id="teachers-list" class="space-y-3.5"></div>
+        </div>
 
-    function confirmOrder() {
-      const ids = Object.keys(cart);
-      if (ids.length === 0) {
-        alert("Cart me koi item nahi hai!");
-        return;
-      }
+        <!-- 5. SCHOOL VACANCIES (ONLY SCHOOL REQUIREMENTS) -->
+        <div id="school-vacancies-view" class="p-4 max-w-xl mx-auto hidden pb-24 bg-sch-grad min-h-screen">
+            <div class="flex justify-between items-center mb-3">
+                <h1 class="uniform-title text-purple-700 mb-0"><i class="fa-solid fa-school"></i> स्कूल वैकेंसी (Jobs)</h1>
+                <button onclick="showPanel('grocery-view')" class="bg-white w-8 h-8 rounded-full flex items-center justify-center text-gray-600 shadow-xs"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <p class="text-xs text-gray-500 mb-3">स्कूलों एवं कोचिंग संस्थानों में टीचर भर्ती व आवश्यकताएं</p>
+            <button onclick="openSchoolJobModal()" class="w-full bg-purple-600 text-white p-3 rounded-xl font-bold shadow-md mb-4 text-xs">+ नई स्कूल वैकेंसी पोस्ट करें</button>
+            <div id="school-vacancies-container" class="space-y-3.5"></div>
+        </div>
 
-      const selectedTable = document.getElementById('cart-table-select').value;
-      const note = document.getElementById('order-note').value;
+        <!-- 6. LADNUN DIRECTORY -->
+        <div id="ladnun-directory-view" class="p-4 max-w-xl mx-auto hidden pb-24 bg-dir-grad min-h-screen">
+            <div class="flex justify-between items-center mb-3">
+                <h1 class="uniform-title text-blue-700 mb-0"><i class="fa-solid fa-landmark"></i> लाडनूं निर्देशिका</h1>
+                <button onclick="showPanel('grocery-view')" class="bg-white w-8 h-8 rounded-full flex items-center justify-center text-gray-600 shadow-xs"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="bg-white/90 p-3.5 rounded-2xl border border-blue-100 mb-4 shadow-sm">
+                <span class="text-xs font-bold text-blue-900 block mb-2"><i class="fa-solid fa-building-columns text-blue-600"></i> प्रशासनिक एवं सरकारी अधिकारी</span>
+                <div id="officials-slider" class="flex gap-3 overflow-x-auto qmart-hide-scroll snap-x pb-1"></div>
+            </div>
+            <span class="text-xs font-bold text-gray-700 block mb-1">वार्ड सदस्य सूची (Ward Members):</span>
+            <select id="ward-filter-select" onchange="filterWardMembers(this.value)" class="w-full p-2.5 rounded-xl border border-blue-200 bg-white text-xs font-bold text-gray-800 outline-none mb-4 shadow-xs">
+                <option value="all">सभी वार्ड (All Wards)</option>
+            </select>
+            <div id="ward-members-list" class="space-y-3"></div>
+        </div>
 
-      const orderItems = ids.map(id => {
-        const d = dishes.find(x => x.id == id);
-        return { name: d.name, price: d.price, qty: cart[id] };
-      });
+        <!-- 7. BOOKS STORE (BLUE ACCENT) -->
+        <div id="books-view" class="p-4 max-w-xl mx-auto hidden pb-24 bg-book-grad min-h-screen">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="uniform-title text-blue-700 mb-0"><i class="fa-solid fa-book-bookmark text-blue-600"></i> System Book</h2>
+                <button onclick="showPanel('grocery-view')" class="bg-white w-8 h-8 rounded-full flex items-center justify-center text-gray-600 shadow-xs"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="flex justify-center mb-4">
+                <div class="bg-white p-1 rounded-full flex w-64 border border-blue-200 shadow-xs">
+                    <button onclick="setMedium('Hindi')" id="btnMedHindi" class="flex-1 py-1.5 text-xs font-bold bg-blue-600 text-white rounded-full">HINDI</button>
+                    <button onclick="setMedium('English')" id="btnMedEnglish" class="flex-1 py-1.5 text-xs font-bold text-gray-600">ENGLISH</button>
+                </div>
+            </div>
+            <div id="catContainer" class="flex gap-2 mb-4 overflow-x-auto pb-2 qmart-hide-scroll"></div>
+            <div id="prodList" class="grid grid-cols-2 gap-3.5 pb-10"></div>
+        </div>
 
-      const subtotal = orderItems.reduce((acc, i) => acc + (i.price * i.qty), 0);
-      const total = subtotal + Math.round(subtotal * 0.05);
+        <!-- 8. ORDERS -->
+        <div id="orders-view" class="p-4 max-w-xl mx-auto hidden bg-order-grad min-h-screen">
+            <h1 class="uniform-title text-blue-600 mb-4"><i class="fa-solid fa-receipt"></i> My Orders</h1>
+            <div id="orders-list" class="space-y-4 pb-20"></div>
+        </div>
 
-      const newOrder = {
-        orderId: 'ORD-' + Math.floor(1000 + Math.random() * 9000),
-        table: selectedTable,
-        items: orderItems,
-        note: note || 'None',
-        total: total,
-        status: 'Pending',
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      };
+        <!-- 9. PROFILE (SUB-PAGES) -->
+        <div id="profile-view" class="p-4 max-w-xl mx-auto hidden bg-prof-grad min-h-screen">
+            <h1 class="uniform-title text-slate-800 mb-4"><i class="fa-solid fa-user"></i> My Profile</h1>
+            
+            <div id="profile-display-mode">
+                <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 space-y-2 mb-4 text-xs">
+                    <div class="flex justify-between"><span class="text-gray-400">Name</span><span class="font-bold" id="display-name">N/A</span></div>
+                    <div class="flex justify-between"><span class="text-gray-400">Phone</span><span class="font-bold" id="display-phone">N/A</span></div>
+                    <div class="flex justify-between"><span class="text-gray-400">Pincode</span><span class="font-bold text-red-500" id="display-pincode">N/A</span></div>
+                    <div class="flex flex-col"><span class="text-gray-400">Address</span><span class="font-bold" id="display-address">N/A</span></div>
+                </div>
+                <button class="w-full bg-blue-50 text-blue-600 font-bold p-3 rounded-xl mb-3 text-xs shadow-xs" onclick="toggleProfileEditMode(true);">Edit Profile</button>
+                
+                <a href="https://wa.me/919999999999?text=Hello%20Soyfa%20Support" target="_blank" class="w-full bg-emerald-50 text-emerald-700 font-bold p-3 rounded-xl mb-3 flex items-center justify-between text-xs border border-emerald-200">
+                    <span><i class="fa-brands fa-whatsapp text-lg"></i> 24x7 WhatsApp Help Desk</span>
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </a>
 
-      // Live Save into LocalStorage for Admin Panel
-      let currentOrders = JSON.parse(localStorage.getItem('restaurant_orders')) || [];
-      currentOrders.unshift(newOrder);
-      localStorage.setItem('restaurant_orders', JSON.stringify(currentOrders));
+                <!-- PROFILE SUB-PAGES NAVIGATION -->
+                <div class="bg-white rounded-2xl shadow-xs border border-slate-100 divide-y divide-slate-100 text-xs font-bold text-gray-700 mb-4">
+                    <button class="w-full text-left p-3.5 flex justify-between items-center" onclick="showInfoPage('about-page')"><span>About Soyfa</span> <i class="fa-solid fa-chevron-right text-gray-300"></i></button>
+                    <button class="w-full text-left p-3.5 flex justify-between items-center" onclick="showInfoPage('privacy-page')"><span>Privacy Policy</span> <i class="fa-solid fa-chevron-right text-gray-300"></i></button>
+                    <button class="w-full text-left p-3.5 flex justify-between items-center" onclick="showInfoPage('terms-page')"><span>Terms & Conditions</span> <i class="fa-solid fa-chevron-right text-gray-300"></i></button>
+                    <button class="w-full text-left p-3.5 flex justify-between items-center" onclick="showInfoPage('cancellation-page')"><span>Cancellation Policy</span> <i class="fa-solid fa-chevron-right text-gray-300"></i></button>
+                </div>
 
-      // Reset
-      cart = {};
-      document.getElementById('order-note').value = '';
-      updateCartUI();
-      closeCartModal();
-      renderMenu();
+                <button class="w-full bg-red-50 text-red-500 font-bold p-3 rounded-xl text-xs mb-8" onclick="customerLogout();">Logout Account</button>
+            </div>
 
-      // Show Success Dialog
-      document.getElementById('order-success-id').innerText = `${newOrder.orderId} • ${newOrder.table}`;
-      const successModal = document.getElementById('success-modal');
-      successModal.classList.remove('hidden');
-      successModal.classList.add('flex');
-      lucide.createIcons();
-    }
+            <!-- Profile Edit Form -->
+            <div id="profile-edit-form" class="bg-white p-4 rounded-xl border border-gray-100 hidden space-y-2 text-xs">
+                <input type="text" id="profile-name" placeholder="Name" class="w-full p-2.5 border rounded-lg">
+                <input type="text" id="profile-phone" placeholder="Phone" class="w-full p-2.5 border rounded-lg">
+                <input type="text" id="profile-city" placeholder="City" class="w-full p-2.5 border rounded-lg">
+                <input type="text" id="profile-pincode" placeholder="Pincode" class="w-full p-2.5 border-2 border-red-300 rounded-lg font-bold">
+                <input type="text" id="profile-address" placeholder="Address" class="w-full p-2.5 border rounded-lg">
+                <button class="w-full bg-blue-600 text-white font-bold p-3 rounded-xl" onclick="updateProfile();">Save Profile</button>
+                <button class="w-full bg-gray-100 text-gray-600 font-bold p-2.5 rounded-xl" onclick="toggleProfileEditMode(false);">Cancel</button>
+            </div>
 
-    function closeSuccessModal() {
-      document.getElementById('success-modal').classList.add('hidden');
-      document.getElementById('success-modal').classList.remove('flex');
-    }
+            <!-- SUB-PAGES CONTAINER -->
+            <div id="info-pages-container" class="hidden pb-20">
+                <div id="about-page" class="hidden bg-white p-5 rounded-2xl shadow-xs mb-3 text-xs leading-relaxed">
+                    <h3 class="font-extrabold text-blue-600 text-sm mb-2">About Soyfa</h3>
+                    <p class="text-gray-600">Soyfa Super App लाडनूं का सर्वोत्कृष्ट डिजिटल प्लेटफ़ॉर्म है जहाँ आप Q-Mart ग्रोसरी (12 मिनट डिलीवरी), फ़ूड, लाडनूं के शिक्षक, स्कूल वैकेंसी, लोकल सेवाएँ और प्रशासनिक निर्देशिका का लाभ एक ही स्थान पर उठा सकते हैं।</p>
+                </div>
+                <div id="privacy-page" class="hidden bg-white p-5 rounded-2xl shadow-xs mb-3 text-xs leading-relaxed">
+                    <h3 class="font-extrabold text-blue-600 text-sm mb-2">Privacy Policy</h3>
+                    <p class="text-gray-600">हम आपकी व्यक्तिगत जानकारी की सुरक्षा के प्रति पूरी तरह प्रतिबद्ध हैं। आपका नाम, पता व संपर्क केवल ऑर्डर प्रोसेसिंग व आवश्यक सेवा वितरण हेतु ही उपयोग में लिए जाते हैं।</p>
+                </div>
+                <div id="terms-page" class="hidden bg-white p-5 rounded-2xl shadow-xs mb-3 text-xs leading-relaxed">
+                    <h3 class="font-extrabold text-blue-600 text-sm mb-2">Terms & Conditions</h3>
+                    <p class="text-gray-600">Soyfa ऐप का उपयोग करते हुए आप उचित उपयोग व नियमों से सहमत होते हैं। सेवा प्रदाताओं व उपयोगकर्ताओं से निष्पक्ष और सुरक्षित व्यवहार की अपेक्षा की जाती है।</p>
+                </div>
+                <div id="cancellation-page" class="hidden bg-white p-5 rounded-2xl shadow-xs mb-3 text-xs leading-relaxed">
+                    <h3 class="font-extrabold text-blue-600 text-sm mb-2">Cancellation Policy</h3>
+                    <p class="text-gray-600">ऑर्डर तैयार या डिस्पैच होने से पहले सीधे कैंसिल किया जा सकता है। कैंसिल होते ही संबंधित स्थिति स्वतः अपडेट हो जाती है।</p>
+                </div>
+                <button class="w-full bg-gray-100 text-gray-700 font-bold p-3 rounded-xl text-xs" onclick="hideInfoPages();">← Back to Profile</button>
+            </div>
+        </div>
 
-    function filterMenu() {
-      renderMenu();
-    }
+        <!-- BLUE BOTTOM NAVIGATION -->
+        <nav class="bottom-nav">
+            <div class="nav-item active" data-panel="grocery-view" onclick="showPanel('grocery-view');"><i class="fa-solid fa-store"></i><span>Mart</span></div>
+            <div class="nav-item" data-panel="home-view" onclick="showPanel('home-view');"><i class="fa-solid fa-burger"></i><span>Food</span></div>
+            <div class="nav-item" data-panel="services-view" onclick="showPanel('services-view');"><i class="fa-solid fa-briefcase"></i><span>Services</span></div>
+            <div class="nav-item" data-panel="orders-view" onclick="showPanel('orders-view');"><i class="fa-solid fa-receipt"></i><span>Orders</span></div>
+            <div class="nav-item" data-panel="profile-view" onclick="showPanel('profile-view');"><i class="fa-solid fa-user"></i><span>Profile</span></div>
+        </nav>
+    </div>
 
-    window.addEventListener('DOMContentLoaded', () => {
-      renderMenu();
-      lucide.createIcons();
-    });
-  </script>
+    <!-- MODALS -->
+    <!-- Checkout Modal -->
+    <div id="universalCheckoutModal" class="universal-modal fixed inset-0 bg-black/60 hidden flex items-end justify-center sm:items-center p-4">
+        <div class="bg-white w-full max-w-md p-5 rounded-3xl shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-3 border-b pb-2"><h3 class="font-bold text-lg" id="chk-title">Checkout</h3><button onclick="closeModals()" class="text-gray-400 font-bold text-xl">&times;</button></div>
+            <div id="chk-items-list" class="max-h-32 overflow-y-auto mb-2 text-xs space-y-1"></div>
+            <div class="bg-emerald-50 p-2.5 rounded-xl mb-3 border border-emerald-200">
+                <div class="flex gap-2">
+                    <input type="text" id="coupon-input" placeholder="Coupon: SOYFA50 or WELCOME10" class="uppercase font-bold text-xs bg-white border p-1.5 rounded-lg flex-grow outline-none">
+                    <button onclick="applyCoupon()" class="bg-blue-600 text-white text-xs font-bold px-3 py-1.5 rounded-lg">Apply</button>
+                </div>
+                <p id="coupon-msg" class="text-[11px] font-bold mt-1 hidden"></p>
+            </div>
+            <div class="bg-gray-50 rounded-xl p-3 mb-3 text-xs space-y-1">
+                <div class="flex justify-between"><span>Items Total</span><span id="chk-sub">₹0</span></div>
+                <div class="flex justify-between text-emerald-600" id="chk-discount-row" style="display:none;"><span>Coupon Discount</span><span id="chk-disc">-₹0</span></div>
+                <div class="flex justify-between"><span>Delivery Fee</span><span id="chk-del">+₹0</span></div>
+                <div class="border-t pt-1 flex justify-between font-bold text-sm text-gray-900"><span>To Pay</span><span id="chk-total" class="text-blue-600 font-black">₹0</span></div>
+            </div>
+            <input type="text" id="chk-name" placeholder="Name" class="w-full p-2 mb-2 border rounded-lg text-xs outline-none">
+            <input type="number" id="chk-phone" placeholder="Phone" class="w-full p-2 mb-2 border rounded-lg text-xs outline-none">
+            <textarea id="chk-address" placeholder="Delivery Address" class="w-full p-2 border rounded-lg text-xs h-14 mb-2 outline-none resize-none"></textarea>
+            <input type="text" id="chk-notes" placeholder="Delivery note (e.g. Gate pe rakh dena)" class="w-full p-2 border rounded-lg text-xs mb-3 bg-amber-50 outline-none">
+            <div class="grid grid-cols-2 gap-2 mb-4">
+                <label class="border-2 p-2 rounded-xl text-center text-xs font-bold cursor-pointer has-[:checked]:border-blue-600 has-[:checked]:bg-blue-50"><input type="radio" name="payMethod" value="COD" checked class="hidden"> Cash on Delivery</label>
+                <label class="border-2 p-2 rounded-xl text-center text-xs font-bold cursor-pointer has-[:checked]:border-blue-600 has-[:checked]:bg-blue-50"><input type="radio" name="payMethod" value="ONLINE" class="hidden"> Pay Online (UPI)</label>
+            </div>
+            <button onclick="processCheckout()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold text-sm shadow">CONFIRM ORDER</button>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="orderSuccessModal" class="universal-modal fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4">
+        <div class="bg-white p-6 rounded-3xl text-center shadow-2xl animate-pop w-full max-w-sm border-t-8 border-emerald-500">
+            <i class="fa-solid fa-circle-check text-5xl text-emerald-500 mb-2"></i>
+            <h2 class="text-xl font-black">Order Placed!</h2>
+            <p class="text-xs text-gray-500 mt-1 mb-4">Your order has been confirmed successfully.</p>
+        </div>
+    </div>
+
+    <!-- Teacher Modal (SUBJECT TYPED TEXT) -->
+    <div id="teacherRegModal" class="universal-modal fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm p-5 rounded-2xl max-h-[85vh] overflow-y-auto text-xs space-y-2">
+            <div class="flex justify-between items-center mb-1"><h3 class="font-bold text-sm text-indigo-900">शिक्षक प्रोफाइल जोड़ें</h3><button onclick="closeModals()" class="text-lg font-bold">&times;</button></div>
+            <input type="text" id="tName" placeholder="शिक्षक का नाम" class="w-full p-2 border rounded-lg outline-none">
+            <input type="text" id="tSubject" placeholder="विषय टाइप करें (उदा. Maths, Science, English...)" class="w-full p-2 border rounded-lg bg-indigo-50/50 outline-none font-bold text-indigo-900">
+            <input type="text" id="tExp" placeholder="अनुभव (उदा. 4 Years Exp)" class="w-full p-2 border rounded-lg outline-none">
+            <textarea id="tDesc" placeholder="योग्यता एवं अन्य विवरण..." class="w-full p-2 border rounded-lg h-14 outline-none resize-none"></textarea>
+            <input type="number" id="tPhone" placeholder="Calling Phone" class="w-full p-2 border rounded-lg outline-none">
+            <input type="number" id="tWa" placeholder="WhatsApp Number" class="w-full p-2 border rounded-lg outline-none">
+            <div class="grid grid-cols-2 gap-2">
+                <label class="border-2 p-2 rounded-lg text-center font-bold cursor-pointer has-[:checked]:border-green-600 has-[:checked]:bg-green-50"><input type="radio" name="tAvailability" value="free" checked class="hidden"> 🟢 FREE</label>
+                <label class="border-2 p-2 rounded-lg text-center font-bold cursor-pointer has-[:checked]:border-red-600 has-[:checked]:bg-red-50"><input type="radio" name="tAvailability" value="busy" class="hidden"> 🔴 BUSY</label>
+            </div>
+            <input type="file" id="tImg" accept="image/*" class="w-full border p-1 rounded-lg">
+            <button onclick="saveTeacherProfile()" class="w-full bg-indigo-600 text-white p-2.5 rounded-xl font-bold mt-2">Save Profile</button>
+        </div>
+    </div>
+
+    <!-- School Job Modal -->
+    <div id="schoolJobModal" class="universal-modal fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm p-5 rounded-2xl max-h-[80vh] overflow-y-auto text-xs space-y-2">
+            <div class="flex justify-between items-center"><h3 class="font-bold text-sm text-purple-900">स्कूल वैकेंसी पोस्ट करें</h3><button onclick="closeModals()" class="text-lg font-bold">&times;</button></div>
+            <input type="text" id="schName" placeholder="स्कूल/कोचिंग का नाम" class="w-full p-2 border rounded-lg outline-none">
+            <input type="text" id="schSubject" placeholder="आवश्यक विषय (उदा. Maths 10th)" class="w-full p-2 border rounded-lg outline-none">
+            <input type="text" id="schSalary" placeholder="सैलरी / मानदेय (उदा. 15,000)" class="w-full p-2 border rounded-lg outline-none">
+            <input type="number" id="schPhone" placeholder="फोन नंबर" class="w-full p-2 border rounded-lg outline-none">
+            <input type="number" id="schWa" placeholder="WhatsApp नंबर" class="w-full p-2 border rounded-lg outline-none">
+            <textarea id="schDetails" placeholder="विवरण व शर्तें..." class="w-full p-2 border rounded-lg h-14 outline-none resize-none"></textarea>
+            <button onclick="saveSchoolVacancy()" class="w-full bg-purple-600 text-white p-2.5 rounded-xl font-bold">Post Vacancy</button>
+        </div>
+    </div>
+
+    <!-- Register Service Modal -->
+    <div id="addServiceModal" class="universal-modal fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm p-5 rounded-2xl max-h-[80vh] overflow-y-auto text-xs space-y-2">
+            <div class="flex justify-between items-center"><h3 class="font-bold text-sm">Register Service</h3><button onclick="closeModals()" class="text-lg font-bold">&times;</button></div>
+            <input type="text" id="srvRegName" placeholder="Name / Business Name" class="w-full p-2 border rounded-lg">
+            <input type="text" id="srvRegCat" placeholder="Category (Plumber, Electrician...)" class="w-full p-2 border rounded-lg">
+            <textarea id="srvRegDesc" placeholder="Description..." class="w-full p-2 border rounded-lg h-14"></textarea>
+            <input type="number" id="srvRegPhone" placeholder="Phone" class="w-full p-2 border rounded-lg">
+            <input type="number" id="srvRegWa" placeholder="WhatsApp" class="w-full p-2 border rounded-lg">
+            <input type="file" id="srvRegImg" accept="image/*" class="w-full border p-1 rounded-lg">
+            <button onclick="submitService()" class="w-full bg-emerald-600 text-white p-2.5 rounded-xl font-bold">Submit</button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        const firebaseConfig = { apiKey: "AIzaSyACNrzJgRGKmn8JsRuS_2b7RecPIfahTvQ", databaseURL: "https://singup-aec8c-default-rtdb.firebaseio.com", projectId: "singup-aec8c" };
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth(), db = firebase.database();
+
+        let customerProfile = {}, groceryCart = {}, foodCart = [];
+        const RAZORPAY_KEY = "rzp_live_Ry7zglI0OnE1Jo";
+        let currentOrderType = 'GROCERY';
+        let allRestaurantsData = {}, allMartData = [], allMartBanners = [], allBookCats = [], allBooks = [];
+        let allSrvCats = [], allSrvProvs = [], currentSrvCat = 'all';
+        let currentBookMed = 'Hindi', currentBookCat = 'all', selectedBook = null;
+        let appliedCouponCode = '', appliedDiscountAmount = 0;
+        let allTeachers = {}, currentTeacherSub = 'all', allSchoolVacancies = {}, allOfficials = {}, allWardMembers = {}, currentWardFilter = 'all';
+
+        function compressImage(file, cb) {
+            if(!file) return cb(null);
+            const r = new FileReader(); r.readAsDataURL(file);
+            r.onload = e => {
+                const i = new Image(); i.src = e.target.result;
+                i.onload = () => {
+                    const c = document.createElement('canvas'); const s = 400 / i.width;
+                    c.width = 400; c.height = i.height * s;
+                    c.getContext('2d').drawImage(i, 0, 0, c.width, c.height);
+                    cb(c.toDataURL('image/jpeg', 0.6));
+                };
+            };
+        }
+
+        function playOrderDoneSound() { try { const s = document.getElementById('order-done-sound'); if(s) { s.currentTime=0; s.play().catch(()=>{}); } } catch(e){} }
+
+        function startVoiceSearch(id, cb) {
+            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if(!SR) return alert("Voice search is not supported on this device.");
+            const r = new SR(); r.lang = 'hi-IN';
+            r.onresult = e => { const t = e.results[0][0].transcript; document.getElementById(id).value = t; cb(t); };
+            r.start();
+        }
+
+        // FOOD AUTO SLIDER
+        function startFoodAutoSlide() { 
+            let cur = 0; 
+            setInterval(() => { 
+                cur = (cur + 1) % 3; 
+                const s = document.getElementById('banner-slider');
+                if(s) s.style.transform = `translateX(-${cur * 100 / 3}%)`; 
+            }, 4500); 
+        }
+
+        // 3. MART AUTO SLIDER
+        function startMartAutoSlide() {
+            let slideIdx = 0;
+            setInterval(() => {
+                const bBox = document.getElementById('mart-banners');
+                if (bBox && bBox.children.length > 1) {
+                    slideIdx = (slideIdx + 1) % bBox.children.length;
+                    bBox.scrollTo({ left: slideIdx * 280, behavior: 'smooth' });
+                }
+            }, 3500);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => { 
+            switchAuth('signup'); 
+            startFoodAutoSlide(); 
+            startMartAutoSlide();
+            populateWards(); 
+            renderServiceCategoryChips();
+            renderTeacherCategories();
+        });
+
+        function switchAuth(t) {
+            document.getElementById('signup-box').classList.toggle('hidden', t !== 'signup');
+            document.getElementById('login-box').classList.toggle('hidden', t === 'signup');
+        }
+
+        function loginUser() {
+            const e = document.getElementById('login-email').value, p = document.getElementById('login-password').value;
+            auth.signInWithEmailAndPassword(e, p).catch(err => { document.getElementById('login-error').innerText = err.message; document.getElementById('login-error').classList.remove('hidden'); });
+        }
+
+        function registerUser() {
+            const e = document.getElementById('reg-email').value, p = document.getElementById('reg-password').value, n = document.getElementById('reg-name').value, ph = document.getElementById('reg-phone').value, c = document.getElementById('reg-city').value, pc = document.getElementById('reg-pincode').value, a = document.getElementById('reg-address').value;
+            if(!e||!p||!n||!ph||!c||!pc||!a) return alert("Fill all fields!");
+            auth.createUserWithEmailAndPassword(e, p).then(uc => {
+                db.ref(`customers/${uc.user.uid}`).set({ name: n, email: e, phone: ph, city: c, pincode: pc, address: a, createdAt: new Date().toISOString() });
+            }).catch(err => { document.getElementById('signup-error').innerText = err.message; document.getElementById('signup-error').classList.remove('hidden'); });
+        }
+
+        function customerLogout() { auth.signOut(); location.reload(); }
+
+        auth.onAuthStateChanged(u => {
+            if(u) {
+                document.getElementById('auth-panel').classList.add('hidden');
+                document.getElementById('app-panel').classList.remove('hidden');
+                loadCustomerData(u.uid);
+                showPanel('grocery-view');
+                loadTeachers(); loadVacancies(); loadOfficials(); loadWardMembers();
+            } else {
+                document.getElementById('auth-panel').classList.remove('hidden');
+                document.getElementById('app-panel').classList.add('hidden');
+                switchAuth('signup');
+            }
+        });
+
+        function loadCustomerData(uid) {
+            db.ref(`customers/${uid}`).on('value', s => {
+                customerProfile = s.val() || {};
+                document.getElementById('mart-top-addr').textContent = customerProfile.address || 'Update location';
+                ['name','email','phone','pincode','address'].forEach(f => { if(document.getElementById(`display-${f}`)) document.getElementById(`display-${f}`).textContent = customerProfile[f] || 'N/A'; });
+                loadRestaurants(); loadGroceryData(); loadBooksData(); loadLocalServices();
+            });
+        }
+
+        function toggleProfileEditMode(e) {
+            document.getElementById('profile-display-mode').classList.toggle('hidden', e);
+            document.getElementById('profile-edit-form').classList.toggle('hidden', !e);
+            if(e) ['name','phone','city','pincode','address'].forEach(f => document.getElementById(`profile-${f}`).value = customerProfile[f] || '');
+        }
+
+        function updateProfile() {
+            const u = { name: document.getElementById('profile-name').value, phone: document.getElementById('profile-phone').value, city: document.getElementById('profile-city').value, pincode: document.getElementById('profile-pincode').value, address: document.getElementById('profile-address').value };
+            db.ref(`customers/${auth.currentUser.uid}`).update(u).then(() => { alert("Profile Updated!"); toggleProfileEditMode(false); loadRestaurants(); });
+        }
+
+        // PROFILE SUB-PAGES
+        function showInfoPage(id) {
+            document.getElementById('profile-display-mode').classList.add('hidden');
+            document.getElementById('info-pages-container').classList.remove('hidden');
+            ['about-page', 'privacy-page', 'terms-page', 'cancellation-page'].forEach(p => document.getElementById(p).classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+        }
+        function hideInfoPages() {
+            document.getElementById('info-pages-container').classList.add('hidden');
+            document.getElementById('profile-display-mode').classList.remove('hidden');
+        }
+
+        // PANEL SWITCHER: FLOATING BUTTONS NEVER HIDE
+        function showPanel(id) {
+            closeModals();
+            document.querySelectorAll('#grocery-view, #home-view, #menu-view, #services-view, #teachers-view, #school-vacancies-view, #ladnun-directory-view, #books-view, #orders-view, #profile-view').forEach(el => el.classList.add('hidden'));
+            const p = document.getElementById(id); if(p) p.classList.remove('hidden');
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            const a = document.querySelector(`.nav-item[data-panel="${id}"]`); if(a) a.classList.add('active');
+
+            const fs = document.getElementById('floating-actions-stack');
+            if(fs) fs.style.display = 'flex';
+
+            if(id === 'orders-view') loadOrders();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function closeModals() { document.querySelectorAll('.universal-modal').forEach(m => m.classList.add('hidden')); }
+
+        // --- Q-MART ---
+        function loadGroceryData() {
+            db.ref('qmart').on('value', s => {
+                const data = s.val() || {};
+                allMartBanners = Object.values(data.banners || {});
+                const cats = Object.values(data.categories || {});
+                allMartData = Object.values(data.products || {});
+                document.getElementById('mart-banners').innerHTML = allMartBanners.map(b => `<img src="${b.img}" class="min-w-[85%] h-32 object-cover rounded-2xl snap-center border">`).join('');
+                document.getElementById('groc-categories').innerHTML = cats.map(c => `<div class="flex flex-col items-center min-w-[65px]"><div class="bg-white w-14 h-14 rounded-full flex items-center justify-center p-2 border shadow-xs"><img src="${c.img}" class="w-full h-full object-contain"></div><span class="text-[11px] font-bold mt-1 text-gray-700">${c.name}</span></div>`).join('');
+                filterMart('');
+            });
+        }
+        function filterMart(q) {
+            q = (q||'').toLowerCase();
+            const cats = [...new Set(allMartData.map(p => p.cat))];
+            document.getElementById('groc-products-container').innerHTML = cats.map(cat => {
+                const list = allMartData.filter(p => p.cat === cat && p.name.toLowerCase().includes(q));
+                if(!list.length) return '';
+                return `<div><h2 class="text-sm font-extrabold mb-2 text-gray-800">${cat}</h2><div class="grid grid-cols-2 gap-3">` +
+                list.map(p => `
+                    <div class="bg-white border border-emerald-50 rounded-2xl p-3 shadow-xs flex flex-col justify-between">
+                        <img src="${p.img}" class="h-24 w-full object-contain mb-1">
+                        <div><h4 class="font-bold text-xs line-clamp-2 text-gray-800">${p.name}</h4><p class="text-[10px] text-gray-400 mb-2">${p.weight||''}</p></div>
+                        <div class="flex justify-between items-center"><span class="font-black text-sm text-gray-900">₹${p.price}</span><button onclick="addGroceryCart('${p.id}','${p.name}',${p.price},${p.deliveryCharge||0})" class="bg-emerald-50 text-emerald-700 border border-emerald-600 font-extrabold px-3 py-1 rounded-xl text-xs active:scale-95 transition">+ ADD</button></div>
+                    </div>
+                `).join('') + `</div></div>`;
+            }).join('') || '<p class="text-center text-gray-400 py-6 text-xs">No items found.</p>';
+        }
+        function addGroceryCart(id, name, price, del) { if(groceryCart[id]) groceryCart[id].qty++; else groceryCart[id] = { id, name, price, del, qty: 1 }; updateGroceryUI(); }
+        function updateGroceryUI() {
+            let total = 0, count = 0, del = 0;
+            for(let k in groceryCart) { total += groceryCart[k].price * groceryCart[k].qty; count += groceryCart[k].qty; del += (groceryCart[k].del * groceryCart[k].qty); }
+            document.getElementById('groc-item-count').textContent = count;
+            document.getElementById('groc-final-total').textContent = total ? total + del : 0;
+            document.getElementById('groc-checkout-bar').classList.toggle('hidden', count === 0);
+        }
+
+        // --- FOOD ---
+        function loadRestaurants() { db.ref('restaurants').on('value', s => { allRestaurantsData = s.val() || {}; filterRestaurants(''); }); }
+        function filterRestaurants(q) {
+            q = (q||'').toLowerCase();
+            const el = document.getElementById('restaurants-list'); el.innerHTML = '';
+            Object.keys(allRestaurantsData).forEach(id => {
+                const r = allRestaurantsData[id];
+                if(r.approved && (r.name.toLowerCase().includes(q) || (r.cuisine||'').toLowerCase().includes(q))) {
+                    el.innerHTML += `
+                        <div class="bg-white rounded-2xl overflow-hidden shadow-xs border border-red-50 cursor-pointer active:scale-98 transition" onclick="viewMenu('${id}','${r.name}','${r.cuisine}','${r.imageUrl}');">
+                            <div class="relative"><img src="${r.imageUrl}" class="w-full h-36 object-cover"><span class="absolute top-2 right-2 bg-white/90 text-gray-900 font-black text-[11px] px-2 py-0.5 rounded-lg shadow-xs">⭐ ${r.avgRating||'4.2'}</span></div>
+                            <div class="p-3"><h3 class="font-extrabold text-sm text-gray-900">${r.name}</h3><p class="text-xs text-gray-500">${r.cuisine||''}</p></div>
+                        </div>
+                    `;
+                }
+            });
+        }
+        function viewMenu(id, name, cuisine, img) {
+            document.getElementById('menu-restaurant-name').textContent = name;
+            document.getElementById('menu-restaurant-cuisine').textContent = cuisine;
+            document.getElementById('menu-restaurant-image').src = img;
+            const l = document.getElementById('menu-items-list'); l.innerHTML = 'Loading dishes...';
+            db.ref(`menus/${id}`).once('value', s => {
+                const m = s.val() || {}; l.innerHTML = '';
+                Object.keys(m).forEach(k => {
+                    l.innerHTML += `<div class="flex justify-between items-center bg-white p-3 rounded-2xl border border-red-50 shadow-xs"><div><h4 class="font-bold text-xs text-gray-800">${m[k].name}</h4><span class="text-red-500 font-black text-xs">₹${m[k].price}</span></div><button onclick="addFoodCart({id:'${k}',name:'${m[k].name}',price:${m[k].price},restaurantId:'${id}',del:${m[k].deliveryCharge||50}})" class="bg-red-500 text-white font-bold text-xs px-3 py-1.5 rounded-xl shadow-xs active:scale-95 transition">+ ADD</button></div>`;
+                });
+            });
+            showPanel('menu-view');
+        }
+        function addFoodCart(i) {
+            if(foodCart.length && foodCart[0].restaurantId !== i.restaurantId) { if(!confirm("Clear food cart?")) return; foodCart = []; }
+            const ex = foodCart.find(x => x.id === i.id); if(ex) ex.quantity++; else foodCart.push({...i, quantity: 1});
+            updateFoodUI();
+        }
+        function updateFoodUI() {
+            let total = 0, del = 0; foodCart.forEach(x => { total += x.price * x.quantity; del = x.del; });
+            document.getElementById('food-cart-total-display').textContent = total ? total + del : 0;
+            document.getElementById('food-checkout-bar').classList.toggle('hidden', !foodCart.length);
+        }
+
+        // --- SERVICES ---
+        function renderServiceCategoryChips() {
+            const servCats = [
+                { id: 'all', name: 'Home / All', icon: 'fa-solid fa-house' },
+                { id: 'Plumber', name: 'Plumber', icon: 'fa-solid fa-wrench' },
+                { id: 'Electrician', name: 'Electrician', icon: 'fa-solid fa-bolt' },
+                { id: 'Carpenter', name: 'Carpenter', icon: 'fa-solid fa-hammer' },
+                { id: 'Painter', name: 'Painter', icon: 'fa-solid fa-paint-roller' },
+                { id: 'AC / Fridge', name: 'AC / Fridge', icon: 'fa-solid fa-snowflake' },
+                { id: 'Cleaning', name: 'Cleaning', icon: 'fa-solid fa-broom' }
+            ];
+            const c = document.getElementById('srv-categories-chips'); if(!c) return;
+            c.innerHTML = servCats.map(x => `
+                <button onclick="filterLocalServices('${x.id}')" class="px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap border flex items-center gap-1.5 transition ${currentSrvCat === x.id ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs' : 'bg-white text-gray-700 border-emerald-100'}">
+                    <i class="${x.icon} text-xs"></i> <span>${x.name}</span>
+                </button>
+            `).join('');
+        }
+        function loadLocalServices() {
+            db.ref('local_services').on('value', s => {
+                const d = s.val() || {}; allSrvProvs = Object.values(d.providers || {}).filter(p => p.status === 'approved');
+                filterLocalServices(currentSrvCat);
+            });
+        }
+        function filterLocalServices(catId) {
+            currentSrvCat = catId; renderServiceCategoryChips();
+            const list = document.getElementById('srv-providers-list'); if(!list) return;
+            const filtered = allSrvProvs.filter(p => catId === 'all' || (p.cat || '').toLowerCase().includes(catId.toLowerCase()));
+            list.innerHTML = filtered.map(p => `
+                <div class="bg-white p-3.5 rounded-2xl border border-emerald-50 shadow-xs flex flex-col gap-2">
+                    <div class="flex gap-3 items-center"><img src="${p.img||'https://cdn-icons-png.flaticon.com/512/149/149071.png'}" class="w-12 h-12 rounded-full border border-emerald-500 shadow-xs"><div><h3 class="font-extrabold text-sm text-gray-900">${p.name}</h3><span class="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded-md">${p.cat}</span></div></div>
+                    <p class="text-xs text-gray-600 bg-gray-50 p-2 rounded-xl">${p.desc}</p>
+                    <div class="flex gap-2 mt-1"><a href="tel:${p.phone}" class="flex-1 bg-gray-900 text-white text-center py-2 rounded-xl text-xs font-bold">Call Direct</a><a href="https://wa.me/91${p.whatsapp}" target="_blank" class="flex-1 bg-green-500 text-white text-center py-2 rounded-xl text-xs font-bold">WhatsApp</a></div>
+                </div>
+            `).join('') || '<p class="text-center text-gray-400 py-6 text-xs">No providers found.</p>';
+        }
+        function submitService() {
+            const name = document.getElementById('srvRegName').value, cat = document.getElementById('srvRegCat').value, desc = document.getElementById('srvRegDesc').value, phone = document.getElementById('srvRegPhone').value, wa = document.getElementById('srvRegWa').value;
+            if(!name||!cat||!phone) return alert("Fill required details!");
+            compressImage(document.getElementById('srvRegImg').files[0], img => {
+                db.ref('local_services/providers').push().set({ name, cat, desc, phone, whatsapp: wa, img, status: 'pending', uid: auth.currentUser.uid }).then(() => { alert("Submitted for approval!"); closeModals(); });
+            });
+        }
+
+        // --- 1. TEACHERS (ONLY TEACHERS DATA) ---
+        function renderTeacherCategories() {
+            const subs = [
+                { id: 'all', name: 'Home (सभी)' }, { id: 'Mathematics', name: 'Mathematics' }, { id: 'Science', name: 'Science' },
+                { id: 'English', name: 'English' }, { id: 'Hindi', name: 'Hindi' }, { id: 'Sanskrit', name: 'Sanskrit' }, { id: 'Primary', name: 'Primary (1-5)' }
+            ];
+            const box = document.getElementById('teacher-categories'); if(!box) return;
+            box.innerHTML = subs.map(s => `
+                <button onclick="filterTeachers('${s.id}')" class="px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap border transition ${currentTeacherSub === s.id ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs' : 'bg-white text-gray-700 border-indigo-100'}">
+                    ${s.name}
+                </button>
+            `).join('');
+        }
+        function loadTeachers() {
+            db.ref('ladnun_teachers').on('value', s => {
+                allTeachers = s.val() || {}; filterTeachers(currentTeacherSub);
+            });
+        }
+        function filterTeachers(subId) {
+            currentTeacherSub = subId; renderTeacherCategories();
+            const l = document.getElementById('teachers-list'); if(!l) return; l.innerHTML = '';
+            const keys = Object.keys(allTeachers).filter(k => subId === 'all' || (allTeachers[k].subject || '').toLowerCase().includes(subId.toLowerCase()));
+            if(!keys.length) return l.innerHTML = '<p class="text-center text-gray-400 py-8 text-xs font-medium">इस विषय में कोई शिक्षक उपलब्ध नहीं हैं।</p>';
+
+            keys.forEach(k => {
+                const t = allTeachers[k];
+                const isOwner = (auth.currentUser && t.uid === auth.currentUser.uid);
+                const isBusy = (t.availability === 'busy');
+                const badge = isBusy 
+                    ? `<span class="w-full block bg-red-100 text-red-700 text-center py-1.5 rounded-xl font-black text-xs">🔴 BUSY (कहीं कार्यरत हैं)</span>` 
+                    : `<span class="w-full block bg-emerald-100 text-emerald-800 text-center py-1.5 rounded-xl font-black text-xs">🟢 FREE (उपलब्ध हैं)</span>`;
+                const owner = isOwner ? `
+                    <div class="flex justify-between items-center text-[10px] bg-indigo-50 p-2 rounded-xl mt-1">
+                        <button onclick="toggleTeacherAvail('${k}','${isBusy?'free':'busy'}')" class="font-black text-indigo-800">Mark ${isBusy?'FREE':'BUSY'}</button>
+                        <button onclick="deleteTeacher('${k}')" class="text-red-500 font-black">Delete Profile</button>
+                    </div>` : '';
+
+                l.innerHTML += `
+                    <div class="bg-white p-3.5 rounded-2xl border border-indigo-50 shadow-xs flex flex-col gap-2">
+                        <div class="flex gap-3 items-center">
+                            <img src="${t.img||'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'}" class="w-14 h-14 rounded-2xl object-cover border-2 border-indigo-400">
+                            <div><h4 class="font-extrabold text-sm text-gray-900">${t.name}</h4><span class="text-[10px] bg-indigo-50 text-indigo-700 font-black px-2 py-0.5 rounded-md">${t.subject} (${t.experience||'Fresher'})</span></div>
+                        </div>
+                        <p class="text-xs text-gray-600 bg-gray-50 p-2.5 rounded-xl leading-relaxed">${t.desc||'विवरण नहीं दिया गया'}</p>
+                        ${badge}
+                        <div class="flex gap-2"><a href="tel:${t.phone}" class="flex-1 bg-gray-900 text-white text-center py-2 rounded-xl text-xs font-bold">Call Direct</a><a href="https://wa.me/91${t.whatsapp}" target="_blank" class="flex-1 bg-green-500 text-white text-center py-2 rounded-xl text-xs font-bold">WhatsApp</a></div>
+                        ${owner}
+                    </div>
+                `;
+            });
+        }
+        function openTeacherRegModal() { document.getElementById('tSubject').value = ''; document.getElementById('teacherRegModal').classList.remove('hidden'); }
+        function saveTeacherProfile() {
+            const name = document.getElementById('tName').value.trim();
+            const subject = document.getElementById('tSubject').value.trim();
+            const exp = document.getElementById('tExp').value.trim();
+            const desc = document.getElementById('tDesc').value.trim();
+            const phone = document.getElementById('tPhone').value.trim();
+            const wa = document.getElementById('tWa').value.trim();
+            const avail = document.querySelector('input[name="tAvailability"]:checked').value;
+            if(!name || !subject || !phone) return alert("नाम, विषय व फोन आवश्यक है!");
+            compressImage(document.getElementById('tImg').files[0], img => {
+                db.ref('ladnun_teachers').push().set({ uid: auth.currentUser.uid, name, subject, experience: exp, desc, phone, whatsapp: wa, availability: avail, img: img || 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png' }).then(() => { alert("शिक्षक प्रोफाइल सेव हो गई!"); closeModals(); });
+            });
+        }
+        function toggleTeacherAvail(k, st) { db.ref(`ladnun_teachers/${k}`).update({ availability: st }); }
+        function deleteTeacher(k) { if(confirm("प्रोफाइल डिलीट करें?")) db.ref(`ladnun_teachers/${k}`).remove(); }
+
+        // --- 1. SCHOOL VACANCIES (ONLY SCHOOL REQUIREMENTS) ---
+        function loadVacancies() {
+            db.ref('school_vacancies').on('value', s => {
+                allSchoolVacancies = s.val() || {};
+                const c = document.getElementById('school-vacancies-container'); if(!c) return; c.innerHTML = '';
+                const keys = Object.keys(allSchoolVacancies);
+                if(!keys.length) return c.innerHTML = '<p class="text-xs text-gray-400 py-6 text-center">वर्तमान में कोई स्कूल वैकेंसी पोस्ट नहीं है।</p>';
+
+                keys.forEach(k => {
+                    const v = allSchoolVacancies[k];
+                    const isOwner = (auth.currentUser && v.uid === auth.currentUser.uid);
+                    c.innerHTML += `
+                        <div class="bg-white p-4 rounded-2xl border border-purple-100 shadow-xs flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-start">
+                                    <h4 class="font-extrabold text-sm text-purple-900">${v.schoolName}</h4>
+                                    <span class="text-[10px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded">Vacancy</span>
+                                </div>
+                                <p class="text-xs font-bold text-purple-700 mt-1">आवश्यक विषय: ${v.subject}</p>
+                                <p class="text-xs text-gray-600 mt-0.5">सैलरी: ${v.salary || 'Negotiable'}</p>
+                                <p class="text-xs text-gray-500 bg-gray-50 p-2 rounded-xl mt-2 leading-relaxed">${v.details || 'विवरण नहीं'}</p>
+                            </div>
+                            <div class="flex gap-2 mt-3">
+                                <a href="tel:${v.phone}" class="flex-1 bg-purple-600 text-white text-center py-2 rounded-xl text-xs font-bold">Call School</a>
+                                <a href="https://wa.me/91${v.whatsapp}" target="_blank" class="flex-1 bg-green-500 text-white text-center py-2 rounded-xl text-xs font-bold">WhatsApp</a>
+                            </div>
+                            ${isOwner ? `<button onclick="deleteVacancy('${k}')" class="text-[11px] text-red-500 font-bold mt-2 text-right">Delete Vacancy Post</button>` : ''}
+                        </div>
+                    `;
+                });
+            });
+        }
+        function openSchoolJobModal() { document.getElementById('schoolJobModal').classList.remove('hidden'); }
+        function saveSchoolVacancy() {
+            const schoolName = document.getElementById('schName').value.trim(), subject = document.getElementById('schSubject').value.trim(), salary = document.getElementById('schSalary').value.trim(), phone = document.getElementById('schPhone').value.trim(), wa = document.getElementById('schWa').value.trim(), details = document.getElementById('schDetails').value.trim();
+            if(!schoolName||!phone||!subject) return alert("स्कूल नाम, विषय व फोन आवश्यक है!");
+            db.ref('school_vacancies').push().set({ uid: auth.currentUser.uid, schoolName, subject, salary, phone, whatsapp: wa || phone, details }).then(() => { alert("वैकेंसी पोस्ट हो गई!"); closeModals(); });
+        }
+        function deleteVacancy(k) { if(confirm("वैकेंसी पोस्ट हटाएं?")) db.ref(`school_vacancies/${k}`).remove(); }
+
+        // --- DIRECTORY ---
+        function populateWards() { const s = document.getElementById('ward-filter-select'); if(!s) return; for(let i=1; i<=45; i++) s.innerHTML += `<option value="${i}">वार्ड नंबर ${i}</option>`; }
+        function loadOfficials() {
+            db.ref('ladnun_officials').on('value', s => {
+                const d = s.val() || {}; const sl = document.getElementById('officials-slider'); if(!sl) return; sl.innerHTML = '';
+                Object.values(d).forEach(off => {
+                    sl.innerHTML += `
+                        <div class="min-w-[80%] bg-white p-3 rounded-xl border border-blue-200 shadow-2xs flex items-center gap-3">
+                            <img src="${off.img||'https://cdn-icons-png.flaticon.com/512/9131/9131529.png'}" class="w-12 h-12 rounded-full border border-blue-500">
+                            <div class="flex-1"><h4 class="font-bold text-xs text-gray-900">${off.name}</h4><span class="text-blue-600 font-bold text-[10px] block">${off.designation}</span><div class="flex gap-2 mt-1"><a href="tel:${off.phone}" class="text-[10px] bg-blue-700 text-white px-2 py-0.5 rounded font-bold">Call</a><a href="https://wa.me/91${off.whatsapp}" target="_blank" class="text-[10px] bg-green-500 text-white px-2 py-0.5 rounded font-bold">WhatsApp</a></div></div>
+                        </div>
+                    `;
+                });
+            });
+        }
+        function loadWardMembers() { db.ref('ladnun_ward_members').on('value', s => { allWardMembers = s.val() || {}; filterWardMembers(currentWardFilter); }); }
+        function filterWardMembers(w) {
+            currentWardFilter = w; const l = document.getElementById('ward-members-list'); if(!l) return; l.innerHTML = '';
+            Object.values(allWardMembers).filter(m => w==='all' || String(m.wardNo)===String(w)).forEach(m => {
+                l.innerHTML += `
+                    <div class="bg-white p-3 rounded-2xl border border-blue-50 flex justify-between items-center shadow-xs">
+                        <div><h4 class="font-extrabold text-xs text-gray-900">${m.name}</h4><span class="text-[10px] text-gray-500 font-bold">वार्ड नं. ${m.wardNo} (${m.role||'पार्षद'})</span></div>
+                        <div class="flex gap-2"><a href="tel:${m.phone}" class="bg-gray-900 text-white text-xs px-2.5 py-1 rounded-xl font-bold">Call</a><a href="https://wa.me/91${m.whatsapp}" target="_blank" class="bg-green-500 text-white text-xs px-2.5 py-1 rounded-xl font-bold">WhatsApp</a></div>
+                    </div>
+                `;
+            });
+        }
+
+        // --- 4. BOOKS (BLUE ACCENTS) ---
+        function loadBooksData() { db.ref('books').on('value', s => { const d = s.val() || {}; allBooks = Object.values(d.items || {}); filterBooks(); }); }
+        function setMedium(m) {
+            currentBookMed = m;
+            document.getElementById('btnMedHindi').className = m==='Hindi' ? 'flex-1 py-1.5 text-xs font-bold bg-blue-600 text-white rounded-full' : 'flex-1 py-1.5 text-xs font-bold text-gray-600';
+            document.getElementById('btnMedEnglish').className = m==='English' ? 'flex-1 py-1.5 text-xs font-bold bg-blue-600 text-white rounded-full' : 'flex-1 py-1.5 text-xs font-bold text-gray-600';
+            filterBooks();
+        }
+        function filterBooks() {
+            const list = document.getElementById('prodList');
+            const filtered = allBooks.filter(p => !p.medium || p.medium.toLowerCase() === currentBookMed.toLowerCase());
+            list.innerHTML = filtered.map(b => `
+                <div class="bg-white p-2.5 rounded-2xl border border-blue-100 flex flex-col justify-between shadow-xs">
+                    <img src="${b.img}" class="h-28 w-full object-contain mb-2">
+                    <h4 class="font-bold text-xs line-clamp-2 text-gray-800">${b.title}</h4>
+                    <div class="mt-2 flex justify-between items-center"><span class="font-bold text-sm text-blue-700">₹${b.price}</span><button onclick="buyBook('${b.id}')" class="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-xl">BUY</button></div>
+                </div>
+            `).join('') || '<p class="text-center text-gray-400 py-6 text-xs col-span-2">No books found.</p>';
+        }
+        function buyBook(id) { selectedBook = allBooks.find(b => b.id === id); openUniversalCheckout('BOOK'); }
+
+        // --- CHECKOUT & ORDERS ---
+        function applyCoupon() {
+            const c = (document.getElementById('coupon-input').value||'').trim().toUpperCase();
+            let sub = parseInt(document.getElementById('chk-sub').innerText.replace('₹','')) || 0;
+            let del = parseInt(document.getElementById('chk-del').innerText.replace('+₹','')) || 0;
+            const msg = document.getElementById('coupon-msg'); msg.classList.remove('hidden');
+            if(c === 'SOYFA50' && sub >= 150) { appliedDiscountAmount = 50; appliedCouponCode = c; msg.innerText = "Flat ₹50 OFF applied!"; msg.className="text-[11px] font-bold text-emerald-600 mt-1"; }
+            else if(c === 'WELCOME10') { appliedDiscountAmount = Math.round(sub * 0.1); appliedCouponCode = c; msg.innerText = "10% OFF applied!"; msg.className="text-[11px] font-bold text-emerald-600 mt-1"; }
+            else { appliedDiscountAmount = 0; appliedCouponCode = ''; msg.innerText = "Invalid coupon code!"; msg.className="text-[11px] font-bold text-red-500 mt-1"; }
+            document.getElementById('chk-discount-row').style.display = appliedDiscountAmount ? 'flex' : 'none';
+            document.getElementById('chk-disc').innerText = `-₹${appliedDiscountAmount}`;
+            document.getElementById('chk-total').innerText = `₹${Math.max(0, sub - appliedDiscountAmount + del)}`;
+        }
+
+        function openUniversalCheckout(type) {
+            currentOrderType = type;
+            let sub = 0, del = 0, itemsHTML = '';
+            appliedCouponCode = ''; appliedDiscountAmount = 0;
+            document.getElementById('chk-discount-row').style.display = 'none';
+
+            if(type === 'GROCERY') {
+                for(let k in groceryCart) { sub += groceryCart[k].price * groceryCart[k].qty; del += (groceryCart[k].del * groceryCart[k].qty); itemsHTML += `<div class="flex justify-between"><span>${groceryCart[k].name} x${groceryCart[k].qty}</span><b>₹${groceryCart[k].price * groceryCart[k].qty}</b></div>`; }
+            } else if(type === 'FOOD') {
+                foodCart.forEach(i => { sub += i.price * i.quantity; del = i.del; itemsHTML += `<div class="flex justify-between"><span>${i.name} x${i.quantity}</span><b>₹${i.price * i.quantity}</b></div>`; });
+            } else if(type === 'BOOK') {
+                sub = parseInt(selectedBook.price); del = parseInt(selectedBook.deliveryCharge||0);
+                itemsHTML = `<div class="flex justify-between"><span>${selectedBook.title}</span><b>₹${sub}</b></div>`;
+            }
+
+            document.getElementById('chk-items-list').innerHTML = itemsHTML;
+            document.getElementById('chk-sub').innerText = `₹${sub}`;
+            document.getElementById('chk-del').innerText = `+₹${del}`;
+            document.getElementById('chk-total').innerText = `₹${sub + del}`;
+            document.getElementById('chk-name').value = customerProfile.name || '';
+            document.getElementById('chk-phone').value = customerProfile.phone || '';
+            document.getElementById('chk-address').value = customerProfile.address || '';
+            document.getElementById('universalCheckoutModal').classList.remove('hidden');
+        }
+
+        function processCheckout() {
+            const method = document.querySelector('input[name="payMethod"]:checked').value;
+            const n = document.getElementById('chk-name').value.trim(), p = document.getElementById('chk-phone').value.trim(), a = document.getElementById('chk-address').value.trim(), notes = document.getElementById('chk-notes').value.trim();
+            if(!n || !p || !a) return alert("Delivery details required!");
+            let sub = parseInt(document.getElementById('chk-sub').innerText.replace('₹','')) || 0;
+            let del = parseInt(document.getElementById('chk-del').innerText.replace('+₹','')) || 0;
+            let total = Math.max(0, sub - appliedDiscountAmount + del);
+
+            if(method === 'ONLINE') {
+                var options = { key: RAZORPAY_KEY, amount: total * 100, currency: "INR", name: "Soyfa " + currentOrderType, handler: res => saveOrder(res.razorpay_payment_id, n, p, a, sub, del, total, 'ONLINE', notes), prefill: { name: n, contact: p } };
+                new Razorpay(options).open();
+            } else {
+                saveOrder('COD_PENDING', n, p, a, sub, del, total, 'COD', notes);
+            }
+        }
+
+        function saveOrder(txnId, n, p, a, sub, del, total, payMethod, notes) {
+            let items = [];
+            if(currentOrderType === 'GROCERY') items = Object.values(groceryCart).map(x => ({ name: x.name, price: x.price, quantity: x.qty }));
+            else if(currentOrderType === 'FOOD') items = foodCart.map(x => ({ name: x.name, price: x.price, quantity: x.quantity }));
+            else if(currentOrderType === 'BOOK') items = [{ name: selectedBook.title, price: selectedBook.price, quantity: 1 }];
+
+            db.ref('orders').push().set({
+                orderId: Date.now().toString(), customerUid: auth.currentUser.uid, orderType: currentOrderType, items,
+                subtotal: sub, deliveryFee: del, discountAmount: appliedDiscountAmount, totalAmount: total, paymentMethod: payMethod,
+                txnId, customerName: n, phone: p, address: a, deliveryNotes: notes, status: 'PLACED', createdAt: new Date().toISOString()
+            }).then(() => {
+                playOrderDoneSound();
+                closeModals();
+                document.getElementById('orderSuccessModal').classList.remove('hidden');
+                if(currentOrderType === 'GROCERY') { groceryCart = {}; updateGroceryUI(); }
+                if(currentOrderType === 'FOOD') { foodCart = []; updateFoodUI(); }
+                setTimeout(() => { document.getElementById('orderSuccessModal').classList.add('hidden'); showPanel('orders-view'); }, 2200);
+            });
+        }
+
+        function loadOrders() {
+            db.ref('orders').orderByChild('customerUid').equalTo(auth.currentUser.uid).on('value', s => {
+                const list = document.getElementById('orders-list'); if(!list) return; list.innerHTML = '';
+                const o = s.val() || {};
+                const keys = Object.keys(o).sort((a,b) => new Date(o[b].createdAt) - new Date(o[a].createdAt));
+                if(!keys.length) return list.innerHTML = '<p class="text-center text-gray-400 py-10 text-xs">No orders yet.</p>';
+
+                keys.forEach(k => {
+                    const ord = o[k];
+                    let step = ['PLACED','ACCEPTED','PREPARING','OUT FOR DELIVERY','DELIVERED'].indexOf(ord.status);
+                    if(step === -1) step = 0;
+                    let prog = step === 0 ? '15%' : step === 1 ? '35%' : step === 2 ? '60%' : step === 3 ? '85%' : '100%';
+                    let trk = ord.status === 'CANCELLED' ? `<p class="text-red-500 font-bold text-center text-xs mt-3">ORDER CANCELLED</p>` : `
+                        <div class="track-line mt-6 mb-3">
+                            <div class="track-fill" style="width: ${prog}; background: #2563eb"></div>
+                            <div class="track-bike" style="left: ${prog};"><i class="fa-solid fa-motorcycle text-blue-600"></i></div>
+                            <span class="absolute top-[-20px] text-[10px] font-bold text-blue-800" style="left: ${prog}; transform: translateX(-50%);">${ord.status}</span>
+                        </div>
+                    `;
+                    list.innerHTML += `
+                        <div class="bg-white p-3.5 rounded-2xl border border-slate-100 shadow-xs text-xs">
+                            <div class="flex justify-between font-bold border-b pb-1"><span>#${ord.orderId.slice(-6)} (${ord.orderType})</span><span class="text-blue-700 font-black">₹${ord.totalAmount}</span></div>
+                            ${trk}
+                            <div class="bg-gray-50 p-2 rounded-lg mt-2">${ord.items.map(i=>`<div>• ${i.name} (x${i.quantity})</div>`).join('')}</div>
+                            ${ord.status==='PLACED' ? `<button onclick="cancelOrder('${k}')" class="text-red-500 font-bold text-[11px] mt-2 block ml-auto">Cancel Order</button>` : ''}
+                        </div>
+                    `;
+                });
+            });
+        }
+        function cancelOrder(k) { if(confirm("Cancel order?")) db.ref(`orders/${k}`).update({ status: 'CANCELLED' }); }
+    </script>
+</body>
+</html>
+
+फ़ाइल 2: admin.html (अपडेटेड मास्टर एडमिन पैनल)
+
+(इस बॉक्स के ऊपर दाईं तरफ दिए गए Copy बटन पर क्लिक करें)
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soyfa Super App - Master Admin</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        .sidebar-item.active { background: #1e293b; color: #38bdf8; border-left: 4px solid #38bdf8; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.25s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-slate-100 flex flex-col md:flex-row min-h-screen text-slate-800">
+
+    <!-- SIDEBAR -->
+    <aside class="w-full md:w-64 bg-slate-900 text-white flex-shrink-0 flex flex-col justify-between shadow-xl">
+        <div>
+            <div class="p-5 border-b border-slate-800 flex items-center justify-between">
+                <div>
+                    <h1 class="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">SOYFA ADMIN</h1>
+                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Super Control Panel</p>
+                </div>
+                <span class="bg-blue-500/20 text-blue-400 text-xs px-2 py-0.5 rounded-full font-bold">Online</span>
+            </div>
+
+            <nav class="p-3 space-y-1 text-xs font-bold text-gray-300">
+                <button onclick="switchTab('orders-tab')" class="sidebar-item active w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-receipt text-amber-400 text-base"></i> <span>Live Orders</span>
+                </button>
+                <button onclick="switchTab('mart-tab')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-store text-emerald-400 text-base"></i> <span>Q-Mart Products</span>
+                </button>
+                <button onclick="switchTab('food-tab')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-burger text-red-400 text-base"></i> <span>Food & Restaurants</span>
+                </button>
+                <button onclick="switchTab('services-tab')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-briefcase text-green-400 text-base"></i> <span>Local Services</span>
+                </button>
+                <button onclick="switchTab('teachers-tab')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-chalkboard-user text-indigo-400 text-base"></i> <span>Teachers Directory</span>
+                </button>
+                <button onclick="switchTab('vacancies-tab')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-school text-purple-400 text-base"></i> <span>School Vacancies</span>
+                </button>
+                <button onclick="switchTab('directory-tab')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-landmark text-sky-400 text-base"></i> <span>Officials & Wards</span>
+                </button>
+                <button onclick="switchTab('books-tab')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-book-open text-blue-400 text-base"></i> <span>Books Store</span>
+                </button>
+            </nav>
+        </div>
+        <div class="p-3 border-t border-slate-800 text-[11px] text-gray-500 text-center font-bold">Soyfa Admin &copy; 2026</div>
+    </aside>
+
+    <!-- DASHBOARD VIEW -->
+    <main class="flex-1 p-4 md:p-6 overflow-y-auto max-h-screen">
+        
+        <!-- 1. LIVE ORDERS -->
+        <section id="orders-tab" class="tab-content active">
+            <h2 class="text-xl font-black mb-3">Live Customer Orders</h2>
+            <div id="admin-orders-container" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">Loading orders...</div>
+        </section>
+
+        <!-- 2. Q-MART -->
+        <section id="mart-tab" class="tab-content">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-xl font-black">Q-Mart Products</h2>
+                <button onclick="openMartModal()" class="bg-emerald-600 text-white font-bold text-xs px-3 py-2 rounded-xl shadow">+ Add Product</button>
+            </div>
+            <div id="admin-mart-list" class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs"></div>
+        </section>
+
+        <!-- 3. FOOD -->
+        <section id="food-tab" class="tab-content">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-xl font-black">Food Restaurants</h2>
+                <button onclick="openRestModal()" class="bg-red-500 text-white font-bold text-xs px-3 py-2 rounded-xl shadow">+ Add Restaurant</button>
+            </div>
+            <div id="admin-rest-list" class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs"></div>
+        </section>
+
+        <!-- 4. SERVICES -->
+        <section id="services-tab" class="tab-content">
+            <h2 class="text-xl font-black mb-3">Local Services Approval</h2>
+            <div id="admin-services-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs"></div>
+        </section>
+
+        <!-- 5. TEACHERS -->
+        <section id="teachers-tab" class="tab-content">
+            <h2 class="text-xl font-black mb-3">Registered Teachers</h2>
+            <div id="admin-teachers-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs"></div>
+        </section>
+
+        <!-- 6. SCHOOL VACANCIES -->
+        <section id="vacancies-tab" class="tab-content">
+            <h2 class="text-xl font-black mb-3">School Vacancy Posts</h2>
+            <div id="admin-vacancies-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs"></div>
+        </section>
+
+        <!-- 7. DIRECTORY -->
+        <section id="directory-tab" class="tab-content">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-xl font-black">Officials & Ward Members</h2>
+                <div class="flex gap-2">
+                    <button onclick="openOffModal()" class="bg-blue-700 text-white font-bold text-xs px-2.5 py-1.5 rounded-xl">+ Official</button>
+                    <button onclick="openWardModal()" class="bg-emerald-600 text-white font-bold text-xs px-2.5 py-1.5 rounded-xl">+ Ward Member</button>
+                </div>
+            </div>
+            <div class="mb-4">
+                <h3 class="font-bold text-xs text-blue-800 mb-1">Government Officials</h3>
+                <div id="admin-officials-list" class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs"></div>
+            </div>
+            <div>
+                <h3 class="font-bold text-xs text-emerald-800 mb-1">Ward Members</h3>
+                <div id="admin-ward-list" class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs"></div>
+            </div>
+        </section>
+
+        <!-- 8. BOOKS -->
+        <section id="books-tab" class="tab-content">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-xl font-black">Books Store</h2>
+                <button onclick="openBookModal()" class="bg-blue-600 text-white font-bold text-xs px-3 py-2 rounded-xl shadow">+ Add Book</button>
+            </div>
+            <div id="admin-books-list" class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs"></div>
+        </section>
+    </main>
+
+    <!-- ADMIN MODAL -->
+    <div id="adminModal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white w-full max-w-sm p-5 rounded-2xl max-h-[85vh] overflow-y-auto text-xs space-y-2">
+            <div class="flex justify-between items-center mb-2"><h3 class="font-bold text-sm" id="aModalTitle">Item</h3><button onclick="closeAModal()" class="text-lg font-bold">&times;</button></div>
+            <div id="aModalBody" class="space-y-2"></div>
+        </div>
+    </div>
+
+    <!-- JS LOGIC -->
+    <script>
+        const firebaseConfig = { apiKey: "AIzaSyACNrzJgRGKmn8JsRuS_2b7RecPIfahTvQ", databaseURL: "https://singup-aec8c-default-rtdb.firebaseio.com", projectId: "singup-aec8c" };
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        function switchTab(id) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+        function closeAModal() { document.getElementById('adminModal').classList.add('hidden'); }
+        function deleteItem(path) { if(confirm("Are you sure you want to delete this item?")) db.ref(path).remove(); }
+
+        // 1. ORDERS
+        db.ref('orders').on('value', s => {
+            const data = s.val() || {}; const c = document.getElementById('admin-orders-container'); c.innerHTML = '';
+            const keys = Object.keys(data).sort((a,b) => new Date(data[b].createdAt) - new Date(data[a].createdAt));
+            if(!keys.length) return c.innerHTML = '<p class="text-gray-400">No orders.</p>';
+            keys.forEach(k => {
+                const o = data[k];
+                c.innerHTML += `
+                    <div class="bg-white p-3.5 rounded-2xl shadow-xs border flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between font-bold"><span class="text-blue-600">#${o.orderId.slice(-6)} (${o.orderType})</span><span class="text-emerald-700 font-black">₹${o.totalAmount}</span></div>
+                            <p class="font-bold mt-1">${o.customerName} | ${o.phone}</p>
+                            <p class="text-gray-500 mb-2">${o.address}</p>
+                            <div class="bg-gray-50 p-2 rounded-lg mb-2">${(o.items||[]).map(i=>`<div>• ${i.name} (x${i.quantity})</div>`).join('')}</div>
+                        </div>
+                        <div class="flex gap-2 border-t pt-2">
+                            <select onchange="db.ref('orders/${k}').update({status:this.value})" class="p-1 border rounded bg-white flex-1 font-bold">
+                                <option value="${o.status}">${o.status} (Current)</option>
+                                <option value="ACCEPTED">ACCEPTED</option><option value="PREPARING">PREPARING</option><option value="OUT FOR DELIVERY">OUT FOR DELIVERY</option><option value="DELIVERED">DELIVERED</option><option value="CANCELLED">CANCELLED</option>
+                            </select>
+                            <button onclick="deleteItem('orders/${k}')" class="text-red-500 font-bold px-2 bg-red-50 rounded">Delete</button>
+                        </div>
+                    </div>
+                `;
+            });
+        });
+
+        // 2. Q-MART
+        db.ref('qmart/products').on('value', s => {
+            const data = s.val() || {}; const l = document.getElementById('admin-mart-list'); l.innerHTML = '';
+            Object.keys(data).forEach(k => {
+                const p = data[k];
+                l.innerHTML += `
+                    <div class="bg-white p-2.5 rounded-xl border flex flex-col justify-between">
+                        <img src="${p.img}" class="h-20 w-full object-contain mb-1">
+                        <h4 class="font-bold truncate">${p.name}</h4><span class="text-emerald-600 font-black">₹${p.price}</span>
+                        <button onclick="deleteItem('qmart/products/${k}')" class="mt-2 text-red-500 font-bold bg-red-50 py-1 rounded">Delete</button>
+                    </div>
+                `;
+            });
+        });
+        function openMartModal() {
+            document.getElementById('aModalTitle').innerText = "Add Mart Product";
+            document.getElementById('aModalBody').innerHTML = `
+                <input type="text" id="mName" placeholder="Product Name" class="w-full p-2 border rounded">
+                <input type="text" id="mCat" placeholder="Category" class="w-full p-2 border rounded">
+                <input type="number" id="mPrice" placeholder="Price (₹)" class="w-full p-2 border rounded">
+                <input type="text" id="mWeight" placeholder="Weight/Unit" class="w-full p-2 border rounded">
+                <input type="text" id="mImg" placeholder="Image URL" class="w-full p-2 border rounded">
+                <button onclick="const id='m_'+Date.now(); db.ref('qmart/products/'+id).set({id, name:document.getElementById('mName').value, cat:document.getElementById('mCat').value, price:Number(document.getElementById('mPrice').value), weight:document.getElementById('mWeight').value, img:document.getElementById('mImg').value, inStock:true}).then(()=>closeAModal())" class="w-full bg-emerald-600 text-white font-bold p-2 rounded">Save</button>
+            `;
+            document.getElementById('adminModal').classList.remove('hidden');
+        }
+
+        // 3. RESTAURANTS
+        db.ref('restaurants').on('value', s => {
+            const data = s.val() || {}; const l = document.getElementById('admin-rest-list'); l.innerHTML = '';
+            Object.keys(data).forEach(k => {
+                const r = data[k];
+                l.innerHTML += `
+                    <div class="bg-white p-3 rounded-2xl border">
+                        <img src="${r.imageUrl}" class="w-full h-24 object-cover rounded-xl mb-1">
+                        <h4 class="font-bold">${r.name}</h4><p class="text-gray-500">${r.cuisine} | Pin: ${r.pincode}</p>
+                        <div class="flex gap-2 mt-2">
+                            <button onclick="db.ref('restaurants/${k}').update({approved:${!r.approved}})" class="flex-1 py-1 rounded font-bold ${r.approved?'bg-green-100 text-green-700':'bg-yellow-100 text-yellow-700'}">${r.approved?'Approved':'Approve'}</button>
+                            <button onclick="deleteItem('restaurants/${k}')" class="text-red-500 font-bold px-2 bg-red-50 rounded">Delete</button>
+                        </div>
+                    </div>
+                `;
+            });
+        });
+        function openRestModal() {
+            document.getElementById('aModalTitle').innerText = "Add Restaurant";
+            document.getElementById('aModalBody').innerHTML = `
+                <input type="text" id="rName" placeholder="Restaurant Name" class="w-full p-2 border rounded">
+                <input type="text" id="rCuisine" placeholder="Cuisine" class="w-full p-2 border rounded">
+                <input type="number" id="rPin" placeholder="Pincode" class="w-full p-2 border rounded">
+                <input type="text" id="rImg" placeholder="Image URL" class="w-full p-2 border rounded">
+                <button onclick="db.ref('restaurants').push().set({name:document.getElementById('rName').value, cuisine:document.getElementById('rCuisine').value, pincode:document.getElementById('rPin').value, imageUrl:document.getElementById('rImg').value, approved:true, avgRating:'4.5'}).then(()=>closeAModal())" class="w-full bg-red-500 text-white font-bold p-2 rounded">Save</button>
+            `;
+            document.getElementById('adminModal').classList.remove('hidden');
+        }
+
+        // 4. SERVICES
+        db.ref('local_services/providers').on('value', s => {
+            const data = s.val() || {}; const l = document.getElementById('admin-services-list'); l.innerHTML = '';
+            Object.keys(data).forEach(k => {
+                const p = data[k];
+                l.innerHTML += `
+                    <div class="bg-white p-3 rounded-xl border flex justify-between items-center">
+                        <div><h4 class="font-bold">${p.name} (${p.cat})</h4><p class="text-gray-500">${p.phone} | Status: ${p.status}</p></div>
+                        <div class="flex gap-2">
+                            ${p.status==='pending' ? `<button onclick="db.ref('local_services/providers/${k}').update({status:'approved'})" class="bg-green-600 text-white px-2 py-1 rounded font-bold">Approve</button>` : ''}
+                            <button onclick="deleteItem('local_services/providers/${k}')" class="text-red-500 font-bold bg-red-50 px-2 py-1 rounded">Delete</button>
+                        </div>
+                    </div>
+                `;
+            });
+        });
+
+        // 5. TEACHERS
+        db.ref('ladnun_teachers').on('value', s => {
+            const data = s.val() || {}; const l = document.getElementById('admin-teachers-list'); l.innerHTML = '';
+            Object.keys(data).forEach(k => {
+                const t = data[k];
+                l.innerHTML += `
+                    <div class="bg-white p-3 rounded-xl border flex justify-between items-center">
+                        <div><h4 class="font-bold">${t.name} (${t.subject})</h4><p class="text-gray-500">${t.phone} | Status: ${t.availability}</p></div>
+                        <button onclick="deleteItem('ladnun_teachers/${k}')" class="text-red-500 font-bold bg-red-50 px-2 py-1 rounded">Delete</button>
+                    </div>
+                `;
+            });
+        });
+
+        // 6. SCHOOL VACANCIES
+        db.ref('school_vacancies').on('value', s => {
+            const data = s.val() || {}; const l = document.getElementById('admin-vacancies-list'); l.innerHTML = '';
+            Object.keys(data).forEach(k => {
+                const v = data[k];
+                l.innerHTML += `
+                    <div class="bg-white p-3 rounded-xl border flex justify-between items-center">
+                        <div><h4 class="font-bold">${v.schoolName}</h4><p class="text-gray-500">विषय: ${v.subject} | Ph: ${v.phone}</p></div>
+                        <button onclick="deleteItem('school_vacancies/${k}')" class="text-red-500 font-bold bg-red-50 px-2 py-1 rounded">Delete</button>
+                    </div>
+                `;
+            });
+        });
+
+        // 7. DIRECTORY & OFFICIALS
+        db.ref('ladnun_officials').on('value', s => {
+            const data = s.val() || {}; const l = document.getElementById('admin-officials-list'); l.innerHTML = '';
+            Object.keys(data).forEach(k => {
+                const o = data[k];
+                l.innerHTML += `
+                    <div class="bg-white p-3 rounded-xl border flex justify-between items-center">
+                        <div><h4 class="font-bold">${o.name}</h4><p class="text-blue-600">${o.designation} (${o.phone})</p></div>
+                        <button onclick="deleteItem('ladnun_officials/${k}')" class="text-red-500 font-bold bg-red-50 px-2 py-1 rounded">Delete</button>
+                    </div>
+                `;
+            });
+        });
+        function openOffModal() {
+            document.getElementById('aModalTitle').innerText = "Add Govt Official";
+            document.getElementById('aModalBody').innerHTML = `
+                <input type="text" id="ofName" placeholder="Name" class="w-full p-2 border rounded">
+                <input type="text" id="ofDesig" placeholder="Designation" class="w-full p-2 border rounded">
+                <input type="number" id="ofPhone" placeholder="Phone" class="w-full p-2 border rounded">
+                <input type="text" id="ofImg" placeholder="Image URL" class="w-full p-2 border rounded">
+                <button onclick="db.ref('ladnun_officials').push().set({name:document.getElementById('ofName').value, designation:document.getElementById('ofDesig').value, phone:document.getElementById('ofPhone').value, whatsapp:document.getElementById('ofPhone').value, img:document.getElementById('ofImg').value}).then(()=>closeAModal())" class="w-full bg-blue-700 text-white font-bold p-2 rounded">Save</button>
+            `;
+            document.getElementById('adminModal').classList.remove('hidden');
+        }
+
+        db.ref('ladnun_ward_members').on('value', s => {
+            const data = s.val() || {}; const l = document.getElementById('admin-ward-list'); l.innerHTML = '';
+            Object.keys(data).forEach(k => {
+                const m = data[k];
+                l.innerHTML += `
+                    <div class="bg-white p-3 rounded-xl border flex justify-between items-center">
+                        <div><h4 class="font-bold">${m.name}</h4><p class="text-gray-500">Ward: ${m.wardNo} (${m.phone})</p></div>
+                        <button onclick="deleteItem('ladnun_ward_members/${k}')" class="text-red-500 font-bold bg-red-50 px-2 py-1 rounded">Delete</button>
+                    </div>
+                `;
+            });
+        });
+        function openWardModal() {
+            document.getElementById('aModalTitle').innerText = "Add Ward Member";
+            document.getElementById('aModalBody').innerHTML = `
+                <input type="text" id="wmName" placeholder="Member Name" class="w-full p-2 border rounded">
+                <input type="number" id="wmNo" placeholder="Ward Number (1-45)" class="w-full p-2 border rounded">
+                <input type="number" id="wmPhone" placeholder="Phone" class="w-full p-2 border rounded">
+                <button onclick="db.ref('ladnun_ward_members').push().set({name:document.getElementById('wmName').value, wardNo:document.getElementById('wmNo').value, phone:document.getElementById('wmPhone').value, whatsapp:document.getElementById('wmPhone').value}).then(()=>closeAModal())" class="w-full bg-emerald-600 text-white font-bold p-2 rounded">Save</button>
+            `;
+            document.getElementById('adminModal').classList.remove('hidden');
+        }
+
+        // 8. BOOKS
+        db.ref('books/items').on('value', s => {
+            const data = s.val() || {}; const l = document.getElementById('admin-books-list'); l.innerHTML = '';
+            Object.keys(data).forEach(k => {
+                const b = data[k];
+                l.innerHTML += `
+                    <div class="bg-white p-2.5 rounded-xl border text-xs flex flex-col justify-between">
+                        <img src="${b.img}" class="h-20 w-full object-contain mb-1">
+                        <h4 class="font-bold truncate">${b.title}</h4><span class="text-blue-600 font-black">₹${b.price} (${b.medium})</span>
+                        <button onclick="deleteItem('books/items/${k}')" class="mt-2 text-red-500 bg-red-50 py-1 rounded font-bold">Delete</button>
+                    </div>
+                `;
+            });
+        });
+        function openBookModal() {
+            document.getElementById('aModalTitle').innerText = "Add Book";
+            document.getElementById('aModalBody').innerHTML = `
+                <input type="text" id="bTitle" placeholder="Book Title" class="w-full p-2 border rounded">
+                <select id="bMed" class="w-full p-2 border rounded"><option value="Hindi">Hindi Medium</option><option value="English">English Medium</option></select>
+                <input type="number" id="bPrice" placeholder="Price (₹)" class="w-full p-2 border rounded">
+                <input type="text" id="bImg" placeholder="Image URL" class="w-full p-2 border rounded">
+                <button onclick="const id='b_'+Date.now(); db.ref('books/items/'+id).set({id, title:document.getElementById('bTitle').value, medium:document.getElementById('bMed').value, price:Number(document.getElementById('bPrice').value), img:document.getElementById('bImg').value, deliveryCharge:20}).then(()=>closeAModal())" class="w-full bg-blue-600 text-white font-bold p-2 rounded">Save</button>
+            `;
+            document.getElementById('adminModal').classList.remove('hidden');
+        }
+    </script>
 </body>
 </html>
