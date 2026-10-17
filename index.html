@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Soyfa Super App - User</title>
     
-    <!-- SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -25,7 +24,6 @@
         .qmart-hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
         .uniform-title { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
 
-        /* Gradients */
         .bg-mart-grad { background: linear-gradient(180deg, #ecfdf5 0%, #f0fdf4 25%, #ffffff 80%); }
         .bg-food-grad { background: linear-gradient(180deg, #fff7ed 0%, #fff1f2 30%, #ffffff 85%); }
         .bg-serv-grad { background: linear-gradient(180deg, #f0fdfa 0%, #f0fdf4 30%, #ffffff 85%); }
@@ -36,18 +34,15 @@
         .bg-order-grad { background: linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 35%, #ffffff 85%); }
         .bg-prof-grad { background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 35%, #ffffff 85%); }
 
-        /* Blue Bottom Nav */
         .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: var(--nav-height); background: #ffffff; box-shadow: 0 -4px 25px rgba(37, 99, 235, 0.12); display: flex; justify-content: space-around; align-items: center; z-index: 9000; border-top: 1.5px solid #e0e7ff; border-radius: 22px 22px 0 0; max-width: 650px; margin: 0 auto; padding: 0 6px; }
         .nav-item { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #94a3b8; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.3s; padding: 4px 0; }
         .nav-item i { font-size: 20px; margin-bottom: 2px; display: block; }
         .nav-item.active { color: var(--nav-blue); transform: translateY(-5px); }
         .nav-item.active i { transform: scale(1.2); filter: drop-shadow(0 4px 8px rgba(37,99,235,0.4)); color: var(--nav-blue); }
 
-        /* Floating Buttons: Always Visible */
         .floating-right-nav { position: fixed; right: 15px; bottom: 80px; z-index: 9999 !important; display: flex !important; flex-direction: column; gap: 9px; }
         .float-btn { width: 46px; height: 46px; background: rgba(255,255,255,0.96); backdrop-filter: blur(6px); border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 8px 20px rgba(37,99,235,0.22); cursor: pointer; font-size: 18px; transition: 0.3s; border: 2px solid var(--nav-blue); color: var(--nav-blue); }
         .float-btn:hover { transform: scale(1.1); }
-        .float-btn:active { transform: scale(0.95); }
 
         .track-line { position: relative; height: 5px; background: #e2e8f0; margin: 26px 10px 12px 10px; border-radius: 4px; }
         .track-fill { position: absolute; left: 0; top: 0; height: 100%; border-radius: 4px; transition: width 0.8s ease-in-out; }
@@ -90,17 +85,17 @@
     <!-- MAIN APP PANEL -->
     <div id="app-panel" class="hidden">
         
-        <!-- 4 FLOATING BUTTONS (ALL BLUE, NEVER HIDDEN) -->
+        <!-- 4 FLOATING BUTTONS (ALL BLUE, ALWAYS VISIBLE) -->
         <div class="floating-right-nav" id="floating-actions-stack">
             <div class="float-btn" onclick="showPanel('ladnun-directory-view')" title="लाडनूं निर्देशिका (अधिकारी एवं वार्ड)"><i class="fa-solid fa-landmark"></i></div>
-            <div class="float-btn" onclick="showPanel('animals-view')" title="पशु मंडी (गाय, भैंस, बकरी खरीदें/बेचें)"><i class="fa-solid fa-cow"></i></div>
+            <div class="float-btn" onclick="showPanel('animals-view')" title="पशु मंडी (गाय, भैंस, बकरा आदि)"><i class="fa-solid fa-cow"></i></div>
             <div class="float-btn" onclick="showPanel('teachers-view')" title="शिक्षक एवं स्कूल पोर्टल"><i class="fa-solid fa-chalkboard-user"></i></div>
             <div class="float-btn" onclick="showPanel('books-view')" title="Books Store"><i class="fa-solid fa-book-open"></i></div>
         </div>
 
-        <!-- 1. Q-MART (AUTO SLIDER + VEGETABLES SLIDER) -->
+        <!-- 1. Q-MART (TOP SWITCHER SLIDER + VEGETABLES AUTO-SLIDER) -->
         <div id="grocery-view" class="p-4 max-w-xl mx-auto bg-mart-grad min-h-screen">
-            <header class="bg-white/95 sticky top-0 z-40 border border-emerald-100 p-3 rounded-2xl flex justify-between items-center shadow-xs mb-4">
+            <header class="bg-white/95 sticky top-0 z-40 border border-emerald-100 p-3 rounded-2xl flex justify-between items-center shadow-xs mb-3">
                 <div class="flex items-center gap-2">
                     <h1 class="text-2xl font-black text-emerald-600 tracking-tighter">Q-Mart</h1>
                     <div>
@@ -110,28 +105,48 @@
                 </div>
             </header>
             
-            <div class="relative mb-4 flex items-center">
+            <!-- 1. MART TOP PILL SWITCHER (GROCERY vs SABZI) -->
+            <div class="flex justify-center mb-3">
+                <div class="bg-white p-1 rounded-full flex w-full max-w-[320px] relative shadow-xs border border-emerald-200">
+                    <div id="sliderBgMart" class="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] bg-emerald-600 rounded-full shadow-sm transition-transform duration-300"></div>
+                    <button onclick="setMartMode('grocery')" id="btnMartGroc" class="flex-1 py-1.5 text-xs font-bold text-white relative z-10 transition">
+                        🛒 ग्रोसरी (Grocery)
+                    </button>
+                    <button onclick="setMartMode('vegetables')" id="btnMartVeg" class="flex-1 py-1.5 text-xs font-bold text-emerald-900 relative z-10 transition">
+                        🥦 ताज़ा सब्जियां (Sabzi)
+                    </button>
+                </div>
+            </div>
+
+            <div class="relative mb-3 flex items-center">
                 <span class="absolute left-3.5 text-gray-400"><i class="fa-solid fa-magnifying-glass"></i></span>
-                <input type="text" id="mart-search" placeholder="Search groceries, sabzi..." onkeyup="filterMart(this.value);" class="w-full p-3 rounded-xl border border-emerald-100 text-sm pl-10 pr-10 bg-white shadow-xs outline-none">
+                <input type="text" id="mart-search" placeholder="Search items..." onkeyup="filterMart(this.value);" class="w-full p-3 rounded-xl border border-emerald-100 text-sm pl-10 pr-10 bg-white shadow-xs outline-none">
                 <button onclick="startVoiceSearch('mart-search', filterMart)" class="absolute right-3 text-emerald-600 bg-emerald-50 w-7 h-7 rounded-full flex items-center justify-center text-sm shadow-xs"><i class="fa-solid fa-microphone"></i></button>
             </div>
 
-            <!-- Auto-sliding Mart Banners -->
-            <div id="mart-banners" class="flex gap-3 overflow-x-auto qmart-hide-scroll snap-x mb-4 scroll-smooth"></div>
-
-            <!-- 1. NEW: FRESH VEGETABLES SLIDER -->
-            <div class="bg-white/90 p-3.5 rounded-2xl border border-emerald-100 mb-5 shadow-xs">
-                <div class="flex justify-between items-center mb-2.5">
+            <!-- AUTO SLIDING VEGETABLES/BANNER SLIDER -->
+            <div class="bg-white/90 p-3 rounded-2xl border border-emerald-100 mb-4 shadow-xs">
+                <div class="flex justify-between items-center mb-2">
                     <span class="text-xs font-black text-emerald-900 flex items-center gap-1.5">
-                        <i class="fa-solid fa-carrot text-emerald-600"></i> ताज़ा हरी सब्जियां (Fresh Vegetables)
+                        <i class="fa-solid fa-carrot text-emerald-600"></i> ताज़ा सब्जियां (Fresh Sabzi)
                     </span>
-                    <span class="text-[10px] text-emerald-700 bg-emerald-50 font-bold px-2 py-0.5 rounded">Daily Fresh</span>
+                    <span class="text-[10px] text-emerald-700 bg-emerald-50 font-bold px-2 py-0.5 rounded">Auto Fresh</span>
                 </div>
                 <div id="mart-veg-slider" class="flex gap-3 overflow-x-auto qmart-hide-scroll snap-x pb-1 scroll-smooth"></div>
             </div>
 
-            <div id="groc-categories" class="flex gap-4 overflow-x-auto qmart-hide-scroll mb-6 pb-1"></div>
-            <div id="groc-products-container" class="space-y-6"></div>
+            <!-- PANE 1: GROCERY DATA -->
+            <div id="mart-grocery-pane">
+                <div id="mart-banners" class="flex gap-3 overflow-x-auto qmart-hide-scroll snap-x mb-4 scroll-smooth"></div>
+                <div id="groc-categories" class="flex gap-4 overflow-x-auto qmart-hide-scroll mb-4 pb-1"></div>
+                <div id="groc-products-container" class="space-y-5"></div>
+            </div>
+
+            <!-- PANE 2: SABZI FULL GRID DATA -->
+            <div id="mart-veg-pane" class="hidden">
+                <h3 class="font-extrabold text-sm text-gray-800 mb-3">सभी हरी व ताज़ा सब्जियां</h3>
+                <div id="mart-veg-full-grid" class="grid grid-cols-2 gap-3 pb-8"></div>
+            </div>
 
             <div id="groc-checkout-bar" class="fixed bottom-[75px] left-4 right-4 bg-emerald-700 text-white p-3.5 rounded-2xl shadow-xl z-40 hidden flex justify-between items-center cursor-pointer max-w-xl mx-auto" onclick="openUniversalCheckout('GROCERY')">
                 <div><p class="text-sm font-extrabold"><span id="groc-item-count">0</span> Items | ₹<span id="groc-final-total">0</span></p><p class="text-[10px] opacity-90">Extra charges may apply</p></div>
@@ -139,22 +154,19 @@
             </div>
         </div>
 
-        <!-- 2. FOOD DELIVERY (VEG / NON-VEG SLIDER TOGGLE) -->
+        <!-- 2. FOOD DELIVERY (ONLY 2 BUTTONS: NON-VEG DEFAULT & VEG) -->
         <div id="home-view" class="container-food p-4 hidden max-w-xl mx-auto bg-food-grad min-h-screen">
             <h1 class="uniform-title text-red-500"><i class="fa-solid fa-burger text-orange-500"></i> Soyfa Food</h1>
             
-            <!-- 2. NEW: VEG / NON-VEG SLIDER TOGGLE -->
+            <!-- 2. FOOD 2-BUTTON SLIDER (NON-VEG BY DEFAULT) -->
             <div class="flex justify-center mb-4">
-                <div class="bg-white p-1 rounded-full flex w-full max-w-[320px] relative shadow-xs border border-red-200">
-                    <div id="sliderBgFood" class="absolute top-1 bottom-1 left-1 w-[calc(33.33%-3px)] bg-emerald-600 rounded-full shadow-sm transition-transform duration-300"></div>
-                    <button onclick="setFoodVegFilter('veg')" id="btnFoodVeg" class="flex-1 py-1 text-xs font-bold text-white relative z-10 transition">
-                        🟢 Veg
-                    </button>
-                    <button onclick="setFoodVegFilter('nonveg')" id="btnFoodNonVeg" class="flex-1 py-1 text-xs font-bold text-red-900 relative z-10 transition">
+                <div class="bg-white p-1 rounded-full flex w-full max-w-[260px] relative shadow-xs border border-red-200">
+                    <div id="sliderBgFood" class="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] bg-red-600 rounded-full shadow-sm transition-transform duration-300"></div>
+                    <button onclick="setFoodVegFilter('nonveg')" id="btnFoodNonVeg" class="flex-1 py-1.5 text-xs font-bold text-white relative z-10 transition">
                         🔴 Non-Veg
                     </button>
-                    <button onclick="setFoodVegFilter('all')" id="btnFoodAll" class="flex-1 py-1 text-xs font-bold text-gray-700 relative z-10 transition">
-                        All (सभी)
+                    <button onclick="setFoodVegFilter('veg')" id="btnFoodVeg" class="flex-1 py-1.5 text-xs font-bold text-red-900 relative z-10 transition">
+                        🟢 Veg
                     </button>
                 </div>
             </div>
@@ -199,7 +211,7 @@
             <div id="srv-providers-list" class="space-y-3.5 pb-20"></div>
         </div>
 
-        <!-- 3. NEW: ANIMAL MARKET (पशु मंडी - BUY & SELL) -->
+        <!-- 4. PASHU MANDI (DYNAMIC CATEGORIES & FULL HINDI UI) -->
         <div id="animals-view" class="p-4 max-w-xl mx-auto hidden pb-24 bg-anim-grad min-h-screen">
             <div class="flex justify-between items-center mb-2">
                 <h1 class="uniform-title text-amber-700 mb-0"><i class="fa-solid fa-cow text-amber-600"></i> पशु मंडी (Animal Market)</h1>
@@ -211,7 +223,7 @@
                 <i class="fa-solid fa-plus-circle"></i> + अपना पशु बेचने के लिए जोड़ें
             </button>
 
-            <!-- Animal Category Filter -->
+            <!-- Dynamic Animal Categories -->
             <div class="mb-3">
                 <div id="animal-categories" class="flex gap-2 overflow-x-auto qmart-hide-scroll pb-1"></div>
             </div>
@@ -219,7 +231,7 @@
             <div id="animals-list" class="space-y-4"></div>
         </div>
 
-        <!-- 4. LADNUN TEACHERS & SCHOOL VACANCIES -->
+        <!-- 5. TEACHERS & SCHOOLS (ONE NAVIGATION WITH DUAL SLIDER SWITCH) -->
         <div id="teachers-view" class="p-4 max-w-xl mx-auto hidden pb-24 bg-teach-grad min-h-screen">
             <div class="flex justify-between items-center mb-3">
                 <h1 class="uniform-title text-indigo-700 mb-0"><i class="fa-solid fa-chalkboard-user"></i> शिक्षक एवं स्कूल पोर्टल</h1>
@@ -238,7 +250,7 @@
                 </div>
             </div>
 
-            <!-- PANE 1: TEACHERS -->
+            <!-- PANE 1: ONLY TEACHERS -->
             <div id="teacher-content-pane">
                 <button onclick="openTeacherRegModal()" class="w-full bg-indigo-600 text-white p-3 rounded-xl font-bold shadow-md mb-4 text-xs">+ शिक्षक के रूप में खुद को रजिस्टर करें</button>
                 <div class="mb-3">
@@ -248,14 +260,14 @@
                 <div id="teachers-list" class="space-y-3.5"></div>
             </div>
 
-            <!-- PANE 2: SCHOOL VACANCIES -->
+            <!-- PANE 2: ONLY SCHOOL VACANCIES -->
             <div id="school-content-pane" class="hidden">
                 <button onclick="openSchoolJobModal()" class="w-full bg-purple-600 text-white p-3 rounded-xl font-bold shadow-md mb-4 text-xs">+ नई स्कूल वैकेंसी पोस्ट करें</button>
                 <div id="school-vacancies-container" class="space-y-3.5"></div>
             </div>
         </div>
 
-        <!-- 5. LADNUN DIRECTORY -->
+        <!-- 6. LADNUN DIRECTORY -->
         <div id="ladnun-directory-view" class="p-4 max-w-xl mx-auto hidden pb-24 bg-dir-grad min-h-screen">
             <div class="flex justify-between items-center mb-3">
                 <h1 class="uniform-title text-blue-700 mb-0"><i class="fa-solid fa-landmark"></i> लाडनूं निर्देशिका</h1>
@@ -272,7 +284,7 @@
             <div id="ward-members-list" class="space-y-3"></div>
         </div>
 
-        <!-- 6. BOOKS STORE (4. CLASS-WISE CATEGORIES) -->
+        <!-- 7. BOOKS STORE (3. INDIVIDUAL CLASS CATEGORIES: CLASS 1, CLASS 2...) -->
         <div id="books-view" class="p-4 max-w-xl mx-auto hidden pb-24 bg-book-grad min-h-screen">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="uniform-title text-blue-700 mb-0"><i class="fa-solid fa-book-bookmark text-blue-600"></i> System Book</h2>
@@ -286,7 +298,7 @@
                 </div>
             </div>
             
-            <!-- CLASS-WISE CATEGORY FILTER -->
+            <!-- Dynamic Individual Class Filter Chips -->
             <div class="mb-3">
                 <span class="text-xs font-bold text-gray-500 block mb-1 uppercase">कक्षा चुनें (Class):</span>
                 <div id="book-class-categories" class="flex gap-2 overflow-x-auto pb-2 qmart-hide-scroll"></div>
@@ -295,13 +307,13 @@
             <div id="prodList" class="grid grid-cols-2 gap-3.5 pb-10"></div>
         </div>
 
-        <!-- 7. ORDERS -->
+        <!-- 8. ORDERS -->
         <div id="orders-view" class="p-4 max-w-xl mx-auto hidden bg-order-grad min-h-screen">
             <h1 class="uniform-title text-blue-600 mb-4"><i class="fa-solid fa-receipt"></i> My Orders</h1>
             <div id="orders-list" class="space-y-4 pb-20"></div>
         </div>
 
-        <!-- 8. PROFILE (WITH SUB-PAGES) -->
+        <!-- 9. PROFILE (SUB-PAGES) -->
         <div id="profile-view" class="p-4 max-w-xl mx-auto hidden bg-prof-grad min-h-screen">
             <h1 class="uniform-title text-slate-800 mb-4"><i class="fa-solid fa-user"></i> My Profile</h1>
             <div id="profile-display-mode">
@@ -341,7 +353,7 @@
             <div id="info-pages-container" class="hidden pb-20">
                 <div id="about-page" class="hidden bg-white p-5 rounded-2xl shadow-xs mb-3 text-xs leading-relaxed">
                     <h3 class="font-extrabold text-blue-600 text-sm mb-2">About Soyfa</h3>
-                    <p class="text-gray-600">Soyfa Super App लाडनूं का सर्वोत्कृष्ट डिजिटल प्लेटफ़ॉर्म है जहाँ आप Q-Mart ग्रोसरी (12 मिनट डिलीवरी), ताज़ा सब्जियां, फ़ूड, पशु मंडी, शिक्षक, स्कूल वैकेंसी, लोकल सेवाएँ और प्रशासनिक निर्देशिका का लाभ एक ही स्थान पर उठा सकते हैं।</p>
+                    <p class="text-gray-600">Soyfa Super App लाडनूं का सर्वोत्कृष्ट डिजिटल प्लेटफ़ॉर्म है जहाँ आप Q-Mart ग्रोसरी, ताज़ा सब्जियां, फ़ूड, पशु मंडी, शिक्षक, स्कूल वैकेंसी, लोकल सेवाएँ और प्रशासनिक निर्देशिका का लाभ एक ही स्थान पर उठा सकते हैं।</p>
                 </div>
                 <div id="privacy-page" class="hidden bg-white p-5 rounded-2xl shadow-xs mb-3 text-xs leading-relaxed">
                     <h3 class="font-extrabold text-blue-600 text-sm mb-2">Privacy Policy</h3>
@@ -409,18 +421,15 @@
         </div>
     </div>
 
-    <!-- 3. ANIMAL LISTING MODAL -->
+    <!-- 4. ANIMAL POST MODAL (TYPED CATEGORY IN HINDI) -->
     <div id="addAnimalModal" class="universal-modal fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-sm p-5 rounded-2xl max-h-[85vh] overflow-y-auto text-xs space-y-2">
             <div class="flex justify-between items-center mb-1"><h3 class="font-bold text-sm text-amber-900" id="animalModalTitle">पशु बिक्री हेतु जोड़ें</h3><button onclick="closeModals()" class="text-lg font-bold">&times;</button></div>
             <input type="hidden" id="animalEditKey">
-            <select id="anType" class="w-full p-2 border rounded-lg bg-white outline-none">
-                <option value="गाय (Cow)">गाय (Cow)</option>
-                <option value="भैंस (Buffalo)">भैंस (Buffalo)</option>
-                <option value="बकरा / बकरी (Goat)">बकरा / बकरी (Goat)</option>
-                <option value="भेड़ (Sheep)">भेड़ (Sheep)</option>
-                <option value="अन्य पशु">अन्य पशु (Other)</option>
-            </select>
+            
+            <label class="block text-gray-600 font-bold">पशु की श्रेणी (Type Category):</label>
+            <input type="text" id="anType" placeholder="श्रेणी लिखें (उदा. गाय, भैंस, बकरा, बकरी, घोड़ा...)" class="w-full p-2 border rounded-lg bg-amber-50/50 outline-none font-bold text-amber-900">
+            
             <input type="text" id="anTitle" placeholder="शीर्षक/नस्ल (उदा. साहीवाल गाय, देसी बकरा)" class="w-full p-2 border rounded-lg outline-none">
             <input type="number" id="anPrice" placeholder="कीमत (₹)" class="w-full p-2 border rounded-lg outline-none">
             <input type="text" id="anDetails" placeholder="दूध क्षमता / उम्र / अन्य विवरण..." class="w-full p-2 border rounded-lg outline-none">
@@ -489,13 +498,16 @@
         let customerProfile = {}, groceryCart = {}, foodCart = [];
         const RAZORPAY_KEY = "rzp_live_Ry7zglI0OnE1Jo";
         let currentOrderType = 'GROCERY';
-        let allRestaurantsData = {}, allMartData = [], allMartBanners = [], allBookCats = [], allBooks = [];
+        let allRestaurantsData = {}, allMartData = [], allMartVegetables = [], allMartBanners = [], allBookCats = [], allBooks = [];
         let allSrvCats = [], allSrvProvs = [], currentSrvCat = 'all';
         let currentBookMed = 'Hindi', currentBookClass = 'all', selectedBook = null;
         let appliedCouponCode = '', appliedDiscountAmount = 0;
         let allTeachers = {}, currentTeacherSub = 'all', allSchoolVacancies = {}, allOfficials = {}, allWardMembers = {}, currentWardFilter = 'all';
         let allAnimals = {}, currentAnimalFilter = 'all';
-        let currentFoodVegFilter = 'all';
+        
+        // 2. SHURU ME NON-VEG DEFAULT (AS REQUESTED)
+        let currentFoodVegFilter = 'nonveg'; 
+        let currentMartMode = 'grocery';
 
         function compressImage(file, cb) {
             if(!file) return cb(null);
@@ -531,14 +543,14 @@
             }, 4500); 
         }
 
-        // MART BANNER SLIDER
+        // 1. MART AUTO SLIDER (SABZI & BANNERS)
         function startMartAutoSlide() {
             let slideIdx = 0;
             setInterval(() => {
-                const bBox = document.getElementById('mart-banners');
-                if (bBox && bBox.children.length > 1) {
-                    slideIdx = (slideIdx + 1) % bBox.children.length;
-                    bBox.scrollTo({ left: slideIdx * 280, behavior: 'smooth' });
+                const vegBox = document.getElementById('mart-veg-slider');
+                if (vegBox && vegBox.children.length > 1) {
+                    slideIdx = (slideIdx + 1) % vegBox.children.length;
+                    vegBox.scrollTo({ left: slideIdx * 150, behavior: 'smooth' });
                 }
             }, 3500);
         }
@@ -550,8 +562,6 @@
             populateWards(); 
             renderServiceCategoryChips();
             renderTeacherCategories();
-            renderAnimalCategories();
-            renderBookClassCategories();
         });
 
         function switchAuth(t) {
@@ -635,15 +645,41 @@
 
         function closeModals() { document.querySelectorAll('.universal-modal').forEach(m => m.classList.add('hidden')); }
 
-        // --- 1. Q-MART & VEGETABLES SLIDER ---
+        // --- 1. Q-MART TOP MODE SWITCHER & VEGETABLES ---
+        function setMartMode(mode) {
+            currentMartMode = mode;
+            const bg = document.getElementById('sliderBgMart');
+            const btnG = document.getElementById('btnMartGroc');
+            const btnV = document.getElementById('btnMartVeg');
+            const paneG = document.getElementById('mart-grocery-pane');
+            const paneV = document.getElementById('mart-veg-pane');
+
+            if(mode === 'grocery') {
+                if(bg) bg.style.transform = 'translateX(0)';
+                if(btnG) btnG.className = 'flex-1 py-1.5 text-xs font-bold text-white relative z-10 transition';
+                if(btnV) btnV.className = 'flex-1 py-1.5 text-xs font-bold text-emerald-900 relative z-10 transition';
+                if(paneG) paneG.classList.remove('hidden');
+                if(paneV) paneV.classList.add('hidden');
+            } else {
+                if(bg) bg.style.transform = 'translateX(100%)';
+                if(btnG) btnG.className = 'flex-1 py-1.5 text-xs font-bold text-emerald-900 relative z-10 transition';
+                if(btnV) btnV.className = 'flex-1 py-1.5 text-xs font-bold text-white relative z-10 transition';
+                if(paneG) paneG.classList.add('hidden');
+                if(paneV) paneV.classList.remove('hidden');
+            }
+        }
+
         function loadGroceryData() {
             db.ref('qmart').on('value', s => {
                 const data = s.val() || {};
                 allMartBanners = Object.values(data.banners || {});
                 const cats = Object.values(data.categories || {});
                 allMartData = Object.values(data.products || {});
+                allMartVegetables = Object.values(data.vegetables || {});
+
                 document.getElementById('mart-banners').innerHTML = allMartBanners.map(b => `<img src="${b.img}" class="min-w-[85%] h-32 object-cover rounded-2xl snap-center border">`).join('');
                 document.getElementById('groc-categories').innerHTML = cats.map(c => `<div class="flex flex-col items-center min-w-[65px]"><div class="bg-white w-14 h-14 rounded-full flex items-center justify-center p-2 border shadow-xs"><img src="${c.img}" class="w-full h-full object-contain"></div><span class="text-[11px] font-bold mt-1 text-gray-700">${c.name}</span></div>`).join('');
+                
                 renderVegetablesSlider(data.vegetables || {});
                 filterMart('');
             });
@@ -651,16 +687,18 @@
 
         function renderVegetablesSlider(vegData) {
             const container = document.getElementById('mart-veg-slider');
+            const fullGrid = document.getElementById('mart-veg-full-grid');
             if(!container) return;
             const vegList = Object.values(vegData);
             const defaultVeg = [
                 { id: 'v1', name: 'देसी टमाटर', price: 30, weight: '1 kg', img: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=300' },
                 { id: 'v2', name: 'हरी मिर्च', price: 20, weight: '250g', img: 'https://images.unsplash.com/photo-1588252303782-cb80119abd6d?w=300' },
                 { id: 'v3', name: 'नया आलू', price: 25, weight: '1 kg', img: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=300' },
-                { id: 'v4', name: 'लाल प्याज', price: 35, weight: '1 kg', img: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=300' }
+                { id: 'v4', name: 'प्याज', price: 35, weight: '1 kg', img: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=300' }
             ];
             const finalVeg = vegList.length ? vegList : defaultVeg;
 
+            // Auto-Slider Cards
             container.innerHTML = finalVeg.map(v => `
                 <div class="min-w-[130px] snap-center bg-white p-2.5 rounded-2xl border border-emerald-100 shadow-2xs flex flex-col justify-between">
                     <img src="${v.img}" class="h-20 w-full object-contain mb-1 rounded-xl">
@@ -672,6 +710,21 @@
                     </div>
                 </div>
             `).join('');
+
+            // Full Grid in Sabzi Mode
+            if(fullGrid) {
+                fullGrid.innerHTML = finalVeg.map(v => `
+                    <div class="bg-white p-3 rounded-2xl border border-emerald-100 shadow-xs flex flex-col justify-between">
+                        <img src="${v.img}" class="h-28 w-full object-contain mb-2 rounded-xl">
+                        <h4 class="font-extrabold text-xs text-gray-900">${v.name}</h4>
+                        <span class="text-[11px] text-gray-400 font-bold mb-2">${v.weight || '1 kg'}</span>
+                        <div class="flex justify-between items-center">
+                            <span class="font-black text-sm text-emerald-800">₹${v.price}</span>
+                            <button onclick="addGroceryCart('${v.id}','${v.name}',${v.price},0)" class="bg-emerald-600 text-white font-bold text-xs px-3 py-1.5 rounded-xl active:scale-95 transition">+ ADD</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
         }
 
         function filterMart(q) {
@@ -699,29 +752,21 @@
             document.getElementById('groc-checkout-bar').classList.toggle('hidden', count === 0);
         }
 
-        // --- 2. FOOD DELIVERY WITH VEG / NON-VEG SLIDER ---
+        // --- 2. FOOD DELIVERY (2 BUTTONS: NON-VEG DEFAULT) ---
         function setFoodVegFilter(mode) {
             currentFoodVegFilter = mode;
             const bg = document.getElementById('sliderBgFood');
             const btnV = document.getElementById('btnFoodVeg');
             const btnNV = document.getElementById('btnFoodNonVeg');
-            const btnA = document.getElementById('btnFoodAll');
 
-            if(mode === 'veg') {
-                if(bg) { bg.style.transform = 'translateX(0)'; bg.className = "absolute top-1 bottom-1 left-1 w-[calc(33.33%-3px)] bg-emerald-600 rounded-full shadow-sm transition-transform duration-300"; }
-                if(btnV) btnV.className = 'flex-1 py-1 text-xs font-bold text-white relative z-10 transition';
-                if(btnNV) btnNV.className = 'flex-1 py-1 text-xs font-bold text-red-900 relative z-10 transition';
-                if(btnA) btnA.className = 'flex-1 py-1 text-xs font-bold text-gray-700 relative z-10 transition';
-            } else if(mode === 'nonveg') {
-                if(bg) { bg.style.transform = 'translateX(100%)'; bg.className = "absolute top-1 bottom-1 left-1 w-[calc(33.33%-3px)] bg-red-600 rounded-full shadow-sm transition-transform duration-300"; }
-                if(btnV) btnV.className = 'flex-1 py-1 text-xs font-bold text-emerald-900 relative z-10 transition';
-                if(btnNV) btnNV.className = 'flex-1 py-1 text-xs font-bold text-white relative z-10 transition';
-                if(btnA) btnA.className = 'flex-1 py-1 text-xs font-bold text-gray-700 relative z-10 transition';
+            if(mode === 'nonveg') {
+                if(bg) bg.style.transform = 'translateX(0)';
+                if(btnNV) btnNV.className = 'flex-1 py-1.5 text-xs font-bold text-white relative z-10 transition';
+                if(btnV) btnV.className = 'flex-1 py-1.5 text-xs font-bold text-red-900 relative z-10 transition';
             } else {
-                if(bg) { bg.style.transform = 'translateX(200%)'; bg.className = "absolute top-1 bottom-1 left-1 w-[calc(33.33%-3px)] bg-gray-800 rounded-full shadow-sm transition-transform duration-300"; }
-                if(btnV) btnV.className = 'flex-1 py-1 text-xs font-bold text-emerald-900 relative z-10 transition';
-                if(btnNV) btnNV.className = 'flex-1 py-1 text-xs font-bold text-red-900 relative z-10 transition';
-                if(btnA) btnA.className = 'flex-1 py-1 text-xs font-bold text-white relative z-10 transition';
+                if(bg) bg.style.transform = 'translateX(100%)';
+                if(btnNV) btnNV.className = 'flex-1 py-1.5 text-xs font-bold text-red-900 relative z-10 transition';
+                if(btnV) btnV.className = 'flex-1 py-1.5 text-xs font-bold text-white relative z-10 transition';
             }
             filterRestaurants(document.getElementById('restaurant-search')?.value || '');
         }
@@ -732,7 +777,7 @@
             const el = document.getElementById('restaurants-list'); el.innerHTML = '';
             Object.keys(allRestaurantsData).forEach(id => {
                 const r = allRestaurantsData[id];
-                const matchesVeg = (currentFoodVegFilter === 'all') || (r.foodType === currentFoodVegFilter);
+                const matchesVeg = (r.foodType === currentFoodVegFilter);
                 if(r.approved && matchesVeg && (r.name.toLowerCase().includes(q) || (r.cuisine||'').toLowerCase().includes(q))) {
                     const tagBadge = r.foodType === 'nonveg' ? '<span class="text-red-600 font-bold text-[10px] bg-red-50 px-1.5 py-0.5 rounded">🔴 Non-Veg</span>' : '<span class="text-emerald-700 font-bold text-[10px] bg-emerald-50 px-1.5 py-0.5 rounded">🟢 Pure Veg</span>';
                     el.innerHTML += `
@@ -746,6 +791,9 @@
                     `;
                 }
             });
+            if(!el.innerHTML) {
+                el.innerHTML = `<p class="text-center text-gray-400 py-8 text-xs">कोई रेस्टोरेंट उपलब्ध नहीं है (${currentFoodVegFilter.toUpperCase()})</p>`;
+            }
         }
         function viewMenu(id, name, cuisine, img) {
             document.getElementById('menu-restaurant-name').textContent = name;
@@ -755,7 +803,7 @@
             db.ref(`menus/${id}`).once('value', s => {
                 const m = s.val() || {}; l.innerHTML = '';
                 Object.keys(m).forEach(k => {
-                    const isVeg = (m[k].foodType !== 'nonveg');
+                    const isVeg = (m[k].foodType === 'veg');
                     l.innerHTML += `<div class="flex justify-between items-center bg-white p-3 rounded-2xl border border-red-50 shadow-xs"><div><h4 class="font-bold text-xs text-gray-800">${isVeg ? '🟢' : '🔴'} ${m[k].name}</h4><span class="text-red-500 font-black text-xs">₹${m[k].price}</span></div><button onclick="addFoodCart({id:'${k}',name:'${m[k].name}',price:${m[k].price},restaurantId:'${id}',del:${m[k].deliveryCharge||50}})" class="bg-red-500 text-white font-bold text-xs px-3 py-1.5 rounded-xl shadow-xs active:scale-95 transition">+ ADD</button></div>`;
                 });
             });
@@ -816,27 +864,29 @@
             });
         }
 
-        // --- 3. ANIMAL MARKET (पशु मंडी) LOGIC ---
-        function renderAnimalCategories() {
-            const anCats = ['all', 'गाय (Cow)', 'भैंस (Buffalo)', 'बकरा / बकरी (Goat)', 'भेड़ (Sheep)', 'अन्य पशु'];
-            const box = document.getElementById('animal-categories'); if(!box) return;
-            box.innerHTML = anCats.map(c => `
-                <button onclick="filterAnimals('${c}')" class="px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap border transition ${currentAnimalFilter === c ? 'bg-amber-600 text-white border-amber-600 shadow-xs' : 'bg-white text-gray-700 border-amber-100'}">
-                    ${c === 'all' ? 'All (सभी पशु)' : c}
-                </button>
-            `).join('');
-        }
-
+        // --- 4. ANIMAL MARKET (पशु मंडी) DYNAMIC TYPED CATEGORIES IN HINDI ---
         function loadAnimals() {
             db.ref('animals').on('value', s => {
                 allAnimals = s.val() || {};
+                renderAnimalDynamicCategories();
                 filterAnimals(currentAnimalFilter);
             });
         }
 
+        function renderAnimalDynamicCategories() {
+            const box = document.getElementById('animal-categories'); if(!box) return;
+            const uniqueCats = ['all', ...new Set(Object.values(allAnimals).map(a => a.type).filter(Boolean))];
+            
+            box.innerHTML = uniqueCats.map(c => `
+                <button onclick="filterAnimals('${c}')" class="px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap border transition ${currentAnimalFilter === c ? 'bg-amber-600 text-white border-amber-600 shadow-xs' : 'bg-white text-gray-700 border-amber-100'}">
+                    ${c === 'all' ? 'सभी पशु' : c}
+                </button>
+            `).join('');
+        }
+
         function filterAnimals(cat) {
             currentAnimalFilter = cat;
-            renderAnimalCategories();
+            renderAnimalDynamicCategories();
             const list = document.getElementById('animals-list'); if(!list) return;
             list.innerHTML = '';
             const keys = Object.keys(allAnimals);
@@ -849,7 +899,6 @@
                 const isOwner = (auth.currentUser && an.uid === auth.currentUser.uid);
                 const ownerControls = isOwner ? `
                     <div class="flex justify-end gap-2 border-t pt-2 mt-2">
-                        <button onclick="editAnimalPost('${k}')" class="text-amber-700 font-bold text-xs bg-amber-50 px-2.5 py-1 rounded-lg">Edit Post</button>
                         <button onclick="deleteAnimalPost('${k}')" class="text-red-600 font-bold text-xs bg-red-50 px-2.5 py-1 rounded-lg">Delete (बिक गया)</button>
                     </div>
                 ` : '';
@@ -870,7 +919,7 @@
                         </div>
                         <div class="flex gap-2 mt-3">
                             <a href="tel:${an.phone}" class="flex-1 bg-amber-700 text-white text-center py-2 rounded-xl text-xs font-bold active:scale-95 transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-phone"></i> Call Direct</a>
-                            <a href="https://wa.me/91${an.whatsapp || an.phone}?text=${encodeURIComponent(`नमस्ते, मैंने Soyfa ऐप पर आपका पशु देखा (${an.title})। मुझे इसके बारे में जानना है।`)}" target="_blank" class="flex-1 bg-green-500 text-white text-center py-2 rounded-xl text-xs font-bold active:scale-95 transition flex items-center justify-center gap-1.5"><i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp</a>
+                            <a href="https://wa.me/91${an.whatsapp || an.phone}?text=${encodeURIComponent(`नमस्ते, मैंने Soyfa ऐप पर आपका पशु देखा (${an.title})। मुझे इसके बारे में बात करनी है।`)}" target="_blank" class="flex-1 bg-green-500 text-white text-center py-2 rounded-xl text-xs font-bold active:scale-95 transition flex items-center justify-center gap-1.5"><i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp</a>
                         </div>
                         ${ownerControls}
                     </div>
@@ -881,27 +930,13 @@
         function openAnimalPostModal() {
             document.getElementById('animalModalTitle').innerText = "पशु बिक्री हेतु जोड़ें";
             document.getElementById('animalEditKey').value = '';
+            document.getElementById('anType').value = '';
             document.getElementById('anTitle').value = '';
             document.getElementById('anPrice').value = '';
             document.getElementById('anDetails').value = '';
             document.getElementById('anSeller').value = customerProfile.name || '';
             document.getElementById('anPhone').value = customerProfile.phone || '';
             document.getElementById('anWa').value = customerProfile.phone || '';
-            document.getElementById('addAnimalModal').classList.remove('hidden');
-        }
-
-        function editAnimalPost(k) {
-            const an = allAnimals[k];
-            if(!an) return;
-            document.getElementById('animalModalTitle').innerText = "पशु विज्ञापन एडिट करें";
-            document.getElementById('animalEditKey').value = k;
-            document.getElementById('anType').value = an.type || 'गाय (Cow)';
-            document.getElementById('anTitle').value = an.title || '';
-            document.getElementById('anPrice').value = an.price || '';
-            document.getElementById('anDetails').value = an.details || '';
-            document.getElementById('anSeller').value = an.seller || '';
-            document.getElementById('anPhone').value = an.phone || '';
-            document.getElementById('anWa').value = an.whatsapp || '';
             document.getElementById('addAnimalModal').classList.remove('hidden');
         }
 
@@ -912,8 +947,7 @@
         }
 
         function saveAnimalListing() {
-            const editKey = document.getElementById('animalEditKey').value;
-            const type = document.getElementById('anType').value;
+            const type = document.getElementById('anType').value.trim();
             const title = document.getElementById('anTitle').value.trim();
             const price = document.getElementById('anPrice').value.trim();
             const details = document.getElementById('anDetails').value.trim();
@@ -921,28 +955,18 @@
             const phone = document.getElementById('anPhone').value.trim();
             const wa = document.getElementById('anWa').value.trim();
 
-            if(!title || !price || !phone) return alert("कृपया पशु की जानकारी, कीमत और फोन नंबर भरें!");
+            if(!type || !title || !price || !phone) return alert("कृपया पशु की श्रेणी, नस्ल, कीमत और फोन नंबर भरें!");
 
             const proceedSave = (imgUrl) => {
                 const payload = {
                     uid: auth.currentUser.uid, type, title, price, details, seller, phone, whatsapp: wa || phone,
-                    updatedAt: new Date().toISOString()
+                    img: imgUrl || 'https://images.unsplash.com/photo-1546445317-29f4545e9d53?w=300',
+                    createdAt: new Date().toISOString()
                 };
-                if(imgUrl) payload.img = imgUrl;
-
-                if(editKey) {
-                    db.ref(`animals/${editKey}`).update(payload).then(() => {
-                        alert("विज्ञापन अपडेट हो गया!");
-                        closeModals();
-                    });
-                } else {
-                    payload.img = imgUrl || 'https://images.unsplash.com/photo-1546445317-29f4545e9d53?w=300';
-                    payload.createdAt = new Date().toISOString();
-                    db.ref('animals').push().set(payload).then(() => {
-                        alert("पशु सफलता पूर्वक बिक्री हेतु लिस्ट हो गया!");
-                        closeModals();
-                    });
-                }
+                db.ref('animals').push().set(payload).then(() => {
+                    alert("पशु सफलता पूर्वक बिक्री हेतु लिस्ट हो गया!");
+                    closeModals();
+                });
             };
 
             const file = document.getElementById('anImg').files[0];
@@ -950,7 +974,7 @@
             else proceedSave(null);
         }
 
-        // --- 4. TEACHERS & SCHOOLS TOGGLE ---
+        // --- 5. TEACHERS & SCHOOLS TOGGLE ---
         function setTeacherMode(mode) {
             const bg = document.getElementById('sliderBgTeacher');
             const btnT = document.getElementById('btnTeachTeachers');
@@ -1108,28 +1132,27 @@
             });
         }
 
-        // --- 4. BOOKS & CLASS-WISE CATEGORIES ---
-        function renderBookClassCategories() {
-            const classCats = [
-                { id: 'all', name: 'All Classes' },
-                { id: 'Class 1-5', name: 'कक्षा 1 से 5' },
-                { id: 'Class 6-8', name: 'कक्षा 6 से 8' },
-                { id: 'Class 9-10', name: 'कक्षा 9 व 10' },
-                { id: 'Class 11-12', name: 'कक्षा 11 व 12' },
-                { id: 'College', name: 'कॉलेज / डिग्री' },
-                { id: 'Govt Exam', name: 'प्रतियोगी परीक्षा (Govt Job)' },
-                { id: 'General', name: 'उपन्यास व अन्य' }
-            ];
+        // --- 3. BOOKS (INDIVIDUAL CLASS CATEGORIES 1, 2, 3...) ---
+        function loadBooksData() { 
+            db.ref('books').on('value', s => { 
+                const d = s.val() || {}; 
+                allBooks = Object.values(d.items || {}); 
+                renderBookDynamicClassCategories();
+                filterBooks(); 
+            }); 
+        }
+
+        function renderBookDynamicClassCategories() {
             const box = document.getElementById('book-class-categories'); if(!box) return;
-            box.innerHTML = classCats.map(c => `
-                <button onclick="filterBooksByClass('${c.id}')" class="px-3.5 py-1 rounded-full text-xs font-bold whitespace-nowrap border transition ${currentBookClass === c.id ? 'bg-blue-600 text-white border-blue-600 shadow-xs' : 'bg-white text-gray-700 border-blue-100'}">
-                    ${c.name}
+            const uniqueClasses = ['all', ...new Set(allBooks.map(b => b.classCat).filter(Boolean))];
+            
+            box.innerHTML = uniqueClasses.map(c => `
+                <button onclick="filterBooksByClass('${c}')" class="px-3.5 py-1 rounded-full text-xs font-bold whitespace-nowrap border transition ${currentBookClass === c ? 'bg-blue-600 text-white border-blue-600 shadow-xs' : 'bg-white text-gray-700 border-blue-100'}">
+                    ${c === 'all' ? 'All Classes' : c}
                 </button>
             `).join('');
         }
 
-        function loadBooksData() { db.ref('books').on('value', s => { const d = s.val() || {}; allBooks = Object.values(d.items || {}); filterBooks(); }); }
-        
         function setMedium(m) {
             currentBookMed = m;
             const bg = document.getElementById('sliderBgBook');
@@ -1141,7 +1164,7 @@
 
         function filterBooksByClass(classId) {
             currentBookClass = classId;
-            renderBookClassCategories();
+            renderBookDynamicClassCategories();
             filterBooks();
         }
 
