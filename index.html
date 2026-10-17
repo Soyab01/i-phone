@@ -23,28 +23,29 @@
         .universal-modal { z-index: 10005; }
         .qmart-hide-scroll::-webkit-scrollbar { display: none; }
         .qmart-hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
-        .uniform-title { font-size: 25px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .uniform-title { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
 
         /* Gradients */
         .bg-mart-grad { background: linear-gradient(180deg, #ecfdf5 0%, #f0fdf4 25%, #ffffff 80%); }
         .bg-food-grad { background: linear-gradient(180deg, #fff7ed 0%, #fff1f2 30%, #ffffff 85%); }
         .bg-serv-grad { background: linear-gradient(180deg, #f0fdfa 0%, #f0fdf4 30%, #ffffff 85%); }
         .bg-teach-grad { background: linear-gradient(180deg, #eef2ff 0%, #faf5ff 35%, #ffffff 85%); }
+        .bg-anim-grad { background: linear-gradient(180deg, #fefce8 0%, #fffbeb 35%, #ffffff 85%); }
         .bg-dir-grad { background: linear-gradient(180deg, #eff6ff 0%, #f0f9ff 35%, #ffffff 85%); }
         .bg-book-grad { background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 40%, #ffffff 85%); }
         .bg-order-grad { background: linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 35%, #ffffff 85%); }
         .bg-prof-grad { background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 35%, #ffffff 85%); }
 
-        /* Bottom Nav */
+        /* Blue Bottom Nav */
         .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: var(--nav-height); background: #ffffff; box-shadow: 0 -4px 25px rgba(37, 99, 235, 0.12); display: flex; justify-content: space-around; align-items: center; z-index: 9000; border-top: 1.5px solid #e0e7ff; border-radius: 22px 22px 0 0; max-width: 650px; margin: 0 auto; padding: 0 6px; }
         .nav-item { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #94a3b8; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.3s; padding: 4px 0; }
         .nav-item i { font-size: 20px; margin-bottom: 2px; display: block; }
         .nav-item.active { color: var(--nav-blue); transform: translateY(-5px); }
         .nav-item.active i { transform: scale(1.2); filter: drop-shadow(0 4px 8px rgba(37,99,235,0.4)); color: var(--nav-blue); }
 
-        /* All Blue Floating Buttons: ALWAYS VISIBLE */
-        .floating-right-nav { position: fixed; right: 15px; bottom: 80px; z-index: 9999 !important; display: flex !important; flex-direction: column; gap: 10px; }
-        .float-btn { width: 48px; height: 48px; background: rgba(255,255,255,0.96); backdrop-filter: blur(6px); border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 8px 20px rgba(37,99,235,0.22); cursor: pointer; font-size: 19px; transition: 0.3s; border: 2.5px solid var(--nav-blue); color: var(--nav-blue); }
+        /* Floating Buttons: Always Visible */
+        .floating-right-nav { position: fixed; right: 15px; bottom: 80px; z-index: 9999 !important; display: flex !important; flex-direction: column; gap: 9px; }
+        .float-btn { width: 46px; height: 46px; background: rgba(255,255,255,0.96); backdrop-filter: blur(6px); border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 8px 20px rgba(37,99,235,0.22); cursor: pointer; font-size: 18px; transition: 0.3s; border: 2px solid var(--nav-blue); color: var(--nav-blue); }
         .float-btn:hover { transform: scale(1.1); }
         .float-btn:active { transform: scale(0.95); }
 
@@ -57,11 +58,11 @@
 
     <audio id="order-done-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-positive-notification-951.mp3" preload="auto"></audio>
 
-    <!-- AUTH PANEL -->
+    <!-- AUTH PANEL (DEFAULT: SIGNUP) -->
     <div id="auth-panel" class="flex justify-center items-center min-h-screen flex-col p-5 bg-gradient-to-br from-blue-100 via-blue-200 to-indigo-200">
         <div class="bg-white p-7 rounded-3xl shadow-xl w-full max-w-sm text-center" id="signup-box">
             <h1 class="uniform-title justify-center text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 mb-2">Join Soyfa</h1>
-            <p class="text-xs text-gray-500 mb-4 font-medium">Food • Mart • Teachers • Services • Books</p>
+            <p class="text-xs text-gray-500 mb-4 font-medium">Food • Mart • Teachers • Pashu Mandi • Books</p>
             <input type="text" id="reg-name" placeholder="Full Name" class="w-full p-3 mb-2 border rounded-xl text-xs outline-none">
             <input type="email" id="reg-email" placeholder="Email Address" class="w-full p-3 mb-2 border rounded-xl text-xs outline-none">
             <input type="password" id="reg-password" placeholder="Create Password" class="w-full p-3 mb-2 border rounded-xl text-xs outline-none">
@@ -89,14 +90,15 @@
     <!-- MAIN APP PANEL -->
     <div id="app-panel" class="hidden">
         
-        <!-- 3 FLOATING ACTION BUTTONS (ALL BLUE, NEVER HIDDEN) -->
+        <!-- 4 FLOATING BUTTONS (ALL BLUE, NEVER HIDDEN) -->
         <div class="floating-right-nav" id="floating-actions-stack">
             <div class="float-btn" onclick="showPanel('ladnun-directory-view')" title="लाडनूं निर्देशिका (अधिकारी एवं वार्ड)"><i class="fa-solid fa-landmark"></i></div>
-            <div class="float-btn" onclick="showPanel('teachers-view')" title="लाडनूं शिक्षक एवं स्कूल वैकेंसी"><i class="fa-solid fa-chalkboard-user"></i></div>
+            <div class="float-btn" onclick="showPanel('animals-view')" title="पशु मंडी (गाय, भैंस, बकरी खरीदें/बेचें)"><i class="fa-solid fa-cow"></i></div>
+            <div class="float-btn" onclick="showPanel('teachers-view')" title="शिक्षक एवं स्कूल पोर्टल"><i class="fa-solid fa-chalkboard-user"></i></div>
             <div class="float-btn" onclick="showPanel('books-view')" title="Books Store"><i class="fa-solid fa-book-open"></i></div>
         </div>
 
-        <!-- 1. Q-MART (AUTO SLIDER) -->
+        <!-- 1. Q-MART (AUTO SLIDER + VEGETABLES SLIDER) -->
         <div id="grocery-view" class="p-4 max-w-xl mx-auto bg-mart-grad min-h-screen">
             <header class="bg-white/95 sticky top-0 z-40 border border-emerald-100 p-3 rounded-2xl flex justify-between items-center shadow-xs mb-4">
                 <div class="flex items-center gap-2">
@@ -110,12 +112,24 @@
             
             <div class="relative mb-4 flex items-center">
                 <span class="absolute left-3.5 text-gray-400"><i class="fa-solid fa-magnifying-glass"></i></span>
-                <input type="text" id="mart-search" placeholder="Search groceries..." onkeyup="filterMart(this.value);" class="w-full p-3 rounded-xl border border-emerald-100 text-sm pl-10 pr-10 bg-white shadow-xs outline-none">
+                <input type="text" id="mart-search" placeholder="Search groceries, sabzi..." onkeyup="filterMart(this.value);" class="w-full p-3 rounded-xl border border-emerald-100 text-sm pl-10 pr-10 bg-white shadow-xs outline-none">
                 <button onclick="startVoiceSearch('mart-search', filterMart)" class="absolute right-3 text-emerald-600 bg-emerald-50 w-7 h-7 rounded-full flex items-center justify-center text-sm shadow-xs"><i class="fa-solid fa-microphone"></i></button>
             </div>
 
-            <!-- Auto-sliding Mart Banners Carousel -->
+            <!-- Auto-sliding Mart Banners -->
             <div id="mart-banners" class="flex gap-3 overflow-x-auto qmart-hide-scroll snap-x mb-4 scroll-smooth"></div>
+
+            <!-- 1. NEW: FRESH VEGETABLES SLIDER -->
+            <div class="bg-white/90 p-3.5 rounded-2xl border border-emerald-100 mb-5 shadow-xs">
+                <div class="flex justify-between items-center mb-2.5">
+                    <span class="text-xs font-black text-emerald-900 flex items-center gap-1.5">
+                        <i class="fa-solid fa-carrot text-emerald-600"></i> ताज़ा हरी सब्जियां (Fresh Vegetables)
+                    </span>
+                    <span class="text-[10px] text-emerald-700 bg-emerald-50 font-bold px-2 py-0.5 rounded">Daily Fresh</span>
+                </div>
+                <div id="mart-veg-slider" class="flex gap-3 overflow-x-auto qmart-hide-scroll snap-x pb-1 scroll-smooth"></div>
+            </div>
+
             <div id="groc-categories" class="flex gap-4 overflow-x-auto qmart-hide-scroll mb-6 pb-1"></div>
             <div id="groc-products-container" class="space-y-6"></div>
 
@@ -125,15 +139,32 @@
             </div>
         </div>
 
-        <!-- 2. FOOD DELIVERY -->
+        <!-- 2. FOOD DELIVERY (VEG / NON-VEG SLIDER TOGGLE) -->
         <div id="home-view" class="container-food p-4 hidden max-w-xl mx-auto bg-food-grad min-h-screen">
             <h1 class="uniform-title text-red-500"><i class="fa-solid fa-burger text-orange-500"></i> Soyfa Food</h1>
+            
+            <!-- 2. NEW: VEG / NON-VEG SLIDER TOGGLE -->
+            <div class="flex justify-center mb-4">
+                <div class="bg-white p-1 rounded-full flex w-full max-w-[320px] relative shadow-xs border border-red-200">
+                    <div id="sliderBgFood" class="absolute top-1 bottom-1 left-1 w-[calc(33.33%-3px)] bg-emerald-600 rounded-full shadow-sm transition-transform duration-300"></div>
+                    <button onclick="setFoodVegFilter('veg')" id="btnFoodVeg" class="flex-1 py-1 text-xs font-bold text-white relative z-10 transition">
+                        🟢 Veg
+                    </button>
+                    <button onclick="setFoodVegFilter('nonveg')" id="btnFoodNonVeg" class="flex-1 py-1 text-xs font-bold text-red-900 relative z-10 transition">
+                        🔴 Non-Veg
+                    </button>
+                    <button onclick="setFoodVegFilter('all')" id="btnFoodAll" class="flex-1 py-1 text-xs font-bold text-gray-700 relative z-10 transition">
+                        All (सभी)
+                    </button>
+                </div>
+            </div>
+
             <div class="relative mb-4 flex items-center">
                 <span class="absolute left-3.5 text-red-400"><i class="fa-solid fa-utensils"></i></span>
                 <input type="text" id="restaurant-search" placeholder="Search restaurants..." onkeyup="filterRestaurants(this.value);" class="w-full p-3 rounded-xl border border-red-100 text-sm pl-10 pr-10 bg-white shadow-xs outline-none">
                 <button onclick="startVoiceSearch('restaurant-search', filterRestaurants)" class="absolute right-3 text-red-500 bg-red-50 w-7 h-7 rounded-full flex items-center justify-center text-sm shadow-xs"><i class="fa-solid fa-microphone"></i></button>
             </div>
-            <!-- Restored 3-Image Carousel -->
+
             <div class="overflow-hidden rounded-2xl mb-5 shadow-sm border border-red-100 h-40">
                 <div id="banner-slider" class="flex w-[300%] transition-transform duration-500 h-full">
                     <img loading="lazy" class="w-1/3 h-full object-cover" src="https://b.zmtcdn.com/data/dish_photos/0f7/7c9e90b66dabd5aa5bb51ee96ac6d0f7.jpg">
@@ -151,7 +182,7 @@
             <h2 id="menu-restaurant-name" class="text-xl font-bold text-gray-800">Restaurant</h2>
             <p id="menu-restaurant-cuisine" class="text-xs text-gray-500 mb-4"></p>
             <div id="menu-items-list" class="space-y-3 mb-20"></div>
-            <div id="food-checkout-bar" class="fixed bottom-[75px] left-4 right-4 bg-red-500 text-white p-3.5 rounded-2xl shadow-xl z-40 hidden flex justify-between items-center cursor-pointer max-w-xl mx-auto animate-pop" onclick="openUniversalCheckout('FOOD')">
+            <div id="food-checkout-bar" class="fixed bottom-[75px] left-4 right-4 bg-red-500 text-white p-3.5 rounded-2xl shadow-xl z-40 hidden flex justify-between items-center cursor-pointer max-w-xl mx-auto" onclick="openUniversalCheckout('FOOD')">
                 <p class="text-sm font-extrabold"><i class="fa-solid fa-burger"></i> Cart (₹<span id="food-cart-total-display">0</span>)</p>
                 <div class="font-bold text-sm flex items-center gap-2">Proceed <i class="fa-solid fa-arrow-right"></i></div>
             </div>
@@ -168,29 +199,47 @@
             <div id="srv-providers-list" class="space-y-3.5 pb-20"></div>
         </div>
 
-        <!-- 4. LADNUN TEACHERS & SCHOOL VACANCIES (COMBINED SINGLE NAVIGATION WITH 2 SLIDER PILL SWITCH) -->
+        <!-- 3. NEW: ANIMAL MARKET (पशु मंडी - BUY & SELL) -->
+        <div id="animals-view" class="p-4 max-w-xl mx-auto hidden pb-24 bg-anim-grad min-h-screen">
+            <div class="flex justify-between items-center mb-2">
+                <h1 class="uniform-title text-amber-700 mb-0"><i class="fa-solid fa-cow text-amber-600"></i> पशु मंडी (Animal Market)</h1>
+                <button onclick="showPanel('grocery-view')" class="bg-white w-8 h-8 rounded-full flex items-center justify-center text-gray-600 shadow-xs"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <p class="text-xs text-gray-500 mb-3">गाय, भैंस, बकरी, बकरा आदि सीधे खरीदें व बेचें</p>
+            
+            <button onclick="openAnimalPostModal()" class="w-full bg-amber-600 text-white p-3 rounded-xl font-bold shadow-md mb-4 text-xs active:scale-95 transition">
+                <i class="fa-solid fa-plus-circle"></i> + अपना पशु बेचने के लिए जोड़ें
+            </button>
+
+            <!-- Animal Category Filter -->
+            <div class="mb-3">
+                <div id="animal-categories" class="flex gap-2 overflow-x-auto qmart-hide-scroll pb-1"></div>
+            </div>
+
+            <div id="animals-list" class="space-y-4"></div>
+        </div>
+
+        <!-- 4. LADNUN TEACHERS & SCHOOL VACANCIES -->
         <div id="teachers-view" class="p-4 max-w-xl mx-auto hidden pb-24 bg-teach-grad min-h-screen">
             <div class="flex justify-between items-center mb-3">
                 <h1 class="uniform-title text-indigo-700 mb-0"><i class="fa-solid fa-chalkboard-user"></i> शिक्षक एवं स्कूल पोर्टल</h1>
                 <button onclick="showPanel('grocery-view')" class="bg-white w-8 h-8 rounded-full flex items-center justify-center text-gray-600 shadow-xs"><i class="fa-solid fa-xmark"></i></button>
             </div>
             
-            <!-- BOOK-STYLE 2-SLIDER PILL SWITCH (TEACHERS vs SCHOOL VACANCIES) -->
             <div class="flex justify-center mb-4">
                 <div class="bg-white p-1 rounded-full flex w-full max-w-[320px] relative shadow-xs border border-blue-200">
                     <div id="sliderBgTeacher" class="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] bg-blue-600 rounded-full shadow-sm transition-transform duration-300"></div>
-                    <button onclick="setTeacherMode('teachers')" id="btnTeachTeachers" class="flex-1 py-1.5 text-xs font-bold text-white relative z-10 transition tracking-wide">
+                    <button onclick="setTeacherMode('teachers')" id="btnTeachTeachers" class="flex-1 py-1.5 text-xs font-bold text-white relative z-10 transition">
                         👨‍🏫 शिक्षक (Teachers)
                     </button>
-                    <button onclick="setTeacherMode('schools')" id="btnTeachSchools" class="flex-1 py-1.5 text-xs font-bold text-blue-900 relative z-10 transition tracking-wide">
+                    <button onclick="setTeacherMode('schools')" id="btnTeachSchools" class="flex-1 py-1.5 text-xs font-bold text-blue-900 relative z-10 transition">
                         🏫 स्कूल वैकेंसी (Jobs)
                     </button>
                 </div>
             </div>
 
-            <!-- PANE 1: ONLY TEACHERS DATA -->
+            <!-- PANE 1: TEACHERS -->
             <div id="teacher-content-pane">
-                <p class="text-xs text-gray-500 mb-3">लाडनूं के योग्य शिक्षक सूची एवं उपलब्धता (Free/Busy)</p>
                 <button onclick="openTeacherRegModal()" class="w-full bg-indigo-600 text-white p-3 rounded-xl font-bold shadow-md mb-4 text-xs">+ शिक्षक के रूप में खुद को रजिस्टर करें</button>
                 <div class="mb-3">
                     <span class="text-xs font-bold text-gray-500 block mb-2 uppercase">विषय अनुसार शिक्षक:</span>
@@ -199,9 +248,8 @@
                 <div id="teachers-list" class="space-y-3.5"></div>
             </div>
 
-            <!-- PANE 2: ONLY SCHOOL VACANCIES DATA -->
+            <!-- PANE 2: SCHOOL VACANCIES -->
             <div id="school-content-pane" class="hidden">
-                <p class="text-xs text-gray-500 mb-3">स्कूलों एवं कोचिंग संस्थानों में टीचर भर्ती व आवश्यकताएं</p>
                 <button onclick="openSchoolJobModal()" class="w-full bg-purple-600 text-white p-3 rounded-xl font-bold shadow-md mb-4 text-xs">+ नई स्कूल वैकेंसी पोस्ट करें</button>
                 <div id="school-vacancies-container" class="space-y-3.5"></div>
             </div>
@@ -224,8 +272,1003 @@
             <div id="ward-members-list" class="space-y-3"></div>
         </div>
 
-        <!-- 6. BOOKS STORE (BLUE ACCENT) -->
+        <!-- 6. BOOKS STORE (4. CLASS-WISE CATEGORIES) -->
         <div id="books-view" class="p-4 max-w-xl mx-auto hidden pb-24 bg-book-grad min-h-screen">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="uniform-title text-blue-700 mb-0"><i class="fa-solid fa-book-bookmark text-blue-600"></i> System Book</h2>
-                <button onclick="sho
+                <button onclick="showPanel('grocery-view')" class="bg-white w-8 h-8 rounded-full flex items-center justify-center text-gray-600 shadow-xs"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="flex justify-center mb-4">
+                <div class="bg-white p-1 rounded-full flex w-64 border border-blue-200 shadow-xs relative">
+                    <div id="sliderBgBook" class="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] bg-blue-600 rounded-full shadow-sm transition-transform duration-300"></div>
+                    <button onclick="setMedium('Hindi')" id="btnMedHindi" class="flex-1 py-1.5 text-xs font-bold text-white relative z-10 transition">HINDI</button>
+                    <button onclick="setMedium('English')" id="btnMedEnglish" class="flex-1 py-1.5 text-xs font-bold text-blue-900 relative z-10 transition">ENGLISH</button>
+                </div>
+            </div>
+            
+            <!-- CLASS-WISE CATEGORY FILTER -->
+            <div class="mb-3">
+                <span class="text-xs font-bold text-gray-500 block mb-1 uppercase">कक्षा चुनें (Class):</span>
+                <div id="book-class-categories" class="flex gap-2 overflow-x-auto pb-2 qmart-hide-scroll"></div>
+            </div>
+
+            <div id="prodList" class="grid grid-cols-2 gap-3.5 pb-10"></div>
+        </div>
+
+        <!-- 7. ORDERS -->
+        <div id="orders-view" class="p-4 max-w-xl mx-auto hidden bg-order-grad min-h-screen">
+            <h1 class="uniform-title text-blue-600 mb-4"><i class="fa-solid fa-receipt"></i> My Orders</h1>
+            <div id="orders-list" class="space-y-4 pb-20"></div>
+        </div>
+
+        <!-- 8. PROFILE (WITH SUB-PAGES) -->
+        <div id="profile-view" class="p-4 max-w-xl mx-auto hidden bg-prof-grad min-h-screen">
+            <h1 class="uniform-title text-slate-800 mb-4"><i class="fa-solid fa-user"></i> My Profile</h1>
+            <div id="profile-display-mode">
+                <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 space-y-2 mb-4 text-xs">
+                    <div class="flex justify-between"><span class="text-gray-400">Name</span><span class="font-bold" id="display-name">N/A</span></div>
+                    <div class="flex justify-between"><span class="text-gray-400">Phone</span><span class="font-bold" id="display-phone">N/A</span></div>
+                    <div class="flex justify-between"><span class="text-gray-400">Pincode</span><span class="font-bold text-red-500" id="display-pincode">N/A</span></div>
+                    <div class="flex flex-col"><span class="text-gray-400">Address</span><span class="font-bold" id="display-address">N/A</span></div>
+                </div>
+                <button class="w-full bg-blue-50 text-blue-600 font-bold p-3 rounded-xl mb-3 text-xs shadow-xs" onclick="toggleProfileEditMode(true);">Edit Profile</button>
+                
+                <a href="https://wa.me/919999999999?text=Hello%20Soyfa%20Support" target="_blank" class="w-full bg-emerald-50 text-emerald-700 font-bold p-3 rounded-xl mb-3 flex items-center justify-between text-xs border border-emerald-200">
+                    <span><i class="fa-brands fa-whatsapp text-lg"></i> 24x7 WhatsApp Help Desk</span>
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </a>
+
+                <div class="bg-white rounded-2xl shadow-xs border border-slate-100 divide-y divide-slate-100 text-xs font-bold text-gray-700 mb-4">
+                    <button class="w-full text-left p-3.5 flex justify-between items-center" onclick="showInfoPage('about-page')"><span>About Soyfa</span> <i class="fa-solid fa-chevron-right text-gray-300"></i></button>
+                    <button class="w-full text-left p-3.5 flex justify-between items-center" onclick="showInfoPage('privacy-page')"><span>Privacy Policy</span> <i class="fa-solid fa-chevron-right text-gray-300"></i></button>
+                    <button class="w-full text-left p-3.5 flex justify-between items-center" onclick="showInfoPage('terms-page')"><span>Terms & Conditions</span> <i class="fa-solid fa-chevron-right text-gray-300"></i></button>
+                    <button class="w-full text-left p-3.5 flex justify-between items-center" onclick="showInfoPage('cancellation-page')"><span>Cancellation Policy</span> <i class="fa-solid fa-chevron-right text-gray-300"></i></button>
+                </div>
+
+                <button class="w-full bg-red-50 text-red-500 font-bold p-3 rounded-xl text-xs mb-8" onclick="customerLogout();">Logout Account</button>
+            </div>
+
+            <div id="profile-edit-form" class="bg-white p-4 rounded-xl border border-gray-100 hidden space-y-2 text-xs">
+                <input type="text" id="profile-name" placeholder="Name" class="w-full p-2.5 border rounded-lg">
+                <input type="text" id="profile-phone" placeholder="Phone" class="w-full p-2.5 border rounded-lg">
+                <input type="text" id="profile-city" placeholder="City" class="w-full p-2.5 border rounded-lg">
+                <input type="text" id="profile-pincode" placeholder="Pincode" class="w-full p-2.5 border-2 border-red-300 rounded-lg font-bold">
+                <input type="text" id="profile-address" placeholder="Address" class="w-full p-2.5 border rounded-lg">
+                <button class="w-full bg-blue-600 text-white font-bold p-3 rounded-xl" onclick="updateProfile();">Save Profile</button>
+                <button class="w-full bg-gray-100 text-gray-600 font-bold p-2.5 rounded-xl" onclick="toggleProfileEditMode(false);">Cancel</button>
+            </div>
+
+            <div id="info-pages-container" class="hidden pb-20">
+                <div id="about-page" class="hidden bg-white p-5 rounded-2xl shadow-xs mb-3 text-xs leading-relaxed">
+                    <h3 class="font-extrabold text-blue-600 text-sm mb-2">About Soyfa</h3>
+                    <p class="text-gray-600">Soyfa Super App लाडनूं का सर्वोत्कृष्ट डिजिटल प्लेटफ़ॉर्म है जहाँ आप Q-Mart ग्रोसरी (12 मिनट डिलीवरी), ताज़ा सब्जियां, फ़ूड, पशु मंडी, शिक्षक, स्कूल वैकेंसी, लोकल सेवाएँ और प्रशासनिक निर्देशिका का लाभ एक ही स्थान पर उठा सकते हैं।</p>
+                </div>
+                <div id="privacy-page" class="hidden bg-white p-5 rounded-2xl shadow-xs mb-3 text-xs leading-relaxed">
+                    <h3 class="font-extrabold text-blue-600 text-sm mb-2">Privacy Policy</h3>
+                    <p class="text-gray-600">हम आपकी व्यक्तिगत जानकारी की सुरक्षा के प्रति पूरी तरह प्रतिबद्ध हैं। आपका विवरण सुरक्षित रखा जाता है।</p>
+                </div>
+                <div id="terms-page" class="hidden bg-white p-5 rounded-2xl shadow-xs mb-3 text-xs leading-relaxed">
+                    <h3 class="font-extrabold text-blue-600 text-sm mb-2">Terms & Conditions</h3>
+                    <p class="text-gray-600">Soyfa ऐप का उपयोग करते हुए आप उचित उपयोग व नियमों से सहमत होते हैं।</p>
+                </div>
+                <div id="cancellation-page" class="hidden bg-white p-5 rounded-2xl shadow-xs mb-3 text-xs leading-relaxed">
+                    <h3 class="font-extrabold text-blue-600 text-sm mb-2">Cancellation Policy</h3>
+                    <p class="text-gray-600">ऑर्डर तैयार या डिस्पैच होने से पहले सीधे कैंसिल किया जा सकता है।</p>
+                </div>
+                <button class="w-full bg-gray-100 text-gray-700 font-bold p-3 rounded-xl text-xs" onclick="hideInfoPages();">← Back to Profile</button>
+            </div>
+        </div>
+
+        <!-- BLUE BOTTOM NAVIGATION -->
+        <nav class="bottom-nav">
+            <div class="nav-item active" data-panel="grocery-view" onclick="showPanel('grocery-view');"><i class="fa-solid fa-store"></i><span>Mart</span></div>
+            <div class="nav-item" data-panel="home-view" onclick="showPanel('home-view');"><i class="fa-solid fa-burger"></i><span>Food</span></div>
+            <div class="nav-item" data-panel="services-view" onclick="showPanel('services-view');"><i class="fa-solid fa-briefcase"></i><span>Services</span></div>
+            <div class="nav-item" data-panel="orders-view" onclick="showPanel('orders-view');"><i class="fa-solid fa-receipt"></i><span>Orders</span></div>
+            <div class="nav-item" data-panel="profile-view" onclick="showPanel('profile-view');"><i class="fa-solid fa-user"></i><span>Profile</span></div>
+        </nav>
+    </div>
+
+    <!-- MODALS -->
+    <!-- Checkout Modal -->
+    <div id="universalCheckoutModal" class="universal-modal fixed inset-0 bg-black/60 hidden flex items-end justify-center sm:items-center p-4">
+        <div class="bg-white w-full max-w-md p-5 rounded-3xl shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-3 border-b pb-2"><h3 class="font-bold text-lg" id="chk-title">Checkout</h3><button onclick="closeModals()" class="text-gray-400 font-bold text-xl">&times;</button></div>
+            <div id="chk-items-list" class="max-h-32 overflow-y-auto mb-2 text-xs space-y-1"></div>
+            <div class="bg-emerald-50 p-2.5 rounded-xl mb-3 border border-emerald-200">
+                <div class="flex gap-2">
+                    <input type="text" id="coupon-input" placeholder="Coupon: SOYFA50 or WELCOME10" class="uppercase font-bold text-xs bg-white border p-1.5 rounded-lg flex-grow outline-none">
+                    <button onclick="applyCoupon()" class="bg-blue-600 text-white text-xs font-bold px-3 py-1.5 rounded-lg">Apply</button>
+                </div>
+                <p id="coupon-msg" class="text-[11px] font-bold mt-1 hidden"></p>
+            </div>
+            <div class="bg-gray-50 rounded-xl p-3 mb-3 text-xs space-y-1">
+                <div class="flex justify-between"><span>Items Total</span><span id="chk-sub">₹0</span></div>
+                <div class="flex justify-between text-emerald-600" id="chk-discount-row" style="display:none;"><span>Coupon Discount</span><span id="chk-disc">-₹0</span></div>
+                <div class="flex justify-between"><span>Delivery Fee</span><span id="chk-del">+₹0</span></div>
+                <div class="border-t pt-1 flex justify-between font-bold text-sm text-gray-900"><span>To Pay</span><span id="chk-total" class="text-blue-600 font-black">₹0</span></div>
+            </div>
+            <input type="text" id="chk-name" placeholder="Name" class="w-full p-2 mb-2 border rounded-lg text-xs outline-none">
+            <input type="number" id="chk-phone" placeholder="Phone" class="w-full p-2 mb-2 border rounded-lg text-xs outline-none">
+            <textarea id="chk-address" placeholder="Delivery Address" class="w-full p-2 border rounded-lg text-xs h-14 mb-2 outline-none resize-none"></textarea>
+            <input type="text" id="chk-notes" placeholder="Delivery note (e.g. Gate pe rakh dena)" class="w-full p-2 border rounded-lg text-xs mb-3 bg-amber-50 outline-none">
+            <div class="grid grid-cols-2 gap-2 mb-4">
+                <label class="border-2 p-2 rounded-xl text-center text-xs font-bold cursor-pointer has-[:checked]:border-blue-600 has-[:checked]:bg-blue-50"><input type="radio" name="payMethod" value="COD" checked class="hidden"> Cash on Delivery</label>
+                <label class="border-2 p-2 rounded-xl text-center text-xs font-bold cursor-pointer has-[:checked]:border-blue-600 has-[:checked]:bg-blue-50"><input type="radio" name="payMethod" value="ONLINE" class="hidden"> Pay Online (UPI)</label>
+            </div>
+            <button onclick="processCheckout()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold text-sm shadow">CONFIRM ORDER</button>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="orderSuccessModal" class="universal-modal fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4">
+        <div class="bg-white p-6 rounded-3xl text-center shadow-2xl animate-pop w-full max-w-sm border-t-8 border-emerald-500">
+            <i class="fa-solid fa-circle-check text-5xl text-emerald-500 mb-2"></i>
+            <h2 class="text-xl font-black">Order Placed!</h2>
+            <p class="text-xs text-gray-500 mt-1 mb-4">Your order has been confirmed successfully.</p>
+        </div>
+    </div>
+
+    <!-- 3. ANIMAL LISTING MODAL -->
+    <div id="addAnimalModal" class="universal-modal fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm p-5 rounded-2xl max-h-[85vh] overflow-y-auto text-xs space-y-2">
+            <div class="flex justify-between items-center mb-1"><h3 class="font-bold text-sm text-amber-900" id="animalModalTitle">पशु बिक्री हेतु जोड़ें</h3><button onclick="closeModals()" class="text-lg font-bold">&times;</button></div>
+            <input type="hidden" id="animalEditKey">
+            <select id="anType" class="w-full p-2 border rounded-lg bg-white outline-none">
+                <option value="गाय (Cow)">गाय (Cow)</option>
+                <option value="भैंस (Buffalo)">भैंस (Buffalo)</option>
+                <option value="बकरा / बकरी (Goat)">बकरा / बकरी (Goat)</option>
+                <option value="भेड़ (Sheep)">भेड़ (Sheep)</option>
+                <option value="अन्य पशु">अन्य पशु (Other)</option>
+            </select>
+            <input type="text" id="anTitle" placeholder="शीर्षक/नस्ल (उदा. साहीवाल गाय, देसी बकरा)" class="w-full p-2 border rounded-lg outline-none">
+            <input type="number" id="anPrice" placeholder="कीमत (₹)" class="w-full p-2 border rounded-lg outline-none">
+            <input type="text" id="anDetails" placeholder="दूध क्षमता / उम्र / अन्य विवरण..." class="w-full p-2 border rounded-lg outline-none">
+            <input type="text" id="anSeller" placeholder="आपका नाम व लाडनूं पता/वार्ड" class="w-full p-2 border rounded-lg outline-none">
+            <input type="number" id="anPhone" placeholder="Calling Phone Number" class="w-full p-2 border rounded-lg outline-none">
+            <input type="number" id="anWa" placeholder="WhatsApp Number" class="w-full p-2 border rounded-lg outline-none">
+            <label class="block text-gray-500 font-bold">पशु की फ़ोटो</label>
+            <input type="file" id="anImg" accept="image/*" class="w-full border p-1 rounded-lg">
+            <button onclick="saveAnimalListing()" class="w-full bg-amber-600 text-white p-2.5 rounded-xl font-bold mt-2">पशु विज्ञापन पोस्ट करें</button>
+        </div>
+    </div>
+
+    <!-- Teacher Modal -->
+    <div id="teacherRegModal" class="universal-modal fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm p-5 rounded-2xl max-h-[85vh] overflow-y-auto text-xs space-y-2">
+            <div class="flex justify-between items-center mb-1"><h3 class="font-bold text-sm text-indigo-900">शिक्षक प्रोफाइल जोड़ें</h3><button onclick="closeModals()" class="text-lg font-bold">&times;</button></div>
+            <input type="text" id="tName" placeholder="शिक्षक का नाम" class="w-full p-2 border rounded-lg outline-none">
+            <input type="text" id="tSubject" placeholder="विषय टाइप करें (उदा. Maths, Science, English...)" class="w-full p-2 border rounded-lg bg-indigo-50/50 outline-none font-bold text-indigo-900">
+            <input type="text" id="tExp" placeholder="अनुभव (उदा. 4 Years Exp)" class="w-full p-2 border rounded-lg outline-none">
+            <textarea id="tDesc" placeholder="योग्यता एवं अन्य विवरण..." class="w-full p-2 border rounded-lg h-14 outline-none resize-none"></textarea>
+            <input type="number" id="tPhone" placeholder="Calling Phone" class="w-full p-2 border rounded-lg outline-none">
+            <input type="number" id="tWa" placeholder="WhatsApp Number" class="w-full p-2 border rounded-lg outline-none">
+            <div class="grid grid-cols-2 gap-2">
+                <label class="border-2 p-2 rounded-lg text-center font-bold cursor-pointer has-[:checked]:border-green-600 has-[:checked]:bg-green-50"><input type="radio" name="tAvailability" value="free" checked class="hidden"> 🟢 FREE</label>
+                <label class="border-2 p-2 rounded-lg text-center font-bold cursor-pointer has-[:checked]:border-red-600 has-[:checked]:bg-red-50"><input type="radio" name="tAvailability" value="busy" class="hidden"> 🔴 BUSY</label>
+            </div>
+            <input type="file" id="tImg" accept="image/*" class="w-full border p-1 rounded-lg">
+            <button onclick="saveTeacherProfile()" class="w-full bg-indigo-600 text-white p-2.5 rounded-xl font-bold mt-2">Save Profile</button>
+        </div>
+    </div>
+
+    <!-- School Job Modal -->
+    <div id="schoolJobModal" class="universal-modal fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm p-5 rounded-2xl max-h-[80vh] overflow-y-auto text-xs space-y-2">
+            <div class="flex justify-between items-center"><h3 class="font-bold text-sm text-purple-900">स्कूल वैकेंसी पोस्ट करें</h3><button onclick="closeModals()" class="text-lg font-bold">&times;</button></div>
+            <input type="text" id="schName" placeholder="स्कूल/कोचिंग का नाम" class="w-full p-2 border rounded-lg outline-none">
+            <input type="text" id="schSubject" placeholder="आवश्यक विषय (उदा. Maths 10th)" class="w-full p-2 border rounded-lg outline-none">
+            <input type="text" id="schSalary" placeholder="सैलरी / मानदेय (उदा. 15,000)" class="w-full p-2 border rounded-lg outline-none">
+            <input type="number" id="schPhone" placeholder="फोन नंबर" class="w-full p-2 border rounded-lg outline-none">
+            <input type="number" id="schWa" placeholder="WhatsApp नंबर" class="w-full p-2 border rounded-lg outline-none">
+            <textarea id="schDetails" placeholder="विवरण व शर्तें..." class="w-full p-2 border rounded-lg h-14 outline-none resize-none"></textarea>
+            <button onclick="saveSchoolVacancy()" class="w-full bg-purple-600 text-white p-2.5 rounded-xl font-bold">Post Vacancy</button>
+        </div>
+    </div>
+
+    <!-- Register Service Modal -->
+    <div id="addServiceModal" class="universal-modal fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm p-5 rounded-2xl max-h-[80vh] overflow-y-auto text-xs space-y-2">
+            <div class="flex justify-between items-center"><h3 class="font-bold text-sm">Register Service</h3><button onclick="closeModals()" class="text-lg font-bold">&times;</button></div>
+            <input type="text" id="srvRegName" placeholder="Name / Business Name" class="w-full p-2 border rounded-lg">
+            <input type="text" id="srvRegCat" placeholder="Category (Plumber, Electrician...)" class="w-full p-2 border rounded-lg">
+            <textarea id="srvRegDesc" placeholder="Description..." class="w-full p-2 border rounded-lg h-14"></textarea>
+            <input type="number" id="srvRegPhone" placeholder="Phone" class="w-full p-2 border rounded-lg">
+            <input type="number" id="srvRegWa" placeholder="WhatsApp" class="w-full p-2 border rounded-lg">
+            <input type="file" id="srvRegImg" accept="image/*" class="w-full border p-1 rounded-lg">
+            <button onclick="submitService()" class="w-full bg-emerald-600 text-white p-2.5 rounded-xl font-bold">Submit</button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        const firebaseConfig = { apiKey: "AIzaSyACNrzJgRGKmn8JsRuS_2b7RecPIfahTvQ", databaseURL: "https://singup-aec8c-default-rtdb.firebaseio.com", projectId: "singup-aec8c" };
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth(), db = firebase.database();
+
+        let customerProfile = {}, groceryCart = {}, foodCart = [];
+        const RAZORPAY_KEY = "rzp_live_Ry7zglI0OnE1Jo";
+        let currentOrderType = 'GROCERY';
+        let allRestaurantsData = {}, allMartData = [], allMartBanners = [], allBookCats = [], allBooks = [];
+        let allSrvCats = [], allSrvProvs = [], currentSrvCat = 'all';
+        let currentBookMed = 'Hindi', currentBookClass = 'all', selectedBook = null;
+        let appliedCouponCode = '', appliedDiscountAmount = 0;
+        let allTeachers = {}, currentTeacherSub = 'all', allSchoolVacancies = {}, allOfficials = {}, allWardMembers = {}, currentWardFilter = 'all';
+        let allAnimals = {}, currentAnimalFilter = 'all';
+        let currentFoodVegFilter = 'all';
+
+        function compressImage(file, cb) {
+            if(!file) return cb(null);
+            const r = new FileReader(); r.readAsDataURL(file);
+            r.onload = e => {
+                const i = new Image(); i.src = e.target.result;
+                i.onload = () => {
+                    const c = document.createElement('canvas'); const s = 400 / i.width;
+                    c.width = 400; c.height = i.height * s;
+                    c.getContext('2d').drawImage(i, 0, 0, c.width, c.height);
+                    cb(c.toDataURL('image/jpeg', 0.6));
+                };
+            };
+        }
+
+        function playOrderDoneSound() { try { const s = document.getElementById('order-done-sound'); if(s) { s.currentTime=0; s.play().catch(()=>{}); } } catch(e){} }
+
+        function startVoiceSearch(id, cb) {
+            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if(!SR) return alert("Voice search is not supported on this device.");
+            const r = new SR(); r.lang = 'hi-IN';
+            r.onresult = e => { const t = e.results[0][0].transcript; document.getElementById(id).value = t; cb(t); };
+            r.start();
+        }
+
+        // FOOD BANNER SLIDER
+        function startFoodAutoSlide() { 
+            let cur = 0; 
+            setInterval(() => { 
+                cur = (cur + 1) % 3; 
+                const s = document.getElementById('banner-slider');
+                if(s) s.style.transform = `translateX(-${cur * 100 / 3}%)`; 
+            }, 4500); 
+        }
+
+        // MART BANNER SLIDER
+        function startMartAutoSlide() {
+            let slideIdx = 0;
+            setInterval(() => {
+                const bBox = document.getElementById('mart-banners');
+                if (bBox && bBox.children.length > 1) {
+                    slideIdx = (slideIdx + 1) % bBox.children.length;
+                    bBox.scrollTo({ left: slideIdx * 280, behavior: 'smooth' });
+                }
+            }, 3500);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => { 
+            switchAuth('signup'); 
+            startFoodAutoSlide(); 
+            startMartAutoSlide();
+            populateWards(); 
+            renderServiceCategoryChips();
+            renderTeacherCategories();
+            renderAnimalCategories();
+            renderBookClassCategories();
+        });
+
+        function switchAuth(t) {
+            document.getElementById('signup-box').classList.toggle('hidden', t !== 'signup');
+            document.getElementById('login-box').classList.toggle('hidden', t === 'signup');
+        }
+
+        function loginUser() {
+            const e = document.getElementById('login-email').value, p = document.getElementById('login-password').value;
+            auth.signInWithEmailAndPassword(e, p).catch(err => { document.getElementById('login-error').innerText = err.message; document.getElementById('login-error').classList.remove('hidden'); });
+        }
+
+        function registerUser() {
+            const e = document.getElementById('reg-email').value, p = document.getElementById('reg-password').value, n = document.getElementById('reg-name').value, ph = document.getElementById('reg-phone').value, c = document.getElementById('reg-city').value, pc = document.getElementById('reg-pincode').value, a = document.getElementById('reg-address').value;
+            if(!e||!p||!n||!ph||!c||!pc||!a) return alert("Fill all fields!");
+            auth.createUserWithEmailAndPassword(e, p).then(uc => {
+                db.ref(`customers/${uc.user.uid}`).set({ name: n, email: e, phone: ph, city: c, pincode: pc, address: a, createdAt: new Date().toISOString() });
+            }).catch(err => { document.getElementById('signup-error').innerText = err.message; document.getElementById('signup-error').classList.remove('hidden'); });
+        }
+
+        function customerLogout() { auth.signOut(); location.reload(); }
+
+        auth.onAuthStateChanged(u => {
+            if(u) {
+                document.getElementById('auth-panel').classList.add('hidden');
+                document.getElementById('app-panel').classList.remove('hidden');
+                loadCustomerData(u.uid);
+                showPanel('grocery-view');
+                loadTeachers(); loadVacancies(); loadOfficials(); loadWardMembers(); loadAnimals();
+            } else {
+                document.getElementById('auth-panel').classList.remove('hidden');
+                document.getElementById('app-panel').classList.add('hidden');
+                switchAuth('signup');
+            }
+        });
+
+        function loadCustomerData(uid) {
+            db.ref(`customers/${uid}`).on('value', s => {
+                customerProfile = s.val() || {};
+                document.getElementById('mart-top-addr').textContent = customerProfile.address || 'Update location';
+                ['name','email','phone','pincode','address'].forEach(f => { if(document.getElementById(`display-${f}`)) document.getElementById(`display-${f}`).textContent = customerProfile[f] || 'N/A'; });
+                loadRestaurants(); loadGroceryData(); loadBooksData(); loadLocalServices();
+            });
+        }
+
+        function toggleProfileEditMode(e) {
+            document.getElementById('profile-display-mode').classList.toggle('hidden', e);
+            document.getElementById('profile-edit-form').classList.toggle('hidden', !e);
+            if(e) ['name','phone','city','pincode','address'].forEach(f => document.getElementById(`profile-${f}`).value = customerProfile[f] || '');
+        }
+
+        function updateProfile() {
+            const u = { name: document.getElementById('profile-name').value, phone: document.getElementById('profile-phone').value, city: document.getElementById('profile-city').value, pincode: document.getElementById('profile-pincode').value, address: document.getElementById('profile-address').value };
+            db.ref(`customers/${auth.currentUser.uid}`).update(u).then(() => { alert("Profile Updated!"); toggleProfileEditMode(false); loadRestaurants(); });
+        }
+
+        function showInfoPage(id) {
+            document.getElementById('profile-display-mode').classList.add('hidden');
+            document.getElementById('info-pages-container').classList.remove('hidden');
+            ['about-page', 'privacy-page', 'terms-page', 'cancellation-page'].forEach(p => document.getElementById(p).classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+        }
+        function hideInfoPages() {
+            document.getElementById('info-pages-container').classList.add('hidden');
+            document.getElementById('profile-display-mode').classList.remove('hidden');
+        }
+
+        function showPanel(id) {
+            closeModals();
+            document.querySelectorAll('#grocery-view, #home-view, #menu-view, #services-view, #animals-view, #teachers-view, #ladnun-directory-view, #books-view, #orders-view, #profile-view').forEach(el => el.classList.add('hidden'));
+            const p = document.getElementById(id); if(p) p.classList.remove('hidden');
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            const a = document.querySelector(`.nav-item[data-panel="${id}"]`); if(a) a.classList.add('active');
+
+            const fs = document.getElementById('floating-actions-stack');
+            if(fs) fs.style.display = 'flex';
+
+            if(id === 'orders-view') loadOrders();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function closeModals() { document.querySelectorAll('.universal-modal').forEach(m => m.classList.add('hidden')); }
+
+        // --- 1. Q-MART & VEGETABLES SLIDER ---
+        function loadGroceryData() {
+            db.ref('qmart').on('value', s => {
+                const data = s.val() || {};
+                allMartBanners = Object.values(data.banners || {});
+                const cats = Object.values(data.categories || {});
+                allMartData = Object.values(data.products || {});
+                document.getElementById('mart-banners').innerHTML = allMartBanners.map(b => `<img src="${b.img}" class="min-w-[85%] h-32 object-cover rounded-2xl snap-center border">`).join('');
+                document.getElementById('groc-categories').innerHTML = cats.map(c => `<div class="flex flex-col items-center min-w-[65px]"><div class="bg-white w-14 h-14 rounded-full flex items-center justify-center p-2 border shadow-xs"><img src="${c.img}" class="w-full h-full object-contain"></div><span class="text-[11px] font-bold mt-1 text-gray-700">${c.name}</span></div>`).join('');
+                renderVegetablesSlider(data.vegetables || {});
+                filterMart('');
+            });
+        }
+
+        function renderVegetablesSlider(vegData) {
+            const container = document.getElementById('mart-veg-slider');
+            if(!container) return;
+            const vegList = Object.values(vegData);
+            const defaultVeg = [
+                { id: 'v1', name: 'देसी टमाटर', price: 30, weight: '1 kg', img: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=300' },
+                { id: 'v2', name: 'हरी मिर्च', price: 20, weight: '250g', img: 'https://images.unsplash.com/photo-1588252303782-cb80119abd6d?w=300' },
+                { id: 'v3', name: 'नया आलू', price: 25, weight: '1 kg', img: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=300' },
+                { id: 'v4', name: 'लाल प्याज', price: 35, weight: '1 kg', img: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=300' }
+            ];
+            const finalVeg = vegList.length ? vegList : defaultVeg;
+
+            container.innerHTML = finalVeg.map(v => `
+                <div class="min-w-[130px] snap-center bg-white p-2.5 rounded-2xl border border-emerald-100 shadow-2xs flex flex-col justify-between">
+                    <img src="${v.img}" class="h-20 w-full object-contain mb-1 rounded-xl">
+                    <h5 class="font-extrabold text-xs text-gray-800 truncate">${v.name}</h5>
+                    <span class="text-[10px] text-gray-400 font-bold">${v.weight || '1 kg'}</span>
+                    <div class="flex justify-between items-center mt-2">
+                        <span class="font-black text-xs text-emerald-800">₹${v.price}</span>
+                        <button onclick="addGroceryCart('${v.id}','${v.name}',${v.price},0)" class="bg-emerald-600 text-white font-extrabold text-[10px] px-2 py-1 rounded-lg active:scale-95 transition">+ ADD</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterMart(q) {
+            q = (q||'').toLowerCase();
+            const cats = [...new Set(allMartData.map(p => p.cat))];
+            document.getElementById('groc-products-container').innerHTML = cats.map(cat => {
+                const list = allMartData.filter(p => p.cat === cat && p.name.toLowerCase().includes(q));
+                if(!list.length) return '';
+                return `<div><h2 class="text-sm font-extrabold mb-2 text-gray-800">${cat}</h2><div class="grid grid-cols-2 gap-3">` +
+                list.map(p => `
+                    <div class="bg-white border border-emerald-50 rounded-2xl p-3 shadow-xs flex flex-col justify-between">
+                        <img src="${p.img}" class="h-24 w-full object-contain mb-1">
+                        <div><h4 class="font-bold text-xs line-clamp-2 text-gray-800">${p.name}</h4><p class="text-[10px] text-gray-400 mb-2">${p.weight||''}</p></div>
+                        <div class="flex justify-between items-center"><span class="font-black text-sm text-gray-900">₹${p.price}</span><button onclick="addGroceryCart('${p.id}','${p.name}',${p.price},${p.deliveryCharge||0})" class="bg-emerald-50 text-emerald-700 border border-emerald-600 font-extrabold px-3 py-1 rounded-xl text-xs active:scale-95 transition">+ ADD</button></div>
+                    </div>
+                `).join('') + `</div></div>`;
+            }).join('') || '<p class="text-center text-gray-400 py-6 text-xs">No items found.</p>';
+        }
+        function addGroceryCart(id, name, price, del) { if(groceryCart[id]) groceryCart[id].qty++; else groceryCart[id] = { id, name, price, del, qty: 1 }; updateGroceryUI(); }
+        function updateGroceryUI() {
+            let total = 0, count = 0, del = 0;
+            for(let k in groceryCart) { total += groceryCart[k].price * groceryCart[k].qty; count += groceryCart[k].qty; del += (groceryCart[k].del * groceryCart[k].qty); }
+            document.getElementById('groc-item-count').textContent = count;
+            document.getElementById('groc-final-total').textContent = total ? total + del : 0;
+            document.getElementById('groc-checkout-bar').classList.toggle('hidden', count === 0);
+        }
+
+        // --- 2. FOOD DELIVERY WITH VEG / NON-VEG SLIDER ---
+        function setFoodVegFilter(mode) {
+            currentFoodVegFilter = mode;
+            const bg = document.getElementById('sliderBgFood');
+            const btnV = document.getElementById('btnFoodVeg');
+            const btnNV = document.getElementById('btnFoodNonVeg');
+            const btnA = document.getElementById('btnFoodAll');
+
+            if(mode === 'veg') {
+                if(bg) { bg.style.transform = 'translateX(0)'; bg.className = "absolute top-1 bottom-1 left-1 w-[calc(33.33%-3px)] bg-emerald-600 rounded-full shadow-sm transition-transform duration-300"; }
+                if(btnV) btnV.className = 'flex-1 py-1 text-xs font-bold text-white relative z-10 transition';
+                if(btnNV) btnNV.className = 'flex-1 py-1 text-xs font-bold text-red-900 relative z-10 transition';
+                if(btnA) btnA.className = 'flex-1 py-1 text-xs font-bold text-gray-700 relative z-10 transition';
+            } else if(mode === 'nonveg') {
+                if(bg) { bg.style.transform = 'translateX(100%)'; bg.className = "absolute top-1 bottom-1 left-1 w-[calc(33.33%-3px)] bg-red-600 rounded-full shadow-sm transition-transform duration-300"; }
+                if(btnV) btnV.className = 'flex-1 py-1 text-xs font-bold text-emerald-900 relative z-10 transition';
+                if(btnNV) btnNV.className = 'flex-1 py-1 text-xs font-bold text-white relative z-10 transition';
+                if(btnA) btnA.className = 'flex-1 py-1 text-xs font-bold text-gray-700 relative z-10 transition';
+            } else {
+                if(bg) { bg.style.transform = 'translateX(200%)'; bg.className = "absolute top-1 bottom-1 left-1 w-[calc(33.33%-3px)] bg-gray-800 rounded-full shadow-sm transition-transform duration-300"; }
+                if(btnV) btnV.className = 'flex-1 py-1 text-xs font-bold text-emerald-900 relative z-10 transition';
+                if(btnNV) btnNV.className = 'flex-1 py-1 text-xs font-bold text-red-900 relative z-10 transition';
+                if(btnA) btnA.className = 'flex-1 py-1 text-xs font-bold text-white relative z-10 transition';
+            }
+            filterRestaurants(document.getElementById('restaurant-search')?.value || '');
+        }
+
+        function loadRestaurants() { db.ref('restaurants').on('value', s => { allRestaurantsData = s.val() || {}; filterRestaurants(''); }); }
+        function filterRestaurants(q) {
+            q = (q||'').toLowerCase();
+            const el = document.getElementById('restaurants-list'); el.innerHTML = '';
+            Object.keys(allRestaurantsData).forEach(id => {
+                const r = allRestaurantsData[id];
+                const matchesVeg = (currentFoodVegFilter === 'all') || (r.foodType === currentFoodVegFilter);
+                if(r.approved && matchesVeg && (r.name.toLowerCase().includes(q) || (r.cuisine||'').toLowerCase().includes(q))) {
+                    const tagBadge = r.foodType === 'nonveg' ? '<span class="text-red-600 font-bold text-[10px] bg-red-50 px-1.5 py-0.5 rounded">🔴 Non-Veg</span>' : '<span class="text-emerald-700 font-bold text-[10px] bg-emerald-50 px-1.5 py-0.5 rounded">🟢 Pure Veg</span>';
+                    el.innerHTML += `
+                        <div class="bg-white rounded-2xl overflow-hidden shadow-xs border border-red-50 cursor-pointer active:scale-98 transition" onclick="viewMenu('${id}','${r.name}','${r.cuisine}','${r.imageUrl}');">
+                            <div class="relative"><img src="${r.imageUrl}" class="w-full h-36 object-cover"><span class="absolute top-2 right-2 bg-white/90 text-gray-900 font-black text-[11px] px-2 py-0.5 rounded-lg shadow-xs">⭐ ${r.avgRating||'4.2'}</span></div>
+                            <div class="p-3 flex justify-between items-center">
+                                <div><h3 class="font-extrabold text-sm text-gray-900">${r.name}</h3><p class="text-xs text-gray-500">${r.cuisine||''}</p></div>
+                                ${tagBadge}
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+        }
+        function viewMenu(id, name, cuisine, img) {
+            document.getElementById('menu-restaurant-name').textContent = name;
+            document.getElementById('menu-restaurant-cuisine').textContent = cuisine;
+            document.getElementById('menu-restaurant-image').src = img;
+            const l = document.getElementById('menu-items-list'); l.innerHTML = 'Loading dishes...';
+            db.ref(`menus/${id}`).once('value', s => {
+                const m = s.val() || {}; l.innerHTML = '';
+                Object.keys(m).forEach(k => {
+                    const isVeg = (m[k].foodType !== 'nonveg');
+                    l.innerHTML += `<div class="flex justify-between items-center bg-white p-3 rounded-2xl border border-red-50 shadow-xs"><div><h4 class="font-bold text-xs text-gray-800">${isVeg ? '🟢' : '🔴'} ${m[k].name}</h4><span class="text-red-500 font-black text-xs">₹${m[k].price}</span></div><button onclick="addFoodCart({id:'${k}',name:'${m[k].name}',price:${m[k].price},restaurantId:'${id}',del:${m[k].deliveryCharge||50}})" class="bg-red-500 text-white font-bold text-xs px-3 py-1.5 rounded-xl shadow-xs active:scale-95 transition">+ ADD</button></div>`;
+                });
+            });
+            showPanel('menu-view');
+        }
+        function addFoodCart(i) {
+            if(foodCart.length && foodCart[0].restaurantId !== i.restaurantId) { if(!confirm("Clear food cart?")) return; foodCart = []; }
+            const ex = foodCart.find(x => x.id === i.id); if(ex) ex.quantity++; else foodCart.push({...i, quantity: 1});
+            updateFoodUI();
+        }
+        function updateFoodUI() {
+            let total = 0, del = 0; foodCart.forEach(x => { total += x.price * x.quantity; del = x.del; });
+            document.getElementById('food-cart-total-display').textContent = total ? total + del : 0;
+            document.getElementById('food-checkout-bar').classList.toggle('hidden', !foodCart.length);
+        }
+
+        // --- 3. SERVICES ---
+        function renderServiceCategoryChips() {
+            const servCats = [
+                { id: 'all', name: 'Home / All', icon: 'fa-solid fa-house' },
+                { id: 'Plumber', name: 'Plumber', icon: 'fa-solid fa-wrench' },
+                { id: 'Electrician', name: 'Electrician', icon: 'fa-solid fa-bolt' },
+                { id: 'Carpenter', name: 'Carpenter', icon: 'fa-solid fa-hammer' },
+                { id: 'Painter', name: 'Painter', icon: 'fa-solid fa-paint-roller' },
+                { id: 'AC / Fridge', name: 'AC / Fridge', icon: 'fa-solid fa-snowflake' },
+                { id: 'Cleaning', name: 'Cleaning', icon: 'fa-solid fa-broom' }
+            ];
+            const c = document.getElementById('srv-categories-chips'); if(!c) return;
+            c.innerHTML = servCats.map(x => `
+                <button onclick="filterLocalServices('${x.id}')" class="px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap border flex items-center gap-1.5 transition ${currentSrvCat === x.id ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs' : 'bg-white text-gray-700 border-emerald-100'}">
+                    <i class="${x.icon} text-xs"></i> <span>${x.name}</span>
+                </button>
+            `).join('');
+        }
+        function loadLocalServices() {
+            db.ref('local_services').on('value', s => {
+                const d = s.val() || {}; allSrvProvs = Object.values(d.providers || {}).filter(p => p.status === 'approved');
+                filterLocalServices(currentSrvCat);
+            });
+        }
+        function filterLocalServices(catId) {
+            currentSrvCat = catId; renderServiceCategoryChips();
+            const list = document.getElementById('srv-providers-list'); if(!list) return;
+            const filtered = allSrvProvs.filter(p => catId === 'all' || (p.cat || '').toLowerCase().includes(catId.toLowerCase()));
+            list.innerHTML = filtered.map(p => `
+                <div class="bg-white p-3.5 rounded-2xl border border-emerald-50 shadow-xs flex flex-col gap-2">
+                    <div class="flex gap-3 items-center"><img src="${p.img||'https://cdn-icons-png.flaticon.com/512/149/149071.png'}" class="w-12 h-12 rounded-full border border-emerald-500 shadow-xs"><div><h3 class="font-extrabold text-sm text-gray-900">${p.name}</h3><span class="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded-md">${p.cat}</span></div></div>
+                    <p class="text-xs text-gray-600 bg-gray-50 p-2 rounded-xl">${p.desc}</p>
+                    <div class="flex gap-2 mt-1"><a href="tel:${p.phone}" class="flex-1 bg-gray-900 text-white text-center py-2 rounded-xl text-xs font-bold">Call</a><a href="https://wa.me/91${p.whatsapp}" target="_blank" class="flex-1 bg-green-500 text-white text-center py-2 rounded-xl text-xs font-bold">WhatsApp</a></div>
+                </div>
+            `).join('') || '<p class="text-center text-gray-400 py-6 text-xs">No providers found.</p>';
+        }
+        function submitService() {
+            const name = document.getElementById('srvRegName').value, cat = document.getElementById('srvRegCat').value, desc = document.getElementById('srvRegDesc').value, phone = document.getElementById('srvRegPhone').value, wa = document.getElementById('srvRegWa').value;
+            if(!name||!cat||!phone) return alert("Fill required details!");
+            compressImage(document.getElementById('srvRegImg').files[0], img => {
+                db.ref('local_services/providers').push().set({ name, cat, desc, phone, whatsapp: wa, img, status: 'pending', uid: auth.currentUser.uid }).then(() => { alert("Submitted for approval!"); closeModals(); });
+            });
+        }
+
+        // --- 3. ANIMAL MARKET (पशु मंडी) LOGIC ---
+        function renderAnimalCategories() {
+            const anCats = ['all', 'गाय (Cow)', 'भैंस (Buffalo)', 'बकरा / बकरी (Goat)', 'भेड़ (Sheep)', 'अन्य पशु'];
+            const box = document.getElementById('animal-categories'); if(!box) return;
+            box.innerHTML = anCats.map(c => `
+                <button onclick="filterAnimals('${c}')" class="px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap border transition ${currentAnimalFilter === c ? 'bg-amber-600 text-white border-amber-600 shadow-xs' : 'bg-white text-gray-700 border-amber-100'}">
+                    ${c === 'all' ? 'All (सभी पशु)' : c}
+                </button>
+            `).join('');
+        }
+
+        function loadAnimals() {
+            db.ref('animals').on('value', s => {
+                allAnimals = s.val() || {};
+                filterAnimals(currentAnimalFilter);
+            });
+        }
+
+        function filterAnimals(cat) {
+            currentAnimalFilter = cat;
+            renderAnimalCategories();
+            const list = document.getElementById('animals-list'); if(!list) return;
+            list.innerHTML = '';
+            const keys = Object.keys(allAnimals);
+            const filteredKeys = keys.filter(k => cat === 'all' || allAnimals[k].type === cat);
+
+            if(!filteredKeys.length) return list.innerHTML = '<p class="text-center text-gray-400 py-8 text-xs font-medium">इस श्रेणी में कोई पशु लिस्टेड नहीं है।</p>';
+
+            filteredKeys.forEach(k => {
+                const an = allAnimals[k];
+                const isOwner = (auth.currentUser && an.uid === auth.currentUser.uid);
+                const ownerControls = isOwner ? `
+                    <div class="flex justify-end gap-2 border-t pt-2 mt-2">
+                        <button onclick="editAnimalPost('${k}')" class="text-amber-700 font-bold text-xs bg-amber-50 px-2.5 py-1 rounded-lg">Edit Post</button>
+                        <button onclick="deleteAnimalPost('${k}')" class="text-red-600 font-bold text-xs bg-red-50 px-2.5 py-1 rounded-lg">Delete (बिक गया)</button>
+                    </div>
+                ` : '';
+
+                list.innerHTML += `
+                    <div class="bg-white p-4 rounded-2xl border border-amber-100 shadow-xs flex flex-col justify-between">
+                        <div class="flex gap-3">
+                            <img src="${an.img || 'https://images.unsplash.com/photo-1546445317-29f4545e9d53?w=300'}" class="w-24 h-24 rounded-2xl object-cover border border-amber-200">
+                            <div class="flex-1">
+                                <div class="flex justify-between items-start">
+                                    <h4 class="font-extrabold text-sm text-gray-900">${an.title}</h4>
+                                    <span class="text-xs font-black text-amber-700 bg-amber-50 px-2 py-0.5 rounded-lg">₹${an.price}</span>
+                                </div>
+                                <span class="text-[11px] font-bold text-amber-800 bg-amber-100/60 px-2 py-0.5 rounded inline-block mt-1">${an.type}</span>
+                                <p class="text-xs text-gray-600 mt-1 leading-snug">${an.details || ''}</p>
+                                <p class="text-[11px] text-gray-400 mt-1">विक्रेता: <b>${an.seller || 'किसान'}</b></p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2 mt-3">
+                            <a href="tel:${an.phone}" class="flex-1 bg-amber-700 text-white text-center py-2 rounded-xl text-xs font-bold active:scale-95 transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-phone"></i> Call Direct</a>
+                            <a href="https://wa.me/91${an.whatsapp || an.phone}?text=${encodeURIComponent(`नमस्ते, मैंने Soyfa ऐप पर आपका पशु देखा (${an.title})। मुझे इसके बारे में जानना है।`)}" target="_blank" class="flex-1 bg-green-500 text-white text-center py-2 rounded-xl text-xs font-bold active:scale-95 transition flex items-center justify-center gap-1.5"><i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp</a>
+                        </div>
+                        ${ownerControls}
+                    </div>
+                `;
+            });
+        }
+
+        function openAnimalPostModal() {
+            document.getElementById('animalModalTitle').innerText = "पशु बिक्री हेतु जोड़ें";
+            document.getElementById('animalEditKey').value = '';
+            document.getElementById('anTitle').value = '';
+            document.getElementById('anPrice').value = '';
+            document.getElementById('anDetails').value = '';
+            document.getElementById('anSeller').value = customerProfile.name || '';
+            document.getElementById('anPhone').value = customerProfile.phone || '';
+            document.getElementById('anWa').value = customerProfile.phone || '';
+            document.getElementById('addAnimalModal').classList.remove('hidden');
+        }
+
+        function editAnimalPost(k) {
+            const an = allAnimals[k];
+            if(!an) return;
+            document.getElementById('animalModalTitle').innerText = "पशु विज्ञापन एडिट करें";
+            document.getElementById('animalEditKey').value = k;
+            document.getElementById('anType').value = an.type || 'गाय (Cow)';
+            document.getElementById('anTitle').value = an.title || '';
+            document.getElementById('anPrice').value = an.price || '';
+            document.getElementById('anDetails').value = an.details || '';
+            document.getElementById('anSeller').value = an.seller || '';
+            document.getElementById('anPhone').value = an.phone || '';
+            document.getElementById('anWa').value = an.whatsapp || '';
+            document.getElementById('addAnimalModal').classList.remove('hidden');
+        }
+
+        function deleteAnimalPost(k) {
+            if(confirm("क्या आपका पशु बिक गया है या आप इसे हटाना चाहते हैं?")) {
+                db.ref(`animals/${k}`).remove().then(() => alert("पशु विज्ञापन हटा दिया गया!"));
+            }
+        }
+
+        function saveAnimalListing() {
+            const editKey = document.getElementById('animalEditKey').value;
+            const type = document.getElementById('anType').value;
+            const title = document.getElementById('anTitle').value.trim();
+            const price = document.getElementById('anPrice').value.trim();
+            const details = document.getElementById('anDetails').value.trim();
+            const seller = document.getElementById('anSeller').value.trim();
+            const phone = document.getElementById('anPhone').value.trim();
+            const wa = document.getElementById('anWa').value.trim();
+
+            if(!title || !price || !phone) return alert("कृपया पशु की जानकारी, कीमत और फोन नंबर भरें!");
+
+            const proceedSave = (imgUrl) => {
+                const payload = {
+                    uid: auth.currentUser.uid, type, title, price, details, seller, phone, whatsapp: wa || phone,
+                    updatedAt: new Date().toISOString()
+                };
+                if(imgUrl) payload.img = imgUrl;
+
+                if(editKey) {
+                    db.ref(`animals/${editKey}`).update(payload).then(() => {
+                        alert("विज्ञापन अपडेट हो गया!");
+                        closeModals();
+                    });
+                } else {
+                    payload.img = imgUrl || 'https://images.unsplash.com/photo-1546445317-29f4545e9d53?w=300';
+                    payload.createdAt = new Date().toISOString();
+                    db.ref('animals').push().set(payload).then(() => {
+                        alert("पशु सफलता पूर्वक बिक्री हेतु लिस्ट हो गया!");
+                        closeModals();
+                    });
+                }
+            };
+
+            const file = document.getElementById('anImg').files[0];
+            if(file) compressImage(file, img => proceedSave(img));
+            else proceedSave(null);
+        }
+
+        // --- 4. TEACHERS & SCHOOLS TOGGLE ---
+        function setTeacherMode(mode) {
+            const bg = document.getElementById('sliderBgTeacher');
+            const btnT = document.getElementById('btnTeachTeachers');
+            const btnS = document.getElementById('btnTeachSchools');
+            const paneT = document.getElementById('teacher-content-pane');
+            const paneS = document.getElementById('school-content-pane');
+
+            if(mode === 'teachers') {
+                if(bg) bg.style.transform = 'translateX(0)';
+                if(btnT) btnT.className = 'flex-1 py-1.5 text-xs font-bold text-white relative z-10 transition tracking-wide';
+                if(btnS) btnS.className = 'flex-1 py-1.5 text-xs font-bold text-blue-900 relative z-10 transition tracking-wide';
+                if(paneT) paneT.classList.remove('hidden');
+                if(paneS) paneS.classList.add('hidden');
+            } else {
+                if(bg) bg.style.transform = 'translateX(100%)';
+                if(btnT) btnT.className = 'flex-1 py-1.5 text-xs font-bold text-blue-900 relative z-10 transition tracking-wide';
+                if(btnS) btnS.className = 'flex-1 py-1.5 text-xs font-bold text-white relative z-10 transition tracking-wide';
+                if(paneT) paneT.classList.add('hidden');
+                if(paneS) paneS.classList.remove('hidden');
+            }
+        }
+
+        function renderTeacherCategories() {
+            const subs = [
+                { id: 'all', name: 'Home (सभी)' }, { id: 'Mathematics', name: 'Mathematics' }, { id: 'Science', name: 'Science' },
+                { id: 'English', name: 'English' }, { id: 'Hindi', name: 'Hindi' }, { id: 'Sanskrit', name: 'Sanskrit' }, { id: 'Primary', name: 'Primary (1-5)' }
+            ];
+            const box = document.getElementById('teacher-categories'); if(!box) return;
+            box.innerHTML = subs.map(s => `
+                <button onclick="filterTeachers('${s.id}')" class="px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap border transition ${currentTeacherSub === s.id ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs' : 'bg-white text-gray-700 border-indigo-100'}">
+                    ${s.name}
+                </button>
+            `).join('');
+        }
+        function loadTeachers() {
+            db.ref('ladnun_teachers').on('value', s => {
+                allTeachers = s.val() || {}; filterTeachers(currentTeacherSub);
+            });
+        }
+        function filterTeachers(subId) {
+            currentTeacherSub = subId; renderTeacherCategories();
+            const l = document.getElementById('teachers-list'); if(!l) return; l.innerHTML = '';
+            const keys = Object.keys(allTeachers).filter(k => subId === 'all' || (allTeachers[k].subject || '').toLowerCase().includes(subId.toLowerCase()));
+            if(!keys.length) return l.innerHTML = '<p class="text-center text-gray-400 py-8 text-xs font-medium">इस विषय में कोई शिक्षक उपलब्ध नहीं हैं।</p>';
+
+            keys.forEach(k => {
+                const t = allTeachers[k];
+                const isOwner = (auth.currentUser && t.uid === auth.currentUser.uid);
+                const isBusy = (t.availability === 'busy');
+                const badge = isBusy 
+                    ? `<span class="w-full block bg-red-100 text-red-700 text-center py-1.5 rounded-xl font-black text-xs">🔴 BUSY (कहीं कार्यरत हैं)</span>` 
+                    : `<span class="w-full block bg-emerald-100 text-emerald-800 text-center py-1.5 rounded-xl font-black text-xs">🟢 FREE (उपलब्ध हैं)</span>`;
+                const owner = isOwner ? `
+                    <div class="flex justify-between items-center text-[10px] bg-indigo-50 p-2 rounded-xl mt-1">
+                        <button onclick="toggleTeacherAvail('${k}','${isBusy?'free':'busy'}')" class="font-black text-indigo-800">Mark ${isBusy?'FREE':'BUSY'}</button>
+                        <button onclick="deleteTeacher('${k}')" class="text-red-500 font-black">Delete Profile</button>
+                    </div>` : '';
+
+                l.innerHTML += `
+                    <div class="bg-white p-3.5 rounded-2xl border border-indigo-50 shadow-xs flex flex-col gap-2">
+                        <div class="flex gap-3 items-center">
+                            <img src="${t.img||'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'}" class="w-14 h-14 rounded-2xl object-cover border-2 border-indigo-400">
+                            <div><h4 class="font-extrabold text-sm text-gray-900">${t.name}</h4><span class="text-[10px] bg-indigo-50 text-indigo-700 font-black px-2 py-0.5 rounded-md">${t.subject} (${t.experience||'Fresher'})</span></div>
+                        </div>
+                        <p class="text-xs text-gray-600 bg-gray-50 p-2.5 rounded-xl leading-relaxed">${t.desc||'विवरण नहीं दिया गया'}</p>
+                        ${badge}
+                        <div class="flex gap-2"><a href="tel:${t.phone}" class="flex-1 bg-gray-900 text-white text-center py-2 rounded-xl text-xs font-bold">Call Direct</a><a href="https://wa.me/91${t.whatsapp}" target="_blank" class="flex-1 bg-green-500 text-white text-center py-2 rounded-xl text-xs font-bold">WhatsApp</a></div>
+                        ${owner}
+                    </div>
+                `;
+            });
+        }
+        function openTeacherRegModal() { document.getElementById('tSubject').value = ''; document.getElementById('teacherRegModal').classList.remove('hidden'); }
+        function saveTeacherProfile() {
+            const name = document.getElementById('tName').value.trim();
+            const subject = document.getElementById('tSubject').value.trim();
+            const exp = document.getElementById('tExp').value.trim();
+            const desc = document.getElementById('tDesc').value.trim();
+            const phone = document.getElementById('tPhone').value.trim();
+            const wa = document.getElementById('tWa').value.trim();
+            const avail = document.querySelector('input[name="tAvailability"]:checked').value;
+            if(!name || !subject || !phone) return alert("नाम, विषय व फोन आवश्यक है!");
+            compressImage(document.getElementById('tImg').files[0], img => {
+                db.ref('ladnun_teachers').push().set({ uid: auth.currentUser.uid, name, subject, experience: exp, desc, phone, whatsapp: wa, availability: avail, img: img || 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png' }).then(() => { alert("शिक्षक प्रोफाइल सेव हो गई!"); closeModals(); });
+            });
+        }
+        function toggleTeacherAvail(k, st) { db.ref(`ladnun_teachers/${k}`).update({ availability: st }); }
+        function deleteTeacher(k) { if(confirm("प्रोफाइल डिलीट करें?")) db.ref(`ladnun_teachers/${k}`).remove(); }
+
+        // --- SCHOOL VACANCIES ---
+        function loadVacancies() {
+            db.ref('school_vacancies').on('value', s => {
+                allSchoolVacancies = s.val() || {};
+                const c = document.getElementById('school-vacancies-container'); if(!c) return; c.innerHTML = '';
+                const keys = Object.keys(allSchoolVacancies);
+                if(!keys.length) return c.innerHTML = '<p class="text-xs text-gray-400 py-6 text-center">वर्तमान में कोई स्कूल वैकेंसी पोस्ट नहीं है।</p>';
+
+                keys.forEach(k => {
+                    const v = allSchoolVacancies[k];
+                    const isOwner = (auth.currentUser && v.uid === auth.currentUser.uid);
+                    c.innerHTML += `
+                        <div class="bg-white p-4 rounded-2xl border border-purple-100 shadow-xs flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-start">
+                                    <h4 class="font-extrabold text-sm text-purple-900">${v.schoolName}</h4>
+                                    <span class="text-[10px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded">Vacancy</span>
+                                </div>
+                                <p class="text-xs font-bold text-purple-700 mt-1">आवश्यक विषय: ${v.subject}</p>
+                                <p class="text-xs text-gray-600 mt-0.5">सैलरी: ${v.salary || 'Negotiable'}</p>
+                                <p class="text-xs text-gray-500 bg-gray-50 p-2 rounded-xl mt-2 leading-relaxed">${v.details || 'विवरण नहीं'}</p>
+                            </div>
+                            <div class="flex gap-2 mt-3">
+                                <a href="tel:${v.phone}" class="flex-1 bg-purple-600 text-white text-center py-2 rounded-xl text-xs font-bold">Call School</a>
+                                <a href="https://wa.me/91${v.whatsapp}" target="_blank" class="flex-1 bg-green-500 text-white text-center py-2 rounded-xl text-xs font-bold">WhatsApp</a>
+                            </div>
+                            ${isOwner ? `<button onclick="deleteVacancy('${k}')" class="text-[11px] text-red-500 font-bold mt-2 text-right">Delete Vacancy Post</button>` : ''}
+                        </div>
+                    `;
+                });
+            });
+        }
+        function openSchoolJobModal() { document.getElementById('schoolJobModal').classList.remove('hidden'); }
+        function saveSchoolVacancy() {
+            const schoolName = document.getElementById('schName').value.trim(), subject = document.getElementById('schSubject').value.trim(), salary = document.getElementById('schSalary').value.trim(), phone = document.getElementById('schPhone').value.trim(), wa = document.getElementById('schWa').value.trim(), details = document.getElementById('schDetails').value.trim();
+            if(!schoolName||!phone||!subject) return alert("स्कूल नाम, विषय व फोन आवश्यक है!");
+            db.ref('school_vacancies').push().set({ uid: auth.currentUser.uid, schoolName, subject, salary, phone, whatsapp: wa || phone, details }).then(() => { alert("वैकेंसी पोस्ट हो गई!"); closeModals(); });
+        }
+        function deleteVacancy(k) { if(confirm("वैकेंसी पोस्ट हटाएं?")) db.ref(`school_vacancies/${k}`).remove(); }
+
+        // --- DIRECTORY ---
+        function populateWards() { const s = document.getElementById('ward-filter-select'); if(!s) return; for(let i=1; i<=45; i++) s.innerHTML += `<option value="${i}">वार्ड नंबर ${i}</option>`; }
+        function loadOfficials() {
+            db.ref('ladnun_officials').on('value', s => {
+                const d = s.val() || {}; const sl = document.getElementById('officials-slider'); if(!sl) return; sl.innerHTML = '';
+                Object.values(d).forEach(off => {
+                    sl.innerHTML += `
+                        <div class="min-w-[80%] bg-white p-3 rounded-xl border border-blue-200 shadow-2xs flex items-center gap-3">
+                            <img src="${off.img||'https://cdn-icons-png.flaticon.com/512/9131/9131529.png'}" class="w-12 h-12 rounded-full border border-blue-500">
+                            <div class="flex-1"><h4 class="font-bold text-xs text-gray-900">${off.name}</h4><span class="text-blue-600 font-bold text-[10px] block">${off.designation}</span><div class="flex gap-2 mt-1"><a href="tel:${off.phone}" class="text-[10px] bg-blue-700 text-white px-2 py-0.5 rounded font-bold">Call</a><a href="https://wa.me/91${off.whatsapp}" target="_blank" class="text-[10px] bg-green-500 text-white px-2 py-0.5 rounded font-bold">WhatsApp</a></div></div>
+                        </div>
+                    `;
+                });
+            });
+        }
+        function loadWardMembers() { db.ref('ladnun_ward_members').on('value', s => { allWardMembers = s.val() || {}; filterWardMembers(currentWardFilter); }); }
+        function filterWardMembers(w) {
+            currentWardFilter = w; const l = document.getElementById('ward-members-list'); if(!l) return; l.innerHTML = '';
+            Object.values(allWardMembers).filter(m => w==='all' || String(m.wardNo)===String(w)).forEach(m => {
+                l.innerHTML += `
+                    <div class="bg-white p-3 rounded-2xl border border-blue-50 flex justify-between items-center shadow-xs">
+                        <div><h4 class="font-extrabold text-xs text-gray-900">${m.name}</h4><span class="text-[10px] text-gray-500 font-bold">वार्ड नं. ${m.wardNo} (${m.role||'पार्षद'})</span></div>
+                        <div class="flex gap-2"><a href="tel:${m.phone}" class="bg-gray-900 text-white text-xs px-2.5 py-1 rounded-xl font-bold">Call</a><a href="https://wa.me/91${m.whatsapp}" target="_blank" class="bg-green-500 text-white text-xs px-2.5 py-1 rounded-xl font-bold">WhatsApp</a></div>
+                    </div>
+                `;
+            });
+        }
+
+        // --- 4. BOOKS & CLASS-WISE CATEGORIES ---
+        function renderBookClassCategories() {
+            const classCats = [
+                { id: 'all', name: 'All Classes' },
+                { id: 'Class 1-5', name: 'कक्षा 1 से 5' },
+                { id: 'Class 6-8', name: 'कक्षा 6 से 8' },
+                { id: 'Class 9-10', name: 'कक्षा 9 व 10' },
+                { id: 'Class 11-12', name: 'कक्षा 11 व 12' },
+                { id: 'College', name: 'कॉलेज / डिग्री' },
+                { id: 'Govt Exam', name: 'प्रतियोगी परीक्षा (Govt Job)' },
+                { id: 'General', name: 'उपन्यास व अन्य' }
+            ];
+            const box = document.getElementById('book-class-categories'); if(!box) return;
+            box.innerHTML = classCats.map(c => `
+                <button onclick="filterBooksByClass('${c.id}')" class="px-3.5 py-1 rounded-full text-xs font-bold whitespace-nowrap border transition ${currentBookClass === c.id ? 'bg-blue-600 text-white border-blue-600 shadow-xs' : 'bg-white text-gray-700 border-blue-100'}">
+                    ${c.name}
+                </button>
+            `).join('');
+        }
+
+        function loadBooksData() { db.ref('books').on('value', s => { const d = s.val() || {}; allBooks = Object.values(d.items || {}); filterBooks(); }); }
+        
+        function setMedium(m) {
+            currentBookMed = m;
+            const bg = document.getElementById('sliderBgBook');
+            if(bg) bg.style.transform = (m==='Hindi') ? 'translateX(0)' : 'translateX(100%)';
+            document.getElementById('btnMedHindi').className = (m==='Hindi') ? 'flex-1 py-1.5 text-xs font-bold text-white relative z-10 transition' : 'flex-1 py-1.5 text-xs font-bold text-blue-900 relative z-10 transition';
+            document.getElementById('btnMedEnglish').className = (m==='English') ? 'flex-1 py-1.5 text-xs font-bold text-white relative z-10 transition' : 'flex-1 py-1.5 text-xs font-bold text-blue-900 relative z-10 transition';
+            filterBooks();
+        }
+
+        function filterBooksByClass(classId) {
+            currentBookClass = classId;
+            renderBookClassCategories();
+            filterBooks();
+        }
+
+        function filterBooks() {
+            const list = document.getElementById('prodList');
+            const filtered = allBooks.filter(p => {
+                const matchMed = !p.medium || p.medium.toLowerCase() === currentBookMed.toLowerCase();
+                const matchClass = (currentBookClass === 'all') || (p.classCat === currentBookClass);
+                return matchMed && matchClass;
+            });
+            list.innerHTML = filtered.map(b => `
+                <div class="bg-white p-2.5 rounded-2xl border border-blue-100 flex flex-col justify-between shadow-xs">
+                    <img src="${b.img}" class="h-28 w-full object-contain mb-2">
+                    <h4 class="font-bold text-xs line-clamp-2 text-gray-800">${b.title}</h4>
+                    <span class="text-[10px] text-blue-600 font-bold mt-1">${b.classCat || 'All'}</span>
+                    <div class="mt-2 flex justify-between items-center"><span class="font-bold text-sm text-blue-700">₹${b.price}</span><button onclick="buyBook('${b.id}')" class="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-xl">BUY</button></div>
+                </div>
+            `).join('') || '<p class="text-center text-gray-400 py-6 text-xs col-span-2">No books found.</p>';
+        }
+        function buyBook(id) { selectedBook = allBooks.find(b => b.id === id); openUniversalCheckout('BOOK'); }
+
+        // --- CHECKOUT & ORDERS ---
+        function applyCoupon() {
+            const c = (document.getElementById('coupon-input').value||'').trim().toUpperCase();
+            let sub = parseInt(document.getElementById('chk-sub').innerText.replace('₹','')) || 0;
+            let del = parseInt(document.getElementById('chk-del').innerText.replace('+₹','')) || 0;
+            const msg = document.getElementById('coupon-msg'); msg.classList.remove('hidden');
+            if(c === 'SOYFA50' && sub >= 150) { appliedDiscountAmount = 50; appliedCouponCode = c; msg.innerText = "Flat ₹50 OFF applied!"; msg.className="text-[11px] font-bold text-emerald-600 mt-1"; }
+            else if(c === 'WELCOME10') { appliedDiscountAmount = Math.round(sub * 0.1); appliedCouponCode = c; msg.innerText = "10% OFF applied!"; msg.className="text-[11px] font-bold text-emerald-600 mt-1"; }
+            else { appliedDiscountAmount = 0; appliedCouponCode = ''; msg.innerText = "Invalid coupon code!"; msg.className="text-[11px] font-bold text-red-500 mt-1"; }
+            document.getElementById('chk-discount-row').style.display = appliedDiscountAmount ? 'flex' : 'none';
+            document.getElementById('chk-disc').innerText = `-₹${appliedDiscountAmount}`;
+            document.getElementById('chk-total').innerText = `₹${Math.max(0, sub - appliedDiscountAmount + del)}`;
+        }
+
+        function openUniversalCheckout(type) {
+            currentOrderType = type;
+            let sub = 0, del = 0, itemsHTML = '';
+            appliedCouponCode = ''; appliedDiscountAmount = 0;
+            document.getElementById('chk-discount-row').style.display = 'none';
+
+            if(type === 'GROCERY') {
+                for(let k in groceryCart) { sub += groceryCart[k].price * groceryCart[k].qty; del += (groceryCart[k].del * groceryCart[k].qty); itemsHTML += `<div class="flex justify-between"><span>${groceryCart[k].name} x${groceryCart[k].qty}</span><b>₹${groceryCart[k].price * groceryCart[k].qty}</b></div>`; }
+            } else if(type === 'FOOD') {
+                foodCart.forEach(i => { sub += i.price * i.quantity; del = i.del; itemsHTML += `<div class="flex justify-between"><span>${i.name} x${i.quantity}</span><b>₹${i.price * i.quantity}</b></div>`; });
+            } else if(type === 'BOOK') {
+                sub = parseInt(selectedBook.price); del = parseInt(selectedBook.deliveryCharge||0);
+                itemsHTML = `<div class="flex justify-between"><span>${selectedBook.title}</span><b>₹${sub}</b></div>`;
+            }
+
+            document.getElementById('chk-items-list').innerHTML = itemsHTML;
+            document.getElementById('chk-sub').innerText = `₹${sub}`;
+            document.getElementById('chk-del').innerText = `+₹${del}`;
+            document.getElementById('chk-total').innerText = `₹${sub + del}`;
+            document.getElementById('chk-name').value = customerProfile.name || '';
+            document.getElementById('chk-phone').value = customerProfile.phone || '';
+            document.getElementById('chk-address').value = customerProfile.address || '';
+            document.getElementById('universalCheckoutModal').classList.remove('hidden');
+        }
+
+        function processCheckout() {
+            const method = document.querySelector('input[name="payMethod"]:checked').value;
+            const n = document.getElementById('chk-name').value.trim(), p = document.getElementById('chk-phone').value.trim(), a = document.getElementById('chk-address').value.trim(), notes = document.getElementById('chk-notes').value.trim();
+            if(!n || !p || !a) return alert("Delivery details required!");
+            let sub = parseInt(document.getElementById('chk-sub').innerText.replace('₹','')) || 0;
+            let del = parseInt(document.getElementById('chk-del').innerText.replace('+₹','')) || 0;
+            let total = Math.max(0, sub - appliedDiscountAmount + del);
+
+            if(method === 'ONLINE') {
+                var options = { key: RAZORPAY_KEY, amount: total * 100, currency: "INR", name: "Soyfa " + currentOrderType, handler: res => saveOrder(res.razorpay_payment_id, n, p, a, sub, del, total, 'ONLINE', notes), prefill: { name: n, contact: p } };
+                new Razorpay(options).open();
+            } else {
+                saveOrder('COD_PENDING', n, p, a, sub, del, total, 'COD', notes);
+            }
+        }
+
+        function saveOrder(txnId, n, p, a, sub, del, total, payMethod, notes) {
+            let items = [];
+            if(currentOrderType === 'GROCERY') items = Object.values(groceryCart).map(x => ({ name: x.name, price: x.price, quantity: x.qty }));
+            else if(currentOrderType === 'FOOD') items = foodCart.map(x => ({ name: x.name, price: x.price, quantity: x.quantity }));
+            else if(currentOrderType === 'BOOK') items = [{ name: selectedBook.title, price: selectedBook.price, quantity: 1 }];
+
+            db.ref('orders').push().set({
+                orderId: Date.now().toString(), customerUid: auth.currentUser.uid, orderType: currentOrderType, items,
+                subtotal: sub, deliveryFee: del, discountAmount: appliedDiscountAmount, totalAmount: total, paymentMethod: payMethod,
+                txnId, customerName: n, phone: p, address: a, deliveryNotes: notes, status: 'PLACED', createdAt: new Date().toISOString()
+            }).then(() => {
+                playOrderDoneSound();
+                closeModals();
+                document.getElementById('orderSuccessModal').classList.remove('hidden');
+                if(currentOrderType === 'GROCERY') { groceryCart = {}; updateGroceryUI(); }
+                if(currentOrderType === 'FOOD') { foodCart = []; updateFoodUI(); }
+                setTimeout(() => { document.getElementById('orderSuccessModal').classList.add('hidden'); showPanel('orders-view'); }, 2200);
+            });
+        }
+
+        function loadOrders() {
+            db.ref('orders').orderByChild('customerUid').equalTo(auth.currentUser.uid).on('value', s => {
+                const list = document.getElementById('orders-list'); if(!list) return; list.innerHTML = '';
+                const o = s.val() || {};
+                const keys = Object.keys(o).sort((a,b) => new Date(o[b].createdAt) - new Date(o[a].createdAt));
+                if(!keys.length) return list.innerHTML = '<p class="text-center text-gray-400 py-10 text-xs">No orders yet.</p>';
+
+                keys.forEach(k => {
+                    const ord = o[k];
+                    let step = ['PLACED','ACCEPTED','PREPARING','OUT FOR DELIVERY','DELIVERED'].indexOf(ord.status);
+                    if(step === -1) step = 0;
+                    let prog = step === 0 ? '15%' : step === 1 ? '35%' : step === 2 ? '60%' : step === 3 ? '85%' : '100%';
+                    let trk = ord.status === 'CANCELLED' ? `<p class="text-red-500 font-bold text-center text-xs mt-3">ORDER CANCELLED</p>` : `
+                        <div class="track-line mt-6 mb-3">
+                            <div class="track-fill" style="width: ${prog}; background: #2563eb"></div>
+                            <div class="track-bike" style="left: ${prog};"><i class="fa-solid fa-motorcycle text-blue-600"></i></div>
+                            <span class="absolute top-[-20px] text-[10px] font-bold text-blue-800" style="left: ${prog}; transform: translateX(-50%);">${ord.status}</span>
+                        </div>
+                    `;
+                    list.innerHTML += `
+                        <div class="bg-white p-3.5 rounded-2xl border border-slate-100 shadow-xs text-xs">
+                            <div class="flex justify-between font-bold border-b pb-1"><span>#${ord.orderId.slice(-6)} (${ord.orderType})</span><span class="text-blue-700 font-black">₹${ord.totalAmount}</span></div>
+                            ${trk}
+                            <div class="bg-gray-50 p-2 rounded-lg mt-2">${ord.items.map(i=>`<div>• ${i.name} (x${i.quantity})</div>`).join('')}</div>
+                            ${ord.status==='PLACED' ? `<button onclick="cancelOrder('${k}')" class="text-red-500 font-bold text-[11px] mt-2 block ml-auto">Cancel Order</button>` : ''}
+                        </div>
+                    `;
+                });
+            });
+        }
+        function cancelOrder(k) { if(confirm("Cancel order?")) db.ref(`orders/${k}`).update({ status: 'CANCELLED' }); }
+    </script>
+</body>
+</html>
