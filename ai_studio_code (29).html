@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soyfa Super App - Master Admin</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        .sidebar-item.active { background: #1e293b; color: #38bdf8; border-left: 4px solid #38bdf8; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.25s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-slate-100 flex flex-col md:flex-row min-h-screen text-slate-800">
+
+    <!-- SIDEBAR -->
+    <aside class="w-full md:w-64 bg-slate-900 text-white flex-shrink-0 flex flex-col justify-between shadow-xl">
+        <div>
+            <div class="p-5 border-b border-slate-800 flex items-center justify-between">
+                <div>
+                    <h1 class="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">SOYFA ADMIN</h1>
+                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Super Control Panel</p>
+                </div>
+                <span class="bg-blue-500/20 text-blue-400 text-xs px-2 py-0.5 rounded-full font-bold">Online</span>
+            </div>
+
+            <nav class="p-3 space-y-1 text-xs font-bold text-gray-300">
+                <button onclick="switchTab('orders-tab')" class="sidebar-item active w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-receipt text-amber-400 text-base"></i> <span>Live Orders</span>
+                </button>
+                <button onclick="switchTab('mart-tab')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-store text-emerald-400 text-base"></i> <span>Q-Mart & Sabzi</span>
+                </button>
+                <button onclick="switchTab('food-tab')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-burger text-red-400 text-base"></i> <span>Food (Veg / Non-Veg)</span>
+                </button>
+                <button onclick="switchTab('animals-tab')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-cow text-amber-500 text-base"></i> <span>पशु मंडी (Animals)</span>
+                </button>
+                <button onclick="switchTab('services-tab')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-briefcase text-green-400 text-base"></i> <span>Local Services</span>
+                </button>
+                <button onclick="switchTab('teachers-tab')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-chalkboard-user text-indigo-400 text-base"></i> <span>Teachers List</span>
+                </button>
+                <button onclick="switchTab('vacancies-tab')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-school text-purple-400 text-base"></i> <span>School Vacancies</span>
+                </button>
+                <button onclick="switchTab('directory-tab')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-landmark text-sky-400 text-base"></i> <span>Officials & Wards</span>
+                </button>
+                <button onclick="switchTab('books-tab')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-book-open text-blue-400 text-base"></i> <span>Books Store</span>
+                </button>
+            </nav>
+        </div>
+        <div class="p-3 border-t border-slate-800 text-[11px] text-gray-500 text-center font-bold">Soyfa Admin &copy; 2026</div>
+    </aside>
+
+    <!-- MAIN DASHBOARD CONTENT -->
+    <main class="flex-1 p-4 md:p-6 overflow-y-auto max-h-screen">
+        
+        <!-- 1. LIVE ORDERS -->
+        <section id="orders-tab" class="tab-content active">
+            <h2 class="text-xl font-black mb-3">Live Orders</h2>
+            <div id="admin-orders-container" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">Loading orders...</div>
+        </section>
+
+        <!-- 2. Q-MART & SABZI -->
+        <section id="mart-tab" class="tab-content">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-xl font-black">Q-Mart Products & Fresh Sabzi</h2>
+                <div class="flex gap-2">
+                    <button onclick="openMartModal()" class="bg-emerald-600 text-white font-bold text-xs px-3 py-2 rounded-xl shadow">+ Add Product</button>
+                    <button onclick="openVegModal()" class="bg-emerald-800 text-white font-bold text-xs px-3 py-2 rounded-xl shadow">+ Add ताज़ा सब्जी</button>
+                </div>
+            </div>
+            <div class="mb-5">
+                <h3 class="font-bold text-xs text-emerald-800 mb-2">ताज़ा सब्जियां (Fresh Sabzi Slider)</h3>
+                <div id="admin-veg-list" class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs"></div>
+            </div>
+            <div>
+                <h3 class="font-bold text-xs text-gray-700 mb-2">ग्रोसरी प्रोडक्ट्स</h3>
+                <div id="admin-mart-list" class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs"></div>
+            </div>
+        </section>
+
+        <!-- 3. FOOD -->
+        <section id="food-tab" class="tab-content">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-xl font-black">Food Restaurants (Veg / Non-Veg)</h2>
+                <button onclick="openRestModal()" class="bg-red-500 text-white font-bold text-xs px-3 py-2 rounded-xl shadow">+ Add Restaurant</button>
+            </div>
+            <div id="admin-rest-list" class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs"></div>
+        </section>
+
+        <!-- 4. ANIMAL MARKET (पशु मंडी) -->
+        <section id="animals-tab" class="tab-content">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-xl font-black">पशु मंडी (Animal Listings)</h2>
+                <button onclick="openAdminAnimalModal()" class="bg-amber-600 text-white font-bold text-xs px-3 py-2 rounded-xl shadow">+ Add पशु</button>
+            </div>
+            <div id="admin-animals-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs"></div>
+        </section>
+
+        <!-- 5. SERVICES -->
+        <section id="services-tab" class="tab-content">
+            <h2 class="text-xl font-black mb-3">Local Services Approval</h2>
+            <div id="admin-services-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs"></div>
+        </section>
+
+        <!-- 6. TEACHERS -->
+        <section id="teachers-tab" class="tab-content">
+            <h2 class="text-xl font-black mb-3">Registered Teachers</h2>
+            <div id="admin-teachers-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs"></div>
+        </section>
+
+        <!-- 7. SCHOOL VACANCIES -->
+        <section id="vacancies-tab" class="tab-content">
+            <h2 class="text-xl font-black mb-3">School Vacancy Posts</h2>
+            <div id="admin-vacancies-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs"></div>
+        </section>
+
+        <!-- 8. DIRECTORY -->
+        <section id="directory-tab" class="tab-content">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-xl font-black">Officials & Ward Members</h2>
+                <div class="flex gap-2">
+                    <button onclick="openOffModal()" class="bg-blue-700 text-white font-bold text-xs px-2.5 py-1.5 rounded-xl">+ Official</button>
+                    <button onclick="openWardModal()" class="bg-emerald-600 text-white font-bold text-xs px-2.5 py-1.5 rounded-xl">+ Ward Member</button>
+                </div>
+            </div>
+            <div class="mb-4">
+                <h3 class="font-bold text-xs text-blue-800 mb-1">Government Officials</h3>
+                <div id="admin-officials-list" class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs"></div>
+            </div>
+            <div>
+                <h3 class="font-bold text-xs text-emerald-800 mb-1">Ward Members</h3>
+                <div id="admin-ward-list" class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs"></div>
+            </div>
+        </section>
+
+        <!-- 9. BOOKS -->
+        <section id="books-tab" class="tab-content">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-xl font-black">Books Store</h2>
+                <button onclick="openBookModal()" class="bg-blue-600 text-white font-bold text-xs px-3 py-2 rounded-xl shadow">+ Add Book</button>
+            </div>
+            <div id="admin-books-list" class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs"></div>
+        </section>
+    </main>
+
+    <!-- ADMIN GLOBAL MODAL -->
+    <div id="adminModal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white w-full max-w-sm p-5 rounded-2xl max-h-[85vh] overflow-y-auto text-xs space-y-2">
+            <div class="flex justify-between items-center mb-2"><h3 class="font-bold text-sm" id="aModalTitle">Item</h3><button onclick="closeAModal()" class="text-lg font-bold">&times;</button></div>
+            <div id="aModalBody" class="space-y-2"></div>
+        </div>
+    </div>
+
+    <!-- JS LOGIC -->
+    <script>
+        const firebaseConfig = { apiKey: "AIzaSyACNrzJgRGKmn8JsRuS_2b7RecPIfahTvQ", databaseURL: "https://singup-aec8c-default-rtdb.firebaseio.com", projectId: "singup-aec8c" };
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        function switchTab(id) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+        function closeAModal() { document.getElementById('adminModal').classList.add('hidden'); }
+        function deleteItem(path) { if(confirm("Are you sure you want to delete this item?")) db.ref(path).remove(); }
+
+        // 1. ORDERS
+        db.ref('orders').on('value', s => {
+            const data = s.val() || {}; const c = document.getElementById('admin-orders-container'); c.innerHTML = '';
+            const keys = Object.keys(data).sort((a,b) => new Date(data[b].createdAt) - new Date(data[a].createdAt));
+            if(!keys.length) return c.innerHTML = '<p class="text-gray-400">No orders.</p>';
+            keys.forEach(k => {
+                const o = data[k];
+                c.innerHTML += `
+                    <div class="bg-white p-3.5 rounded-2xl shadow-xs border flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between font-bold"><span class="text-blue-600">#${o.orderId.slice(-6)} (${o.orderType})</span><span class="text-emerald-700 font-black">₹${o.totalAmount}</span></div>
+                            <p class="font-bold mt-1">${o.customerName} | ${o.phone}</p>
+                            <p class="text-gray-500 mb-2">${o.address}</p>
+                            <div class="bg-gray-50 p-2 rounded-lg mb-2">${(o.items||[]).map(i=>`<div>• ${i.name} (x${i.quantity})</div>`).join('')}</div>
+                        </div>
+                        <div class="flex gap-2 border-t pt-2">
+                            <select onchange="db.ref('orders/${k}').update({status:this.value})" class="p-1 border rounded bg-white flex-1 font-bold">
+                                <option value="${o.status}">${o.status} (Current)</option>
+                                <option value="ACCEPTED">ACCEPTED</option><option value="PREPARING">PREPARING</option><option value="OUT FOR DELIVERY">OUT FOR DELIVERY</option><option value="DELIVERED">DELIVERED</option><option value="CANCELLED">CANCELLED</option>
+                            </select>
+                            <button onclick="deleteItem('orders/${k}')" class="text-red-500 font-bold px-2 bg-red-50 rounded">Delete</button>
+                        </div>
+                    </div>
+                `;
+            });
+        });
+
+        // 2. Q-MART & SABZI (WITH PAYMENT MODES: COD / ONLINE / BOTH)
+        db.ref('qmart/vegetables').on('value', s => {
+            const data = s.val() || {}; const l = document.getElementById('admin-veg-list'); l.innerHTML = '';
+            Object.keys(data).forEach(k => {
+                const v = data[k];
+                l.innerHTML += `
+                    <div class="bg-white p-2.5 rounded-xl border border-emerald-100 flex flex-col justify-between">
+                        <img src="${v.img}" class="h-20 w-full object-contain mb-1">
+                        <h4 class="font-bold truncate">${v.name}</h4><span class="text-emerald-700 font-black">₹${v.price} (${v.weight})</span>
+                        <span class="text-[9px] font-bold text-blue-600">${v.payMode || 'BOTH'}</span>
+                        <button onclick="deleteItem('qmart/vegetables/${k}')" class="mt-2 text-red-500 font-bold bg-red-50 py-1 rounded">Delete</button>
+                    </div>
+                `;
+            });
+        });
+        function openVegModal() {
+            document.getElementById('aModalTitle').innerText = "Add Fresh Vegetable (सब्जी)";
+            document.getElementById('aModalBody').innerHTML = `
+                <input type="text" id="vgName" placeholder="सब्जी का नाम (उदा. देशी टमाटर)" class="w-full p-2 border rounded">
+                <input type="number" id="vgPrice" placeholder="कीमत (₹)" class="w-full p-2 border rounded">
+                <input type="text" id="vgWeight" placeholder="वजन (उदा. 1 kg / 500g)" class="w-full p-2 border rounded">
+                <input type="text" id="vgImg" placeholder="Image URL" class="w-full p-2 border rounded">
+                <label class="block text-gray-500 font-bold mt-1">Payment Options:</label>
+                <select id="vgPayMode" class="w-full p-2 border rounded">
+                    <option value="BOTH">COD + Online Payment Both (दोनों)</option>
+                    <option value="COD">Only Cash on Delivery (सिर्फ COD)</option>
+                    <option value="ONLINE">Only Online Payment (सिर्फ ऑनलाइन)</option>
+                </select>
+                <button onclick="saveVeg()" class="w-full bg-emerald-700 text-white font-bold p-2 rounded mt-2">सब्जी सेव करें</button>
+            `;
+            document.getElementById('adminModal').classList.remove('hidden');
+        }
+        function saveVeg() {
+            const id = 'veg_' + Date.now();
+            db.ref(`qmart/vegetables/${id}`).set({ 
+                id, 
+                name: document.getElementById('vgName').value, 
+                price: Number(document.getElementById('vgPrice').value), 
+                weight: document.getElementById('vgWeight').value, 
+                img: document.getElementById('vgImg').value,
+                payMode: document.getElementById('vgPayMode').value
+            }).then(() => closeAModal());
+        }
+
+        db.ref('qmart/products').on('value', s => {
+            const data = s.val() || {}; const l = document.getElementById('admin-mart-list'); l.innerHTML = '';
+            Object.keys(data).forEach(k => {
+                const p = data[k];
+                l.innerHTML += `
+                    <div class="bg-white p-2.5 rounded-xl border flex flex-col justify-between">
+                        <img src="${p.img}" class="h-20 w-full object-contain mb-1">
+                        <h4 class="font-bold truncate">${p.name}</h4><span class="text-emerald-600 font-black">₹${p.price}</span>
+                        <span class="text-[9px] font-bold text-blue-600">${p.payMode || 'BOTH'}</span>
+                        <button onclick="deleteItem('qmart/products/${k}')" class="mt-2 text-red-500 font-bold bg-red-50 py-1 rounded">Delete</button>
+                    </div>
+                `;
+            });
+        });
+        function openMartModal() {
+            document.getElementById('aModalTitle').innerText = "Add Mart Product";
+            document.getElementById('aModalBody').innerHTML = `
+                <input type="text" id="mName" placeholder="Product Name" class="w-full p-2 border rounded">
+                <input type="text" id="mCat" placeholder="Category" class="w-full p-2 border rounded">
+                <input type="number" id="mPrice" placeholder="Price (₹)" class="w-full p-2 border rounded">
+                <input type="text" id="mWeight" placeholder="Weight/Unit" class="w-full p-2 border rounded">
+                <input type="text" id="mImg" placeholder="Image URL" class="w-full p-2 border rounded">
+                <label class="block text-gray-500 font-bold mt-1">Payment Options:</label>
+                <select id="mPayMode" class="w-full p-2 border rounded">
+                    <option value="BOTH">COD + Online Payment Both (दोनों)</option>
+                    <option value="COD">Only Cash on Delivery (सिर्फ COD)</option>
+                    <option value="ONLINE">Only Online Payment (सिर्फ ऑनलाइन)</option>
+                </select>
+                <button onclick="saveMart()" class="w-full bg-emerald-600 text-white font-bold p-2 rounded mt-2">Save Product</button>
+            `;
+            document.getElementById('adminModal').classList.remove('hidden');
+        }
+        function saveMart() {
+            const id = 'm_' + Date.now();
+            db.ref(`qmart/products/${id}`).set({ 
+                id, 
+                name: document.getElementById('mName').value, 
+                cat: document.getElementById('mCat').value, 
+                price: Number(document.getElementById('mPrice').value), 
+                weight: document.getElementById('mWeight').value, 
+                img: document.getElementById('mImg').value,
+                payMode: document.getElementById('mPayMode').value,
+                inStock: true 
+            }).then(() => closeAModal());
+        }
+
+        // 3. RESTAURANTS (WITH PAYMENT OPTIONS)
+        db.ref('restaurants').on('value', s => {
+            const data = s.val() || {}; const l = document.getElementById('admin-rest-list'); l.innerHTML = '';
+            Object.keys(data).forEach(k => {
+                const r = data[k];
+                l.innerHTML += `
+                    <div class="bg-white p-3 rounded-2xl border">
+                        <img src="${r.imageUrl}" class="w-full h-24 object-cover rounded-xl mb-1">
+                        <h4 class="font-bold">${r.name} (${r.foodType==='veg'?'🟢 Veg':'🔴 Non-Veg'})</h4>
+                        <p class="text-gray-500">${r.cuisine} | Pin: ${r.pincode} | Pay: ${r.payMode||'BOTH'}</p>
+                        <div class="flex gap-2 mt-2">
+                            <button onclick="db.ref('restaurants/${k}').update({approved:${!r.approved}})" class="flex-1 py-1 rounded font-bold ${r.approved?'bg-green-100 text-green-700':'bg-yellow-100 text-yellow-700'}">${r.approved?'Approved':'Approve'}</button>
+                            <button onclick="deleteItem('restaurants/${k}')" class="text-red-500 font-bold px-2 bg-red-50 rounded">Delete</button>
+                        </div>
+                    </div>
+                `;
+            });
+        });
+        function openRestModal() {
+            document.getElementById('aModalTitle').innerText = "Add Restaurant";
+            document.getElementById('aModalBody').innerHTML = `
+                <input type="text" id="rName" placeholder="Restaurant Name" class="w-full p-2 border rounded">
+                <input type="text" id="rCuisine" placeholder="Cuisine" class="w-full p-2 border rounded">
+                <select id="rFoodType" class="w-full p-2 border rounded">
+                    <option value="nonveg" selected>🔴 Non-Veg</option>
+                    <option value="veg">🟢 Pure Veg</option>
+                </select>
+                <input type="number" id="rPin" placeholder="Pincode" class="w-full p-2 border rounded">
+                <input type="text" id="rImg" placeholder="Image URL" class="w-full p-2 border rounded">
+                <label class="block text-gray-500 font-bold mt-1">Payment Options:</label>
+                <select id="rPayMode" class="w-full p-2 border rounded">
+                    <option value="BOTH">COD + Online Both</option>
+                    <option value="COD">Only COD</option>
+                    <option value="ONLINE">Only Online Payment</option>
+                </select>
+                <button onclick="db.ref('restaurants').push().set({name:document.getElementById('rName').value, cuisine:document.getElementById('rCuisine').value, foodType:document.getElementById('rFoodType').value, pincode:document.getElementById('rPin').value, imageUrl:document.getElementById('rImg').value, payMode:document.getElementById('rPayMode').value, approved:true, avgRating:'4.5'}).then(()=>closeAModal())" class="w-full bg-red-500 text-white font-bold p-2 rounded mt-2">Save</button>
+            `;
+            document.getElementById('adminModal').classList.remove('hidden');
+        }
+
+        // 4. ANIMAL MARKET
+        db.ref('animals').on('value', s => {
+            const data = s.val() || {}; const l = document.getElementById('admin-animals-list'); l.innerHTML = '';
+            Object.keys(data).forEach(k => {
+                const an = data[k];
+                l.innerHTML += `
+                    <div class="bg-white p-3 rounded-2xl border border-amber-100 flex justify-between items-center text-xs">
+                        <div class="flex gap-2.5 items-center">
+                            <img src="${an.img}" class="w-14 h-14 rounded-xl object-cover border">
+                            <div><h4 class="font-extrabold">${an.title} (₹${an.price})</h4><span class="text-amber-700 font-bold">${an.type}</span><p class="text-gray-500">विक्रेता: ${an.seller} | Ph: ${an.phone}</p></div>
+                        </div>
+                        <button onclick="deleteItem('animals/${k}')" class="text-red-500 font-bold bg-red-50 px-2 py-1 rounded">Delete</button>
+                    </div>
+                `;
+            });
+        });
+        function openAdminAnimalModal() {
+            document.getElementById('aModalTitle').innerText = "पशु जोड़ें (Admin)";
+            document.getElementById('aModalBody').innerHTML = `
+                <input type="text" id="adAnType" placeholder="श्रेणी टाइप करें (उदा. गाय, भैंस, बकरा...)" class="w-full p-2 border rounded">
+                <input type="text" id="adAnTitle" placeholder="शीर्षक/नस्ल" class="w-full p-2 border rounded">
+                <input type="number" id="adAnPrice" placeholder="कीमत (₹)" class="w-full p-2 border rounded">
+                <input type="text" id="adAnDetails" placeholder="दूध क्षमता / विवरण" class="w-full p-2 border rounded">
+                <input type="text" id="adAnSeller" placeholder="विक्रेता नाम" class="w-full p-2 border rounded">
+                <input type="number" id="adAnPhone" placeholder="फोन नंबर" class="w-full p-2 border rounded">
+                <input type="text" id="adAnImg" placeholder="फ़ोटो URL" class="w-full p-2 border rounded">
+                <button onclick="db.ref('animals').push().set({type:document.getElementById('adAnType').value, title:document.getElementById('adAnTitle').value, price:document.getElementById('adAnPrice').value, details:document.getElementById('adAnDetails').value, seller:document.getElementById('adAnSeller').value, phone:document.getElementById('adAnPhone').value, whatsapp:document.getElementById('adAnPhone').value, img:document.getElementById('adAnImg').value, createdAt:new Date().toISOString()}).then(()=>closeAModal())" class="w-full bg-amber-600 text-white font-bold p-2 rounded">सेव करें</button>
+            `;
+            document.getElementById('adminModal').classList.remove('hidden');
+        }
+
+        // 5. SERVICES
+        db.ref('local_services/providers').on('value', s => {
+            const data = s.val() || {}; const l = document.getElementById('admin-services-list'); l.innerHTML = '';
+            Object.keys(data).forEach(k => {
+                const p = data[k];
+                l.innerHTML += `
+                    <div class="bg-white p-3 rounded-xl border flex justify-between items-center">
+                        <div><h4 class="font-bold">${p.name} (${p.cat})</h4><p class="text-gray-500">${p.phone} | Status: ${p.status}</p></div>
+                        <div class="flex gap-2">
+                            ${p.status==='pending' ? `<button onclick="db.ref('local_services/providers/${k}').update({status:'approved'})" class="bg-green-600 text-white px-2 py-1 rounded font-bold">Approve</button>` : ''}
+                            <button onclick="deleteItem('local_services/providers/${k}')" class="text-red-500 font-bold bg-red-50 px-2 py-1 rounded">Delete</button>
+                        </div>
+                    </div>
+                `;
+            });
+        });
+
+        // 6. TEACHERS
+        db.ref('ladnun_teachers').on('value', s => {
+            const data = s.val() || {}; const l = document.getElementById('admin-teachers-list'); l.innerHTML = '';
+            Object.keys(data).forEach(k => {
+                const t = data[k];
+                l.innerHTML += `
+                    <div class="bg-white p-3 rounded-xl border flex justify-between items-center">
+                        <div><h4 class="font-bold">${t.name} (${t.subject})</h4><p class="text-gray-500">${t.phone} | Status: ${t.availability}</p></div>
+                        <button onclick="deleteItem('ladnun_teachers/${k}')" class="text-red-500 font-bold bg-red-50 px-2 py-1 rounded">Delete</button>
+                    </div>
+                `;
+            });
+        });
+
+        // 7. SCHOOL VACANCIES
+        db.ref('school_vacancies').on('value', s => {
+            const data = s.val() || {}; const l = document.getElementById('admin-vacancies-list'); l.innerHTML = '';
+            Object.keys(data).forEach(k => {
+                const v = data[k];
+                l.innerHTML += `
+                    <div class="bg-white p-3 rounded-xl border flex justify-between items-center">
+                        <div><h4 class="font-bold">${v.schoolName}</h4><p class="text-gray-500">विषय: ${v.subject} | Ph: ${v.phone}</p></div>
+                        <button onclick="deleteItem('school_vacancies/${k}')" class="text-red-500 font-bold bg-red-50 px-2 py-1 rounded">Delete</button>
+                    </div>
+                `;
+            });
+        });
+
+        // 8. DIRECTORY & OFFICIALS
+        db.ref('ladnun_officials').on('value', s => {
+            const data = s.val() || {}; const l = document.getElementById('admin-officials-list'); l.innerHTML = '';
+            Object.keys(data).forEach(k => {
+                const o = data[k];
+                l.innerHTML += `
+                    <div class="bg-white p-3 rounded-xl border flex justify-between items-center">
+                        <div><h4 class="font-bold">${o.name}</h4><p class="text-blue-600">${o.designation} (${o.phone})</p></div>
+                        <button onclick="deleteItem('ladnun_officials/${k}')" class="text-red-500 font-bold bg-red-50 px-2 py-1 rounded">Delete</button>
+                    </div>
+                `;
+            });
+        });
+        function openOffModal() {
+            document.getElementById('aModalTitle').innerText = "Add Govt Official";
+            document.getElementById('aModalBody').innerHTML = `
+                <input type="text" id="ofName" placeholder="Name" class="w-full p-2 border rounded">
+                <input type="text" id="ofDesig" placeholder="Designation" class="w-full p-2 border rounded">
+                <input type="number" id="ofPhone" placeholder="Phone" class="w-full p-2 border rounded">
+                <input type="text" id="ofImg" placeholder="Image URL" class="w-full p-2 border rounded">
+                <button onclick="db.ref('ladnun_officials').push().set({name:document.getElementById('ofName').value, designation:document.getElementById('ofDesig').value, phone:document.getElementById('ofPhone').value, whatsapp:document.getElementById('ofPhone').value, img:document.getElementById('ofImg').value}).then(()=>closeAModal())" class="w-full bg-blue-700 text-white font-bold p-2 rounded">Save</button>
+            `;
+            document.getElementById('adminModal').classList.remove('hidden');
+        }
+
+        db.ref('ladnun_ward_members').on('value', s => {
+            const data = s.val() || {}; const l = document.getElementById('admin-ward-list'); l.innerHTML = '';
+            Object.keys(data).forEach(k => {
+                const m = data[k];
+                l.innerHTML += `
+                    <div class="bg-white p-3 rounded-xl border flex justify-between items-center">
+                        <div><h4 class="font-bold">${m.name}</h4><p class="text-gray-500">Ward: ${m.wardNo} (${m.phone})</p></div>
+                        <button onclick="deleteItem('ladnun_ward_members/${k}')" class="text-red-500 font-bold bg-red-50 px-2 py-1 rounded">Delete</button>
+                    </div>
+                `;
+            });
+        });
+        function openWardModal() {
+            document.getElementById('aModalTitle').innerText = "Add Ward Member";
+            document.getElementById('aModalBody').innerHTML = `
+                <input type="text" id="wmName" placeholder="Member Name" class="w-full p-2 border rounded">
+                <input type="number" id="wmNo" placeholder="Ward Number (1-45)" class="w-full p-2 border rounded">
+                <input type="text" id="wmRole" placeholder="Role (Ward Parshad)" class="w-full p-2 border rounded">
+                <input type="number" id="wmPhone" placeholder="Phone" class="w-full p-2 border rounded">
+                <button onclick="db.ref('ladnun_ward_members').push().set({name:document.getElementById('wmName').value, wardNo:document.getElementById('wmNo').value, phone:document.getElementById('wmPhone').value, whatsapp:document.getElementById('wmPhone').value}).then(()=>closeAModal())" class="w-full bg-emerald-600 text-white font-bold p-2 rounded">Save</button>
+            `;
+            document.getElementById('adminModal').classList.remove('hidden');
+        }
+
+        // 9. BOOKS STORE (WITH PAYMENT OPTIONS & TYPED CLASS)
+        db.ref('books/items').on('value', s => {
+            const data = s.val() || {}; const l = document.getElementById('admin-books-list'); l.innerHTML = '';
+            Object.keys(data).forEach(k => {
+                const b = data[k];
+                l.innerHTML += `
+                    <div class="bg-white p-2.5 rounded-xl border text-xs flex flex-col justify-between">
+                        <img src="${b.img}" class="h-20 w-full object-contain mb-1">
+                        <h4 class="font-bold truncate">${b.title}</h4>
+                        <span class="text-blue-600 font-black">₹${b.price} (${b.classCat || 'General'})</span>
+                        <span class="text-[9px] font-bold text-gray-500">Pay: ${b.payMode||'BOTH'}</span>
+                        <button onclick="deleteItem('books/items/${k}')" class="mt-2 text-red-500 bg-red-50 py-1 rounded font-bold">Delete</button>
+                    </div>
+                `;
+            });
+        });
+        function openBookModal() {
+            document.getElementById('aModalTitle').innerText = "Add Book (कक्षा टाइप करें)";
+            document.getElementById('aModalBody').innerHTML = `
+                <input type="text" id="bTitle" placeholder="Book Title" class="w-full p-2 border rounded">
+                <select id="bMed" class="w-full p-2 border rounded"><option value="Hindi">Hindi Medium</option><option value="English">English Medium</option></select>
+                <input type="text" id="bClass" placeholder="कक्षा टाइप करें (उदा. Class 1, Class 2, Class 10...)" class="w-full p-2 border rounded">
+                <input type="number" id="bPrice" placeholder="Price (₹)" class="w-full p-2 border rounded">
+                <input type="text" id="bImg" placeholder="Image URL" class="w-full p-2 border rounded">
+                <label class="block text-gray-500 font-bold mt-1">Payment Options:</label>
+                <select id="bPayMode" class="w-full p-2 border rounded">
+                    <option value="BOTH">COD + Online Payment Both (दोनों)</option>
+                    <option value="COD">Only Cash on Delivery (सिर्फ COD)</option>
+                    <option value="ONLINE">Only Online Payment (सिर्फ ऑनलाइन)</option>
+                </select>
+                <button onclick="saveBook()" class="w-full bg-blue-600 text-white font-bold p-2 rounded mt-2">Save Book</button>
+            `;
+            document.getElementById('adminModal').classList.remove('hidden');
+        }
+        function saveBook() {
+            const id = 'b_' + Date.now();
+            db.ref(`books/items/${id}`).set({ 
+                id, 
+                title: document.getElementById('bTitle').value, 
+                medium: document.getElementById('bMed').value, 
+                classCat: document.getElementById('bClass').value.trim() || 'General',
+                price: Number(document.getElementById('bPrice').value), 
+                img: document.getElementById('bImg').value, 
+                payMode: document.getElementById('bPayMode').value,
+                deliveryCharge: 20 
+            }).then(() => closeAModal());
+        }
+    </script>
+</body>
+</html>
