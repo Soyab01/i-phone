@@ -40,20 +40,33 @@
         .nav-item.active { color: var(--nav-blue); transform: translateY(-5px); }
         .nav-item.active i { transform: scale(1.2); filter: drop-shadow(0 4px 8px rgba(37,99,235,0.4)); color: var(--nav-blue); }
 
-        .floating-right-nav { position: fixed; right: 15px; bottom: 80px; z-index: 9999 !important; display: flex !important; flex-direction: column; gap: 9px; }
+        /* 2. AUTO-ADJUSTING FLOATING BUTTONS */
+        .floating-right-nav { 
+            position: fixed; 
+            right: 15px; 
+            bottom: 80px; 
+            z-index: 50; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 9px; 
+            transition: transform 0.3s ease, bottom 0.3s ease, opacity 0.3s ease; 
+        }
+        .floating-right-nav.shift-up {
+            bottom: 145px;
+        }
         .float-btn { width: 46px; height: 46px; background: rgba(255,255,255,0.96); backdrop-filter: blur(6px); border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 8px 20px rgba(37,99,235,0.22); cursor: pointer; font-size: 18px; transition: 0.3s; border: 2px solid var(--nav-blue); color: var(--nav-blue); }
         .float-btn:hover { transform: scale(1.1); }
 
-        .track-line { position: relative; height: 5px; background: #e2e8f0; margin: 26px 10px 12px 10px; border-radius: 4px; }
-        .track-fill { position: absolute; left: 0; top: 0; height: 100%; border-radius: 4px; transition: width 0.8s ease-in-out; }
-        .track-bike { position: absolute; top: -16px; margin-left: -12px; font-size: 22px; transition: left 0.8s ease-in-out; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2)); }
+        .qty-badge { display: flex; align-items: center; justify-content: space-between; background: #0c831f; color: white; border-radius: 10px; padding: 3px 6px; font-weight: 800; font-size: 11px; gap: 8px; }
+        .qty-badge button { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-weight: 900; background: rgba(255,255,255,0.2); border-radius: 6px; transition: 0.15s; }
+        .qty-badge button:active { transform: scale(0.9); }
     </style>
 </head>
 <body>
 
     <audio id="order-done-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-positive-notification-951.mp3" preload="auto"></audio>
 
-    <!-- AUTH PANEL (DEFAULT: SIGNUP) -->
+    <!-- AUTH PANEL -->
     <div id="auth-panel" class="flex justify-center items-center min-h-screen flex-col p-5 bg-gradient-to-br from-blue-100 via-blue-200 to-indigo-200">
         <div class="bg-white p-7 rounded-3xl shadow-xl w-full max-w-sm text-center" id="signup-box">
             <h1 class="uniform-title justify-center text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 mb-2">Join Soyfa</h1>
@@ -85,15 +98,15 @@
     <!-- MAIN APP PANEL -->
     <div id="app-panel" class="hidden">
         
-        <!-- 4 FLOATING BUTTONS (ALL BLUE, ALWAYS VISIBLE) -->
+        <!-- AUTO-ADJUSTING 4 FLOATING BUTTONS -->
         <div class="floating-right-nav" id="floating-actions-stack">
-            <div class="float-btn" onclick="showPanel('ladnun-directory-view')" title="लाडनूं निर्देशिका (अधिकारी एवं वार्ड)"><i class="fa-solid fa-landmark"></i></div>
-            <div class="float-btn" onclick="showPanel('animals-view')" title="पशु मंडी (गाय, भैंस, बकरा आदि)"><i class="fa-solid fa-cow"></i></div>
+            <div class="float-btn" onclick="showPanel('ladnun-directory-view')" title="लाडनूं निर्देशिका"><i class="fa-solid fa-landmark"></i></div>
+            <div class="float-btn" onclick="showPanel('animals-view')" title="पशु मंडी"><i class="fa-solid fa-cow"></i></div>
             <div class="float-btn" onclick="showPanel('teachers-view')" title="शिक्षक एवं स्कूल पोर्टल"><i class="fa-solid fa-chalkboard-user"></i></div>
             <div class="float-btn" onclick="showPanel('books-view')" title="Books Store"><i class="fa-solid fa-book-open"></i></div>
         </div>
 
-        <!-- 1. Q-MART (TOP SWITCHER SLIDER + VEGETABLES AUTO-SLIDER) -->
+        <!-- 1. Q-MART -->
         <div id="grocery-view" class="p-4 max-w-xl mx-auto bg-mart-grad min-h-screen">
             <header class="bg-white/95 sticky top-0 z-40 border border-emerald-100 p-3 rounded-2xl flex justify-between items-center shadow-xs mb-3">
                 <div class="flex items-center gap-2">
@@ -105,16 +118,11 @@
                 </div>
             </header>
             
-            <!-- 1. MART TOP PILL SWITCHER (GROCERY vs SABZI) -->
             <div class="flex justify-center mb-3">
                 <div class="bg-white p-1 rounded-full flex w-full max-w-[320px] relative shadow-xs border border-emerald-200">
                     <div id="sliderBgMart" class="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] bg-emerald-600 rounded-full shadow-sm transition-transform duration-300"></div>
-                    <button onclick="setMartMode('grocery')" id="btnMartGroc" class="flex-1 py-1.5 text-xs font-bold text-white relative z-10 transition">
-                        🛒 ग्रोसरी (Grocery)
-                    </button>
-                    <button onclick="setMartMode('vegetables')" id="btnMartVeg" class="flex-1 py-1.5 text-xs font-bold text-emerald-900 relative z-10 transition">
-                        🥦 ताज़ा सब्जियां (Sabzi)
-                    </button>
+                    <button onclick="setMartMode('grocery')" id="btnMartGroc" class="flex-1 py-1.5 text-xs font-bold text-white relative z-10 transition">🛒 ग्रोसरी</button>
+                    <button onclick="setMartMode('vegetables')" id="btnMartVeg" class="flex-1 py-1.5 text-xs font-bold text-emerald-900 relative z-10 transition">🥦 ताज़ा सब्जियां</button>
                 </div>
             </div>
 
@@ -124,50 +132,40 @@
                 <button onclick="startVoiceSearch('mart-search', filterMart)" class="absolute right-3 text-emerald-600 bg-emerald-50 w-7 h-7 rounded-full flex items-center justify-center text-sm shadow-xs"><i class="fa-solid fa-microphone"></i></button>
             </div>
 
-            <!-- AUTO SLIDING VEGETABLES/BANNER SLIDER -->
             <div class="bg-white/90 p-3 rounded-2xl border border-emerald-100 mb-4 shadow-xs">
                 <div class="flex justify-between items-center mb-2">
-                    <span class="text-xs font-black text-emerald-900 flex items-center gap-1.5">
-                        <i class="fa-solid fa-carrot text-emerald-600"></i> ताज़ा सब्जियां (Fresh Sabzi)
-                    </span>
+                    <span class="text-xs font-black text-emerald-900 flex items-center gap-1.5"><i class="fa-solid fa-carrot text-emerald-600"></i> ताज़ा सब्जियां (Fresh Sabzi)</span>
                     <span class="text-[10px] text-emerald-700 bg-emerald-50 font-bold px-2 py-0.5 rounded">Auto Fresh</span>
                 </div>
                 <div id="mart-veg-slider" class="flex gap-3 overflow-x-auto qmart-hide-scroll snap-x pb-1 scroll-smooth"></div>
             </div>
 
-            <!-- PANE 1: GROCERY DATA -->
             <div id="mart-grocery-pane">
                 <div id="mart-banners" class="flex gap-3 overflow-x-auto qmart-hide-scroll snap-x mb-4 scroll-smooth"></div>
                 <div id="groc-categories" class="flex gap-4 overflow-x-auto qmart-hide-scroll mb-4 pb-1"></div>
                 <div id="groc-products-container" class="space-y-5"></div>
             </div>
 
-            <!-- PANE 2: SABZI FULL GRID DATA -->
             <div id="mart-veg-pane" class="hidden">
-                <h3 class="font-extrabold text-sm text-gray-800 mb-3">सभी हरी व ताज़ा सब्जियां</h3>
+                <h3 class="font-extrabold text-sm text-gray-800 mb-3">सभी ताज़ा सब्जियां</h3>
                 <div id="mart-veg-full-grid" class="grid grid-cols-2 gap-3 pb-8"></div>
             </div>
 
             <div id="groc-checkout-bar" class="fixed bottom-[75px] left-4 right-4 bg-emerald-700 text-white p-3.5 rounded-2xl shadow-xl z-40 hidden flex justify-between items-center cursor-pointer max-w-xl mx-auto" onclick="openUniversalCheckout('GROCERY')">
-                <div><p class="text-sm font-extrabold"><span id="groc-item-count">0</span> Items | ₹<span id="groc-final-total">0</span></p><p class="text-[10px] opacity-90">Extra charges may apply</p></div>
-                <div class="font-bold text-sm flex items-center gap-2">View Cart <i class="fa-solid fa-arrow-right"></i></div>
+                <div><p class="text-sm font-extrabold"><span id="groc-item-count">0</span> Items | ₹<span id="groc-final-total">0</span></p><p class="text-[10px] opacity-90">View Cart</p></div>
+                <div class="font-bold text-sm flex items-center gap-2">Proceed <i class="fa-solid fa-arrow-right"></i></div>
             </div>
         </div>
 
-        <!-- 2. FOOD DELIVERY (ONLY 2 BUTTONS: NON-VEG DEFAULT & VEG) -->
+        <!-- 2. FOOD DELIVERY -->
         <div id="home-view" class="container-food p-4 hidden max-w-xl mx-auto bg-food-grad min-h-screen">
             <h1 class="uniform-title text-red-500"><i class="fa-solid fa-burger text-orange-500"></i> Soyfa Food</h1>
             
-            <!-- 2. FOOD 2-BUTTON SLIDER (NON-VEG BY DEFAULT) -->
             <div class="flex justify-center mb-4">
                 <div class="bg-white p-1 rounded-full flex w-full max-w-[260px] relative shadow-xs border border-red-200">
                     <div id="sliderBgFood" class="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] bg-red-600 rounded-full shadow-sm transition-transform duration-300"></div>
-                    <button onclick="setFoodVegFilter('nonveg')" id="btnFoodNonVeg" class="flex-1 py-1.5 text-xs font-bold text-white relative z-10 transition">
-                        🔴 Non-Veg
-                    </button>
-                    <button onclick="setFoodVegFilter('veg')" id="btnFoodVeg" class="flex-1 py-1.5 text-xs font-bold text-red-900 relative z-10 transition">
-                        🟢 Veg
-                    </button>
+                    <button onclick="setFoodVegFilter('nonveg')" id="btnFoodNonVeg" class="flex-1 py-1.5 text-xs font-bold text-white relative z-10 transition">🔴 Non-Veg</button>
+                    <button onclick="setFoodVegFilter('veg')" id="btnFoodVeg" class="flex-1 py-1.5 text-xs font-bold text-red-900 relative z-10 transition">🟢 Veg</button>
                 </div>
             </div>
 
@@ -200,67 +198,45 @@
             </div>
         </div>
 
-        <!-- 3. LOCAL SERVICES -->
+        <!-- 3. SERVICES -->
         <div id="services-view" class="p-4 max-w-xl mx-auto hidden bg-serv-grad min-h-screen">
             <h1 class="uniform-title text-emerald-700"><i class="fa-solid fa-briefcase"></i> Local Services</h1>
             <button onclick="document.getElementById('addServiceModal').classList.remove('hidden')" class="w-full bg-emerald-600 text-white p-3 rounded-xl font-bold shadow-md mb-4 flex justify-center items-center gap-2 text-xs">+ Register Your Service Free</button>
             <div class="mb-3">
-                <span class="text-xs font-bold text-gray-500 block mb-2 uppercase">Select Category:</span>
                 <div id="srv-categories-chips" class="flex gap-2.5 overflow-x-auto qmart-hide-scroll pb-2"></div>
             </div>
             <div id="srv-providers-list" class="space-y-3.5 pb-20"></div>
         </div>
 
-        <!-- 4. PASHU MANDI (DYNAMIC CATEGORIES & FULL HINDI UI) -->
+        <!-- 4. PASHU MANDI -->
         <div id="animals-view" class="p-4 max-w-xl mx-auto hidden pb-24 bg-anim-grad min-h-screen">
             <div class="flex justify-between items-center mb-2">
-                <h1 class="uniform-title text-amber-700 mb-0"><i class="fa-solid fa-cow text-amber-600"></i> पशु मंडी (Animal Market)</h1>
+                <h1 class="uniform-title text-amber-700 mb-0"><i class="fa-solid fa-cow text-amber-600"></i> पशु मंडी</h1>
                 <button onclick="showPanel('grocery-view')" class="bg-white w-8 h-8 rounded-full flex items-center justify-center text-gray-600 shadow-xs"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <p class="text-xs text-gray-500 mb-3">गाय, भैंस, बकरी, बकरा आदि सीधे खरीदें व बेचें</p>
-            
-            <button onclick="openAnimalPostModal()" class="w-full bg-amber-600 text-white p-3 rounded-xl font-bold shadow-md mb-4 text-xs active:scale-95 transition">
-                <i class="fa-solid fa-plus-circle"></i> + अपना पशु बेचने के लिए जोड़ें
-            </button>
-
-            <!-- Dynamic Animal Categories -->
-            <div class="mb-3">
-                <div id="animal-categories" class="flex gap-2 overflow-x-auto qmart-hide-scroll pb-1"></div>
-            </div>
-
+            <button onclick="openAnimalPostModal()" class="w-full bg-amber-600 text-white p-3 rounded-xl font-bold shadow-md mb-4 text-xs">+ अपना पशु बेचने के लिए जोड़ें</button>
+            <div id="animal-categories" class="flex gap-2 overflow-x-auto qmart-hide-scroll pb-2 mb-3"></div>
             <div id="animals-list" class="space-y-4"></div>
         </div>
 
-        <!-- 5. TEACHERS & SCHOOLS (ONE NAVIGATION WITH DUAL SLIDER SWITCH) -->
+        <!-- 5. TEACHERS & SCHOOLS -->
         <div id="teachers-view" class="p-4 max-w-xl mx-auto hidden pb-24 bg-teach-grad min-h-screen">
             <div class="flex justify-between items-center mb-3">
                 <h1 class="uniform-title text-indigo-700 mb-0"><i class="fa-solid fa-chalkboard-user"></i> शिक्षक एवं स्कूल पोर्टल</h1>
                 <button onclick="showPanel('grocery-view')" class="bg-white w-8 h-8 rounded-full flex items-center justify-center text-gray-600 shadow-xs"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            
             <div class="flex justify-center mb-4">
                 <div class="bg-white p-1 rounded-full flex w-full max-w-[320px] relative shadow-xs border border-blue-200">
                     <div id="sliderBgTeacher" class="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] bg-blue-600 rounded-full shadow-sm transition-transform duration-300"></div>
-                    <button onclick="setTeacherMode('teachers')" id="btnTeachTeachers" class="flex-1 py-1.5 text-xs font-bold text-white relative z-10 transition">
-                        👨‍🏫 शिक्षक (Teachers)
-                    </button>
-                    <button onclick="setTeacherMode('schools')" id="btnTeachSchools" class="flex-1 py-1.5 text-xs font-bold text-blue-900 relative z-10 transition">
-                        🏫 स्कूल वैकेंसी (Jobs)
-                    </button>
+                    <button onclick="setTeacherMode('teachers')" id="btnTeachTeachers" class="flex-1 py-1.5 text-xs font-bold text-white relative z-10 transition">👨‍🏫 शिक्षक</button>
+                    <button onclick="setTeacherMode('schools')" id="btnTeachSchools" class="flex-1 py-1.5 text-xs font-bold text-blue-900 relative z-10 transition">🏫 स्कूल वैकेंसी</button>
                 </div>
             </div>
-
-            <!-- PANE 1: ONLY TEACHERS -->
             <div id="teacher-content-pane">
                 <button onclick="openTeacherRegModal()" class="w-full bg-indigo-600 text-white p-3 rounded-xl font-bold shadow-md mb-4 text-xs">+ शिक्षक के रूप में खुद को रजिस्टर करें</button>
-                <div class="mb-3">
-                    <span class="text-xs font-bold text-gray-500 block mb-2 uppercase">विषय अनुसार शिक्षक:</span>
-                    <div id="teacher-categories" class="flex gap-2 overflow-x-auto qmart-hide-scroll pb-1"></div>
-                </div>
+                <div id="teacher-categories" class="flex gap-2 overflow-x-auto qmart-hide-scroll pb-2 mb-3"></div>
                 <div id="teachers-list" class="space-y-3.5"></div>
             </div>
-
-            <!-- PANE 2: ONLY SCHOOL VACANCIES -->
             <div id="school-content-pane" class="hidden">
                 <button onclick="openSchoolJobModal()" class="w-full bg-purple-600 text-white p-3 rounded-xl font-bold shadow-md mb-4 text-xs">+ नई स्कूल वैकेंसी पोस्ट करें</button>
                 <div id="school-vacancies-container" class="space-y-3.5"></div>
@@ -274,17 +250,16 @@
                 <button onclick="showPanel('grocery-view')" class="bg-white w-8 h-8 rounded-full flex items-center justify-center text-gray-600 shadow-xs"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="bg-white/90 p-3.5 rounded-2xl border border-blue-100 mb-4 shadow-sm">
-                <span class="text-xs font-bold text-blue-900 block mb-2"><i class="fa-solid fa-building-columns text-blue-600"></i> प्रशासनिक एवं सरकारी अधिकारी</span>
+                <span class="text-xs font-bold text-blue-900 block mb-2"><i class="fa-solid fa-building-columns text-blue-600"></i> प्रशासनिक अधिकारी</span>
                 <div id="officials-slider" class="flex gap-3 overflow-x-auto qmart-hide-scroll snap-x pb-1"></div>
             </div>
-            <span class="text-xs font-bold text-gray-700 block mb-1">वार्ड सदस्य सूची (Ward Members):</span>
             <select id="ward-filter-select" onchange="filterWardMembers(this.value)" class="w-full p-2.5 rounded-xl border border-blue-200 bg-white text-xs font-bold text-gray-800 outline-none mb-4 shadow-xs">
                 <option value="all">सभी वार्ड (All Wards)</option>
             </select>
             <div id="ward-members-list" class="space-y-3"></div>
         </div>
 
-        <!-- 7. BOOKS STORE (3. INDIVIDUAL CLASS CATEGORIES: CLASS 1, CLASS 2...) -->
+        <!-- 7. BOOKS STORE (WITH +- ON BOOKS) -->
         <div id="books-view" class="p-4 max-w-xl mx-auto hidden pb-24 bg-book-grad min-h-screen">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="uniform-title text-blue-700 mb-0"><i class="fa-solid fa-book-bookmark text-blue-600"></i> System Book</h2>
@@ -297,14 +272,14 @@
                     <button onclick="setMedium('English')" id="btnMedEnglish" class="flex-1 py-1.5 text-xs font-bold text-blue-900 relative z-10 transition">ENGLISH</button>
                 </div>
             </div>
-            
-            <!-- Dynamic Individual Class Filter Chips -->
             <div class="mb-3">
-                <span class="text-xs font-bold text-gray-500 block mb-1 uppercase">कक्षा चुनें (Class):</span>
                 <div id="book-class-categories" class="flex gap-2 overflow-x-auto pb-2 qmart-hide-scroll"></div>
             </div>
-
             <div id="prodList" class="grid grid-cols-2 gap-3.5 pb-10"></div>
+            <div id="book-checkout-bar" class="fixed bottom-[75px] left-4 right-4 bg-blue-700 text-white p-3.5 rounded-2xl shadow-xl z-40 hidden flex justify-between items-center cursor-pointer max-w-xl mx-auto" onclick="openUniversalCheckout('BOOK')">
+                <div><p class="text-sm font-extrabold"><span id="book-item-count">0</span> Books | ₹<span id="book-final-total">0</span></p><p class="text-[10px] opacity-90">View Cart</p></div>
+                <div class="font-bold text-sm flex items-center gap-2">Proceed <i class="fa-solid fa-arrow-right"></i></div>
+            </div>
         </div>
 
         <!-- 8. ORDERS -->
@@ -313,7 +288,7 @@
             <div id="orders-list" class="space-y-4 pb-20"></div>
         </div>
 
-        <!-- 9. PROFILE (SUB-PAGES) -->
+        <!-- 9. PROFILE -->
         <div id="profile-view" class="p-4 max-w-xl mx-auto hidden bg-prof-grad min-h-screen">
             <h1 class="uniform-title text-slate-800 mb-4"><i class="fa-solid fa-user"></i> My Profile</h1>
             <div id="profile-display-mode">
@@ -324,22 +299,18 @@
                     <div class="flex flex-col"><span class="text-gray-400">Address</span><span class="font-bold" id="display-address">N/A</span></div>
                 </div>
                 <button class="w-full bg-blue-50 text-blue-600 font-bold p-3 rounded-xl mb-3 text-xs shadow-xs" onclick="toggleProfileEditMode(true);">Edit Profile</button>
-                
                 <a href="https://wa.me/919999999999?text=Hello%20Soyfa%20Support" target="_blank" class="w-full bg-emerald-50 text-emerald-700 font-bold p-3 rounded-xl mb-3 flex items-center justify-between text-xs border border-emerald-200">
                     <span><i class="fa-brands fa-whatsapp text-lg"></i> 24x7 WhatsApp Help Desk</span>
                     <i class="fa-solid fa-chevron-right text-xs"></i>
                 </a>
-
                 <div class="bg-white rounded-2xl shadow-xs border border-slate-100 divide-y divide-slate-100 text-xs font-bold text-gray-700 mb-4">
                     <button class="w-full text-left p-3.5 flex justify-between items-center" onclick="showInfoPage('about-page')"><span>About Soyfa</span> <i class="fa-solid fa-chevron-right text-gray-300"></i></button>
                     <button class="w-full text-left p-3.5 flex justify-between items-center" onclick="showInfoPage('privacy-page')"><span>Privacy Policy</span> <i class="fa-solid fa-chevron-right text-gray-300"></i></button>
                     <button class="w-full text-left p-3.5 flex justify-between items-center" onclick="showInfoPage('terms-page')"><span>Terms & Conditions</span> <i class="fa-solid fa-chevron-right text-gray-300"></i></button>
                     <button class="w-full text-left p-3.5 flex justify-between items-center" onclick="showInfoPage('cancellation-page')"><span>Cancellation Policy</span> <i class="fa-solid fa-chevron-right text-gray-300"></i></button>
                 </div>
-
                 <button class="w-full bg-red-50 text-red-500 font-bold p-3 rounded-xl text-xs mb-8" onclick="customerLogout();">Logout Account</button>
             </div>
-
             <div id="profile-edit-form" class="bg-white p-4 rounded-xl border border-gray-100 hidden space-y-2 text-xs">
                 <input type="text" id="profile-name" placeholder="Name" class="w-full p-2.5 border rounded-lg">
                 <input type="text" id="profile-phone" placeholder="Phone" class="w-full p-2.5 border rounded-lg">
@@ -349,24 +320,11 @@
                 <button class="w-full bg-blue-600 text-white font-bold p-3 rounded-xl" onclick="updateProfile();">Save Profile</button>
                 <button class="w-full bg-gray-100 text-gray-600 font-bold p-2.5 rounded-xl" onclick="toggleProfileEditMode(false);">Cancel</button>
             </div>
-
             <div id="info-pages-container" class="hidden pb-20">
-                <div id="about-page" class="hidden bg-white p-5 rounded-2xl shadow-xs mb-3 text-xs leading-relaxed">
-                    <h3 class="font-extrabold text-blue-600 text-sm mb-2">About Soyfa</h3>
-                    <p class="text-gray-600">Soyfa Super App लाडनूं का सर्वोत्कृष्ट डिजिटल प्लेटफ़ॉर्म है जहाँ आप Q-Mart ग्रोसरी, ताज़ा सब्जियां, फ़ूड, पशु मंडी, शिक्षक, स्कूल वैकेंसी, लोकल सेवाएँ और प्रशासनिक निर्देशिका का लाभ एक ही स्थान पर उठा सकते हैं।</p>
-                </div>
-                <div id="privacy-page" class="hidden bg-white p-5 rounded-2xl shadow-xs mb-3 text-xs leading-relaxed">
-                    <h3 class="font-extrabold text-blue-600 text-sm mb-2">Privacy Policy</h3>
-                    <p class="text-gray-600">हम आपकी व्यक्तिगत जानकारी की सुरक्षा के प्रति पूरी तरह प्रतिबद्ध हैं। आपका विवरण सुरक्षित रखा जाता है।</p>
-                </div>
-                <div id="terms-page" class="hidden bg-white p-5 rounded-2xl shadow-xs mb-3 text-xs leading-relaxed">
-                    <h3 class="font-extrabold text-blue-600 text-sm mb-2">Terms & Conditions</h3>
-                    <p class="text-gray-600">Soyfa ऐप का उपयोग करते हुए आप उचित उपयोग व नियमों से सहमत होते हैं।</p>
-                </div>
-                <div id="cancellation-page" class="hidden bg-white p-5 rounded-2xl shadow-xs mb-3 text-xs leading-relaxed">
-                    <h3 class="font-extrabold text-blue-600 text-sm mb-2">Cancellation Policy</h3>
-                    <p class="text-gray-600">ऑर्डर तैयार या डिस्पैच होने से पहले सीधे कैंसिल किया जा सकता है।</p>
-                </div>
+                <div id="about-page" class="hidden bg-white p-5 rounded-2xl shadow-xs mb-3 text-xs leading-relaxed"><h3 class="font-extrabold text-blue-600 text-sm mb-2">About Soyfa</h3><p class="text-gray-600">Soyfa Super App लाडनूं का सर्वोत्कृष्ट डिजिटल प्लेटफ़ॉर्म है।</p></div>
+                <div id="privacy-page" class="hidden bg-white p-5 rounded-2xl shadow-xs mb-3 text-xs leading-relaxed"><h3 class="font-extrabold text-blue-600 text-sm mb-2">Privacy Policy</h3><p class="text-gray-600">आपकी गोपनीयता व जानकारी पूरी तरह सुरक्षित है।</p></div>
+                <div id="terms-page" class="hidden bg-white p-5 rounded-2xl shadow-xs mb-3 text-xs leading-relaxed"><h3 class="font-extrabold text-blue-600 text-sm mb-2">Terms & Conditions</h3><p class="text-gray-600">Soyfa ऐप का उपयोग निष्पक्ष और सुरक्षित नियमों के तहत करें।</p></div>
+                <div id="cancellation-page" class="hidden bg-white p-5 rounded-2xl shadow-xs mb-3 text-xs leading-relaxed"><h3 class="font-extrabold text-blue-600 text-sm mb-2">Cancellation Policy</h3><p class="text-gray-600">ऑर्डर डिस्पैच होने से पहले आसानी से रद्द किए जा सकते हैं।</p></div>
                 <button class="w-full bg-gray-100 text-gray-700 font-bold p-3 rounded-xl text-xs" onclick="hideInfoPages();">← Back to Profile</button>
             </div>
         </div>
@@ -381,12 +339,14 @@
         </nav>
     </div>
 
-    <!-- MODALS -->
-    <!-- Checkout Modal -->
+    <!-- 3. UNIVERSAL CHECKOUT MODAL (WITH +- IN CART SCREEN & PAYMENT MODES) -->
     <div id="universalCheckoutModal" class="universal-modal fixed inset-0 bg-black/60 hidden flex items-end justify-center sm:items-center p-4">
         <div class="bg-white w-full max-w-md p-5 rounded-3xl shadow-2xl max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-3 border-b pb-2"><h3 class="font-bold text-lg" id="chk-title">Checkout</h3><button onclick="closeModals()" class="text-gray-400 font-bold text-xl">&times;</button></div>
-            <div id="chk-items-list" class="max-h-32 overflow-y-auto mb-2 text-xs space-y-1"></div>
+            
+            <!-- +- CART ITEMS LIST -->
+            <div id="chk-items-list" class="max-h-40 overflow-y-auto mb-2 text-xs space-y-2"></div>
+            
             <div class="bg-emerald-50 p-2.5 rounded-xl mb-3 border border-emerald-200">
                 <div class="flex gap-2">
                     <input type="text" id="coupon-input" placeholder="Coupon: SOYFA50 or WELCOME10" class="uppercase font-bold text-xs bg-white border p-1.5 rounded-lg flex-grow outline-none">
@@ -403,10 +363,17 @@
             <input type="text" id="chk-name" placeholder="Name" class="w-full p-2 mb-2 border rounded-lg text-xs outline-none">
             <input type="number" id="chk-phone" placeholder="Phone" class="w-full p-2 mb-2 border rounded-lg text-xs outline-none">
             <textarea id="chk-address" placeholder="Delivery Address" class="w-full p-2 border rounded-lg text-xs h-14 mb-2 outline-none resize-none"></textarea>
-            <input type="text" id="chk-notes" placeholder="Delivery note (e.g. Gate pe rakh dena)" class="w-full p-2 border rounded-lg text-xs mb-3 bg-amber-50 outline-none">
-            <div class="grid grid-cols-2 gap-2 mb-4">
-                <label class="border-2 p-2 rounded-xl text-center text-xs font-bold cursor-pointer has-[:checked]:border-blue-600 has-[:checked]:bg-blue-50"><input type="radio" name="payMethod" value="COD" checked class="hidden"> Cash on Delivery</label>
-                <label class="border-2 p-2 rounded-xl text-center text-xs font-bold cursor-pointer has-[:checked]:border-blue-600 has-[:checked]:bg-blue-50"><input type="radio" name="payMethod" value="ONLINE" class="hidden"> Pay Online (UPI)</label>
+            <input type="text" id="chk-notes" placeholder="Delivery note (e.g. Gate pe de dena)" class="w-full p-2 border rounded-lg text-xs mb-3 bg-amber-50 outline-none">
+            
+            <!-- 1. DYNAMIC PAYMENT METHODS (COD / ONLINE / BOTH) -->
+            <p class="text-xs font-bold text-gray-600 mb-1.5">Payment Method:</p>
+            <div class="grid grid-cols-2 gap-2 mb-4" id="chk-payment-options">
+                <label id="opt-cod" class="border-2 p-2 rounded-xl text-center text-xs font-bold cursor-pointer has-[:checked]:border-blue-600 has-[:checked]:bg-blue-50">
+                    <input type="radio" name="payMethod" value="COD" checked class="hidden"> Cash on Delivery
+                </label>
+                <label id="opt-online" class="border-2 p-2 rounded-xl text-center text-xs font-bold cursor-pointer has-[:checked]:border-blue-600 has-[:checked]:bg-blue-50">
+                    <input type="radio" name="payMethod" value="ONLINE" class="hidden"> Pay Online (UPI)
+                </label>
             </div>
             <button onclick="processCheckout()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold text-sm shadow">CONFIRM ORDER</button>
         </div>
@@ -421,33 +388,27 @@
         </div>
     </div>
 
-    <!-- 4. ANIMAL POST MODAL (TYPED CATEGORY IN HINDI) -->
+    <!-- Modals for Animals, Teachers, Schools, Services -->
     <div id="addAnimalModal" class="universal-modal fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-sm p-5 rounded-2xl max-h-[85vh] overflow-y-auto text-xs space-y-2">
             <div class="flex justify-between items-center mb-1"><h3 class="font-bold text-sm text-amber-900" id="animalModalTitle">पशु बिक्री हेतु जोड़ें</h3><button onclick="closeModals()" class="text-lg font-bold">&times;</button></div>
-            <input type="hidden" id="animalEditKey">
-            
-            <label class="block text-gray-600 font-bold">पशु की श्रेणी (Type Category):</label>
-            <input type="text" id="anType" placeholder="श्रेणी लिखें (उदा. गाय, भैंस, बकरा, बकरी, घोड़ा...)" class="w-full p-2 border rounded-lg bg-amber-50/50 outline-none font-bold text-amber-900">
-            
-            <input type="text" id="anTitle" placeholder="शीर्षक/नस्ल (उदा. साहीवाल गाय, देसी बकरा)" class="w-full p-2 border rounded-lg outline-none">
+            <input type="text" id="anType" placeholder="श्रेणी (गाय, भैंस, बकरा, घोड़ा...)" class="w-full p-2 border rounded-lg bg-amber-50/50 outline-none font-bold text-amber-900">
+            <input type="text" id="anTitle" placeholder="शीर्षक/नस्ल (उदा. साहीवाल गाय)" class="w-full p-2 border rounded-lg outline-none">
             <input type="number" id="anPrice" placeholder="कीमत (₹)" class="w-full p-2 border rounded-lg outline-none">
             <input type="text" id="anDetails" placeholder="दूध क्षमता / उम्र / अन्य विवरण..." class="w-full p-2 border rounded-lg outline-none">
             <input type="text" id="anSeller" placeholder="आपका नाम व लाडनूं पता/वार्ड" class="w-full p-2 border rounded-lg outline-none">
             <input type="number" id="anPhone" placeholder="Calling Phone Number" class="w-full p-2 border rounded-lg outline-none">
             <input type="number" id="anWa" placeholder="WhatsApp Number" class="w-full p-2 border rounded-lg outline-none">
-            <label class="block text-gray-500 font-bold">पशु की फ़ोटो</label>
             <input type="file" id="anImg" accept="image/*" class="w-full border p-1 rounded-lg">
             <button onclick="saveAnimalListing()" class="w-full bg-amber-600 text-white p-2.5 rounded-xl font-bold mt-2">पशु विज्ञापन पोस्ट करें</button>
         </div>
     </div>
 
-    <!-- Teacher Modal -->
     <div id="teacherRegModal" class="universal-modal fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-sm p-5 rounded-2xl max-h-[85vh] overflow-y-auto text-xs space-y-2">
             <div class="flex justify-between items-center mb-1"><h3 class="font-bold text-sm text-indigo-900">शिक्षक प्रोफाइल जोड़ें</h3><button onclick="closeModals()" class="text-lg font-bold">&times;</button></div>
             <input type="text" id="tName" placeholder="शिक्षक का नाम" class="w-full p-2 border rounded-lg outline-none">
-            <input type="text" id="tSubject" placeholder="विषय टाइप करें (उदा. Maths, Science, English...)" class="w-full p-2 border rounded-lg bg-indigo-50/50 outline-none font-bold text-indigo-900">
+            <input type="text" id="tSubject" placeholder="विषय टाइप करें (उदा. Maths, Science...)" class="w-full p-2 border rounded-lg bg-indigo-50/50 outline-none font-bold text-indigo-900">
             <input type="text" id="tExp" placeholder="अनुभव (उदा. 4 Years Exp)" class="w-full p-2 border rounded-lg outline-none">
             <textarea id="tDesc" placeholder="योग्यता एवं अन्य विवरण..." class="w-full p-2 border rounded-lg h-14 outline-none resize-none"></textarea>
             <input type="number" id="tPhone" placeholder="Calling Phone" class="w-full p-2 border rounded-lg outline-none">
@@ -461,13 +422,12 @@
         </div>
     </div>
 
-    <!-- School Job Modal -->
     <div id="schoolJobModal" class="universal-modal fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-sm p-5 rounded-2xl max-h-[80vh] overflow-y-auto text-xs space-y-2">
             <div class="flex justify-between items-center"><h3 class="font-bold text-sm text-purple-900">स्कूल वैकेंसी पोस्ट करें</h3><button onclick="closeModals()" class="text-lg font-bold">&times;</button></div>
             <input type="text" id="schName" placeholder="स्कूल/कोचिंग का नाम" class="w-full p-2 border rounded-lg outline-none">
             <input type="text" id="schSubject" placeholder="आवश्यक विषय (उदा. Maths 10th)" class="w-full p-2 border rounded-lg outline-none">
-            <input type="text" id="schSalary" placeholder="सैलरी / मानदेय (उदा. 15,000)" class="w-full p-2 border rounded-lg outline-none">
+            <input type="text" id="schSalary" placeholder="सैलरी / मानदेय" class="w-full p-2 border rounded-lg outline-none">
             <input type="number" id="schPhone" placeholder="फोन नंबर" class="w-full p-2 border rounded-lg outline-none">
             <input type="number" id="schWa" placeholder="WhatsApp नंबर" class="w-full p-2 border rounded-lg outline-none">
             <textarea id="schDetails" placeholder="विवरण व शर्तें..." class="w-full p-2 border rounded-lg h-14 outline-none resize-none"></textarea>
@@ -475,12 +435,11 @@
         </div>
     </div>
 
-    <!-- Register Service Modal -->
     <div id="addServiceModal" class="universal-modal fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-sm p-5 rounded-2xl max-h-[80vh] overflow-y-auto text-xs space-y-2">
             <div class="flex justify-between items-center"><h3 class="font-bold text-sm">Register Service</h3><button onclick="closeModals()" class="text-lg font-bold">&times;</button></div>
             <input type="text" id="srvRegName" placeholder="Name / Business Name" class="w-full p-2 border rounded-lg">
-            <input type="text" id="srvRegCat" placeholder="Category (Plumber, Electrician...)" class="w-full p-2 border rounded-lg">
+            <input type="text" id="srvRegCat" placeholder="Category" class="w-full p-2 border rounded-lg">
             <textarea id="srvRegDesc" placeholder="Description..." class="w-full p-2 border rounded-lg h-14"></textarea>
             <input type="number" id="srvRegPhone" placeholder="Phone" class="w-full p-2 border rounded-lg">
             <input type="number" id="srvRegWa" placeholder="WhatsApp" class="w-full p-2 border rounded-lg">
@@ -495,17 +454,17 @@
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth(), db = firebase.database();
 
-        let customerProfile = {}, groceryCart = {}, foodCart = [];
+        let customerProfile = {};
+        // 3. CART SYSTEM (+ / - ON ALL ITEMS)
+        let groceryCart = {}, foodCart = {}, booksCart = {};
         const RAZORPAY_KEY = "rzp_live_Ry7zglI0OnE1Jo";
         let currentOrderType = 'GROCERY';
-        let allRestaurantsData = {}, allMartData = [], allMartVegetables = [], allMartBanners = [], allBookCats = [], allBooks = [];
-        let allSrvCats = [], allSrvProvs = [], currentSrvCat = 'all';
-        let currentBookMed = 'Hindi', currentBookClass = 'all', selectedBook = null;
+        let allRestaurantsData = {}, allMartData = [], allMartVegetables = [], allMartBanners = [], allBooks = [];
+        let allSrvProvs = [], currentSrvCat = 'all';
+        let currentBookMed = 'Hindi', currentBookClass = 'all';
         let appliedCouponCode = '', appliedDiscountAmount = 0;
         let allTeachers = {}, currentTeacherSub = 'all', allSchoolVacancies = {}, allOfficials = {}, allWardMembers = {}, currentWardFilter = 'all';
         let allAnimals = {}, currentAnimalFilter = 'all';
-        
-        // 2. SHURU ME NON-VEG DEFAULT (AS REQUESTED)
         let currentFoodVegFilter = 'nonveg'; 
         let currentMartMode = 'grocery';
 
@@ -533,7 +492,6 @@
             r.start();
         }
 
-        // FOOD BANNER SLIDER
         function startFoodAutoSlide() { 
             let cur = 0; 
             setInterval(() => { 
@@ -543,7 +501,6 @@
             }, 4500); 
         }
 
-        // 1. MART AUTO SLIDER (SABZI & BANNERS)
         function startMartAutoSlide() {
             let slideIdx = 0;
             setInterval(() => {
@@ -629,6 +586,22 @@
             document.getElementById('profile-display-mode').classList.remove('hidden');
         }
 
+        // 2. AUTO ADJUST FLOATING BUTTONS WHEN BOTTOM BAR / MODAL APPEARS
+        function adjustFloatingNav() {
+            const fs = document.getElementById('floating-actions-stack');
+            const hasGrocBar = !document.getElementById('groc-checkout-bar').classList.contains('hidden');
+            const hasFoodBar = !document.getElementById('food-checkout-bar').classList.contains('hidden');
+            const hasBookBar = !document.getElementById('book-checkout-bar').classList.contains('hidden');
+            
+            if (fs) {
+                if (hasGrocBar || hasFoodBar || hasBookBar) {
+                    fs.classList.add('shift-up');
+                } else {
+                    fs.classList.remove('shift-up');
+                }
+            }
+        }
+
         function showPanel(id) {
             closeModals();
             document.querySelectorAll('#grocery-view, #home-view, #menu-view, #services-view, #animals-view, #teachers-view, #ladnun-directory-view, #books-view, #orders-view, #profile-view').forEach(el => el.classList.add('hidden'));
@@ -638,14 +611,18 @@
 
             const fs = document.getElementById('floating-actions-stack');
             if(fs) fs.style.display = 'flex';
+            adjustFloatingNav();
 
             if(id === 'orders-view') loadOrders();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function closeModals() { document.querySelectorAll('.universal-modal').forEach(m => m.classList.add('hidden')); }
+        function closeModals() { 
+            document.querySelectorAll('.universal-modal').forEach(m => m.classList.add('hidden')); 
+            adjustFloatingNav();
+        }
 
-        // --- 1. Q-MART TOP MODE SWITCHER & VEGETABLES ---
+        // --- 1. Q-MART & VEGETABLES ---
         function setMartMode(mode) {
             currentMartMode = mode;
             const bg = document.getElementById('sliderBgMart');
@@ -691,39 +668,61 @@
             if(!container) return;
             const vegList = Object.values(vegData);
             const defaultVeg = [
-                { id: 'v1', name: 'देसी टमाटर', price: 30, weight: '1 kg', img: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=300' },
-                { id: 'v2', name: 'हरी मिर्च', price: 20, weight: '250g', img: 'https://images.unsplash.com/photo-1588252303782-cb80119abd6d?w=300' },
-                { id: 'v3', name: 'नया आलू', price: 25, weight: '1 kg', img: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=300' },
-                { id: 'v4', name: 'प्याज', price: 35, weight: '1 kg', img: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=300' }
+                { id: 'v1', name: 'देसी टमाटर', price: 30, weight: '1 kg', img: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=300', payMode: 'BOTH' },
+                { id: 'v2', name: 'हरी मिर्च', price: 20, weight: '250g', img: 'https://images.unsplash.com/photo-1588252303782-cb80119abd6d?w=300', payMode: 'BOTH' },
+                { id: 'v3', name: 'नया आलू', price: 25, weight: '1 kg', img: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=300', payMode: 'BOTH' },
+                { id: 'v4', name: 'प्याज', price: 35, weight: '1 kg', img: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=300', payMode: 'BOTH' }
             ];
             const finalVeg = vegList.length ? vegList : defaultVeg;
 
-            // Auto-Slider Cards
-            container.innerHTML = finalVeg.map(v => `
-                <div class="min-w-[130px] snap-center bg-white p-2.5 rounded-2xl border border-emerald-100 shadow-2xs flex flex-col justify-between">
+            container.innerHTML = finalVeg.map(v => {
+                const qty = groceryCart[v.id] ? groceryCart[v.id].qty : 0;
+                const btnOrBadge = qty > 0 ? `
+                    <div class="qty-badge">
+                        <button onclick="changeCartQty('GROCERY', '${v.id}', -1)">-</button>
+                        <span>${qty}</span>
+                        <button onclick="changeCartQty('GROCERY', '${v.id}', 1)">+</button>
+                    </div>
+                ` : `
+                    <button onclick="addCartItem('GROCERY', '${v.id}', '${v.name.replace(/'/g,"\\'")}', ${v.price}, 0, '${v.payMode||'BOTH'}')" class="bg-emerald-600 text-white font-extrabold text-[10px] px-2.5 py-1 rounded-lg active:scale-95 transition">+ ADD</button>
+                `;
+
+                return `
+                <div class="min-w-[135px] snap-center bg-white p-2.5 rounded-2xl border border-emerald-100 shadow-2xs flex flex-col justify-between">
                     <img src="${v.img}" class="h-20 w-full object-contain mb-1 rounded-xl">
                     <h5 class="font-extrabold text-xs text-gray-800 truncate">${v.name}</h5>
                     <span class="text-[10px] text-gray-400 font-bold">${v.weight || '1 kg'}</span>
                     <div class="flex justify-between items-center mt-2">
                         <span class="font-black text-xs text-emerald-800">₹${v.price}</span>
-                        <button onclick="addGroceryCart('${v.id}','${v.name}',${v.price},0)" class="bg-emerald-600 text-white font-extrabold text-[10px] px-2 py-1 rounded-lg active:scale-95 transition">+ ADD</button>
+                        ${btnOrBadge}
                     </div>
-                </div>
-            `).join('');
+                </div>`;
+            }).join('');
 
-            // Full Grid in Sabzi Mode
             if(fullGrid) {
-                fullGrid.innerHTML = finalVeg.map(v => `
+                fullGrid.innerHTML = finalVeg.map(v => {
+                    const qty = groceryCart[v.id] ? groceryCart[v.id].qty : 0;
+                    const btnOrBadge = qty > 0 ? `
+                        <div class="qty-badge">
+                            <button onclick="changeCartQty('GROCERY', '${v.id}', -1)">-</button>
+                            <span>${qty}</span>
+                            <button onclick="changeCartQty('GROCERY', '${v.id}', 1)">+</button>
+                        </div>
+                    ` : `
+                        <button onclick="addCartItem('GROCERY', '${v.id}', '${v.name.replace(/'/g,"\\'")}', ${v.price}, 0, '${v.payMode||'BOTH'}')" class="bg-emerald-600 text-white font-bold text-xs px-3 py-1.5 rounded-xl active:scale-95 transition">+ ADD</button>
+                    `;
+
+                    return `
                     <div class="bg-white p-3 rounded-2xl border border-emerald-100 shadow-xs flex flex-col justify-between">
                         <img src="${v.img}" class="h-28 w-full object-contain mb-2 rounded-xl">
                         <h4 class="font-extrabold text-xs text-gray-900">${v.name}</h4>
                         <span class="text-[11px] text-gray-400 font-bold mb-2">${v.weight || '1 kg'}</span>
                         <div class="flex justify-between items-center">
                             <span class="font-black text-sm text-emerald-800">₹${v.price}</span>
-                            <button onclick="addGroceryCart('${v.id}','${v.name}',${v.price},0)" class="bg-emerald-600 text-white font-bold text-xs px-3 py-1.5 rounded-xl active:scale-95 transition">+ ADD</button>
+                            ${btnOrBadge}
                         </div>
-                    </div>
-                `).join('');
+                    </div>`;
+                }).join('');
             }
         }
 
@@ -734,25 +733,103 @@
                 const list = allMartData.filter(p => p.cat === cat && p.name.toLowerCase().includes(q));
                 if(!list.length) return '';
                 return `<div><h2 class="text-sm font-extrabold mb-2 text-gray-800">${cat}</h2><div class="grid grid-cols-2 gap-3">` +
-                list.map(p => `
+                list.map(p => {
+                    const qty = groceryCart[p.id] ? groceryCart[p.id].qty : 0;
+                    const btnOrBadge = qty > 0 ? `
+                        <div class="qty-badge">
+                            <button onclick="changeCartQty('GROCERY', '${p.id}', -1)">-</button>
+                            <span>${qty}</span>
+                            <button onclick="changeCartQty('GROCERY', '${p.id}', 1)">+</button>
+                        </div>
+                    ` : `
+                        <button onclick="addCartItem('GROCERY', '${p.id}', '${p.name.replace(/'/g,"\\'")}', ${p.price}, ${p.deliveryCharge||0}, '${p.payMode||'BOTH'}')" class="bg-emerald-50 text-emerald-700 border border-emerald-600 font-extrabold px-3 py-1 rounded-xl text-xs active:scale-95 transition">+ ADD</button>
+                    `;
+
+                    return `
                     <div class="bg-white border border-emerald-50 rounded-2xl p-3 shadow-xs flex flex-col justify-between">
                         <img src="${p.img}" class="h-24 w-full object-contain mb-1">
                         <div><h4 class="font-bold text-xs line-clamp-2 text-gray-800">${p.name}</h4><p class="text-[10px] text-gray-400 mb-2">${p.weight||''}</p></div>
-                        <div class="flex justify-between items-center"><span class="font-black text-sm text-gray-900">₹${p.price}</span><button onclick="addGroceryCart('${p.id}','${p.name}',${p.price},${p.deliveryCharge||0})" class="bg-emerald-50 text-emerald-700 border border-emerald-600 font-extrabold px-3 py-1 rounded-xl text-xs active:scale-95 transition">+ ADD</button></div>
-                    </div>
-                `).join('') + `</div></div>`;
+                        <div class="flex justify-between items-center"><span class="font-black text-sm text-gray-900">₹${p.price}</span>${btnOrBadge}</div>
+                    </div>`;
+                }).join('') + `</div></div>`;
             }).join('') || '<p class="text-center text-gray-400 py-6 text-xs">No items found.</p>';
         }
-        function addGroceryCart(id, name, price, del) { if(groceryCart[id]) groceryCart[id].qty++; else groceryCart[id] = { id, name, price, del, qty: 1 }; updateGroceryUI(); }
+
+        // --- 3. UNIFIED CART SYSTEM WITH + / - FOR MART, FOOD, BOOKS ---
+        function addCartItem(type, id, name, price, del, payMode) {
+            if (type === 'GROCERY') {
+                if (!groceryCart[id]) groceryCart[id] = { id, name, price, del, payMode: payMode||'BOTH', qty: 1 };
+                else groceryCart[id].qty++;
+                updateGroceryUI();
+                filterMart(document.getElementById('mart-search')?.value || '');
+                renderVegetablesSlider(allMartVegetables);
+            } else if (type === 'FOOD') {
+                if (!foodCart[id]) foodCart[id] = { id, name, price, del, payMode: payMode||'BOTH', qty: 1 };
+                else foodCart[id].qty++;
+                updateFoodUI();
+                renderFoodMenuItems();
+            } else if (type === 'BOOK') {
+                if (!booksCart[id]) booksCart[id] = { id, name, price, del, payMode: payMode||'BOTH', qty: 1 };
+                else booksCart[id].qty++;
+                updateBooksUI();
+                filterBooks();
+            }
+        }
+
+        function changeCartQty(type, id, delta) {
+            if (type === 'GROCERY' && groceryCart[id]) {
+                groceryCart[id].qty += delta;
+                if (groceryCart[id].qty <= 0) delete groceryCart[id];
+                updateGroceryUI();
+                filterMart(document.getElementById('mart-search')?.value || '');
+                renderVegetablesSlider(allMartVegetables);
+            } else if (type === 'FOOD' && foodCart[id]) {
+                foodCart[id].qty += delta;
+                if (foodCart[id].qty <= 0) delete foodCart[id];
+                updateFoodUI();
+                renderFoodMenuItems();
+            } else if (type === 'BOOK' && booksCart[id]) {
+                booksCart[id].qty += delta;
+                if (booksCart[id].qty <= 0) delete booksCart[id];
+                updateBooksUI();
+                filterBooks();
+            }
+            if (!document.getElementById('universalCheckoutModal').classList.contains('hidden')) {
+                renderCheckoutCartItems();
+            }
+        }
+
         function updateGroceryUI() {
             let total = 0, count = 0, del = 0;
-            for(let k in groceryCart) { total += groceryCart[k].price * groceryCart[k].qty; count += groceryCart[k].qty; del += (groceryCart[k].del * groceryCart[k].qty); }
+            for (let k in groceryCart) { total += groceryCart[k].price * groceryCart[k].qty; count += groceryCart[k].qty; del += (groceryCart[k].del * groceryCart[k].qty); }
             document.getElementById('groc-item-count').textContent = count;
             document.getElementById('groc-final-total').textContent = total ? total + del : 0;
             document.getElementById('groc-checkout-bar').classList.toggle('hidden', count === 0);
+            adjustFloatingNav();
         }
 
-        // --- 2. FOOD DELIVERY (2 BUTTONS: NON-VEG DEFAULT) ---
+        function updateFoodUI() {
+            let total = 0, count = 0, del = 0;
+            for (let k in foodCart) { total += foodCart[k].price * foodCart[k].qty; count += foodCart[k].qty; del = foodCart[k].del; }
+            document.getElementById('food-cart-total-display').textContent = total ? total + del : 0;
+            document.getElementById('food-checkout-bar').classList.toggle('hidden', count === 0);
+            adjustFloatingNav();
+        }
+
+        function updateBooksUI() {
+            let total = 0, count = 0, del = 0;
+            for (let k in booksCart) { total += booksCart[k].price * booksCart[k].qty; count += booksCart[k].qty; del += (booksCart[k].del * booksCart[k].qty); }
+            const elCount = document.getElementById('book-item-count');
+            const elTotal = document.getElementById('book-final-total');
+            const elBar = document.getElementById('book-checkout-bar');
+            if (elCount) elCount.textContent = count;
+            if (elTotal) elTotal.textContent = total ? total + del : 0;
+            if (elBar) elBar.classList.toggle('hidden', count === 0);
+            adjustFloatingNav();
+        }
+
+        // --- FOOD DELIVERY ---
+        let activeRestaurantMenuId = null;
         function setFoodVegFilter(mode) {
             currentFoodVegFilter = mode;
             const bg = document.getElementById('sliderBgFood');
@@ -781,7 +858,7 @@
                 if(r.approved && matchesVeg && (r.name.toLowerCase().includes(q) || (r.cuisine||'').toLowerCase().includes(q))) {
                     const tagBadge = r.foodType === 'nonveg' ? '<span class="text-red-600 font-bold text-[10px] bg-red-50 px-1.5 py-0.5 rounded">🔴 Non-Veg</span>' : '<span class="text-emerald-700 font-bold text-[10px] bg-emerald-50 px-1.5 py-0.5 rounded">🟢 Pure Veg</span>';
                     el.innerHTML += `
-                        <div class="bg-white rounded-2xl overflow-hidden shadow-xs border border-red-50 cursor-pointer active:scale-98 transition" onclick="viewMenu('${id}','${r.name}','${r.cuisine}','${r.imageUrl}');">
+                        <div class="bg-white rounded-2xl overflow-hidden shadow-xs border border-red-50 cursor-pointer active:scale-98 transition" onclick="viewMenu('${id}','${r.name.replace(/'/g,"\\'")}','${(r.cuisine||'').replace(/'/g,"\\'")}','${r.imageUrl}','${r.payMode||'BOTH'}');">
                             <div class="relative"><img src="${r.imageUrl}" class="w-full h-36 object-cover"><span class="absolute top-2 right-2 bg-white/90 text-gray-900 font-black text-[11px] px-2 py-0.5 rounded-lg shadow-xs">⭐ ${r.avgRating||'4.2'}</span></div>
                             <div class="p-3 flex justify-between items-center">
                                 <div><h3 class="font-extrabold text-sm text-gray-900">${r.name}</h3><p class="text-xs text-gray-500">${r.cuisine||''}</p></div>
@@ -795,32 +872,43 @@
                 el.innerHTML = `<p class="text-center text-gray-400 py-8 text-xs">कोई रेस्टोरेंट उपलब्ध नहीं है (${currentFoodVegFilter.toUpperCase()})</p>`;
             }
         }
-        function viewMenu(id, name, cuisine, img) {
+
+        let currentActiveRestPayMode = 'BOTH';
+        function viewMenu(id, name, cuisine, img, payMode) {
+            activeRestaurantMenuId = id;
+            currentActiveRestPayMode = payMode || 'BOTH';
             document.getElementById('menu-restaurant-name').textContent = name;
             document.getElementById('menu-restaurant-cuisine').textContent = cuisine;
             document.getElementById('menu-restaurant-image').src = img;
-            const l = document.getElementById('menu-items-list'); l.innerHTML = 'Loading dishes...';
-            db.ref(`menus/${id}`).once('value', s => {
+            renderFoodMenuItems();
+            showPanel('menu-view');
+        }
+
+        function renderFoodMenuItems() {
+            if (!activeRestaurantMenuId) return;
+            const l = document.getElementById('menu-items-list');
+            l.innerHTML = 'Loading dishes...';
+            db.ref(`menus/${activeRestaurantMenuId}`).once('value', s => {
                 const m = s.val() || {}; l.innerHTML = '';
                 Object.keys(m).forEach(k => {
                     const isVeg = (m[k].foodType === 'veg');
-                    l.innerHTML += `<div class="flex justify-between items-center bg-white p-3 rounded-2xl border border-red-50 shadow-xs"><div><h4 class="font-bold text-xs text-gray-800">${isVeg ? '🟢' : '🔴'} ${m[k].name}</h4><span class="text-red-500 font-black text-xs">₹${m[k].price}</span></div><button onclick="addFoodCart({id:'${k}',name:'${m[k].name}',price:${m[k].price},restaurantId:'${id}',del:${m[k].deliveryCharge||50}})" class="bg-red-500 text-white font-bold text-xs px-3 py-1.5 rounded-xl shadow-xs active:scale-95 transition">+ ADD</button></div>`;
+                    const qty = foodCart[k] ? foodCart[k].qty : 0;
+                    const btnOrBadge = qty > 0 ? `
+                        <div class="qty-badge bg-red-600">
+                            <button onclick="changeCartQty('FOOD', '${k}', -1)">-</button>
+                            <span>${qty}</span>
+                            <button onclick="changeCartQty('FOOD', '${k}', 1)">+</button>
+                        </div>
+                    ` : `
+                        <button onclick="addCartItem('FOOD', '${k}', '${m[k].name.replace(/'/g,"\\'")}', ${m[k].price}, ${m[k].deliveryCharge||50}, '${m[k].payMode||currentActiveRestPayMode}')" class="bg-red-500 text-white font-bold text-xs px-3.5 py-1.5 rounded-xl shadow-xs active:scale-95 transition">+ ADD</button>
+                    `;
+
+                    l.innerHTML += `<div class="flex justify-between items-center bg-white p-3 rounded-2xl border border-red-50 shadow-xs"><div><h4 class="font-bold text-xs text-gray-800">${isVeg ? '🟢' : '🔴'} ${m[k].name}</h4><span class="text-red-500 font-black text-xs">₹${m[k].price}</span></div>${btnOrBadge}</div>`;
                 });
             });
-            showPanel('menu-view');
-        }
-        function addFoodCart(i) {
-            if(foodCart.length && foodCart[0].restaurantId !== i.restaurantId) { if(!confirm("Clear food cart?")) return; foodCart = []; }
-            const ex = foodCart.find(x => x.id === i.id); if(ex) ex.quantity++; else foodCart.push({...i, quantity: 1});
-            updateFoodUI();
-        }
-        function updateFoodUI() {
-            let total = 0, del = 0; foodCart.forEach(x => { total += x.price * x.quantity; del = x.del; });
-            document.getElementById('food-cart-total-display').textContent = total ? total + del : 0;
-            document.getElementById('food-checkout-bar').classList.toggle('hidden', !foodCart.length);
         }
 
-        // --- 3. SERVICES ---
+        // --- SERVICES ---
         function renderServiceCategoryChips() {
             const servCats = [
                 { id: 'all', name: 'Home / All', icon: 'fa-solid fa-house' },
@@ -864,7 +952,7 @@
             });
         }
 
-        // --- 4. ANIMAL MARKET (पशु मंडी) DYNAMIC TYPED CATEGORIES IN HINDI ---
+        // --- ANIMAL MARKET ---
         function loadAnimals() {
             db.ref('animals').on('value', s => {
                 allAnimals = s.val() || {};
@@ -872,29 +960,25 @@
                 filterAnimals(currentAnimalFilter);
             });
         }
-
         function renderAnimalDynamicCategories() {
             const box = document.getElementById('animal-categories'); if(!box) return;
             const uniqueCats = ['all', ...new Set(Object.values(allAnimals).map(a => a.type).filter(Boolean))];
-            
             box.innerHTML = uniqueCats.map(c => `
                 <button onclick="filterAnimals('${c}')" class="px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap border transition ${currentAnimalFilter === c ? 'bg-amber-600 text-white border-amber-600 shadow-xs' : 'bg-white text-gray-700 border-amber-100'}">
                     ${c === 'all' ? 'सभी पशु' : c}
                 </button>
             `).join('');
         }
-
         function filterAnimals(cat) {
             currentAnimalFilter = cat;
             renderAnimalDynamicCategories();
             const list = document.getElementById('animals-list'); if(!list) return;
             list.innerHTML = '';
-            const keys = Object.keys(allAnimals);
-            const filteredKeys = keys.filter(k => cat === 'all' || allAnimals[k].type === cat);
+            const keys = Object.keys(allAnimals).filter(k => cat === 'all' || allAnimals[k].type === cat);
 
-            if(!filteredKeys.length) return list.innerHTML = '<p class="text-center text-gray-400 py-8 text-xs font-medium">इस श्रेणी में कोई पशु लिस्टेड नहीं है।</p>';
+            if(!keys.length) return list.innerHTML = '<p class="text-center text-gray-400 py-8 text-xs font-medium">इस श्रेणी में कोई पशु लिस्टेड नहीं है।</p>';
 
-            filteredKeys.forEach(k => {
+            keys.forEach(k => {
                 const an = allAnimals[k];
                 const isOwner = (auth.currentUser && an.uid === auth.currentUser.uid);
                 const ownerControls = isOwner ? `
@@ -908,10 +992,7 @@
                         <div class="flex gap-3">
                             <img src="${an.img || 'https://images.unsplash.com/photo-1546445317-29f4545e9d53?w=300'}" class="w-24 h-24 rounded-2xl object-cover border border-amber-200">
                             <div class="flex-1">
-                                <div class="flex justify-between items-start">
-                                    <h4 class="font-extrabold text-sm text-gray-900">${an.title}</h4>
-                                    <span class="text-xs font-black text-amber-700 bg-amber-50 px-2 py-0.5 rounded-lg">₹${an.price}</span>
-                                </div>
+                                <div class="flex justify-between items-start"><h4 class="font-extrabold text-sm text-gray-900">${an.title}</h4><span class="text-xs font-black text-amber-700 bg-amber-50 px-2 py-0.5 rounded-lg">₹${an.price}</span></div>
                                 <span class="text-[11px] font-bold text-amber-800 bg-amber-100/60 px-2 py-0.5 rounded inline-block mt-1">${an.type}</span>
                                 <p class="text-xs text-gray-600 mt-1 leading-snug">${an.details || ''}</p>
                                 <p class="text-[11px] text-gray-400 mt-1">विक्रेता: <b>${an.seller || 'किसान'}</b></p>
@@ -926,7 +1007,6 @@
                 `;
             });
         }
-
         function openAnimalPostModal() {
             document.getElementById('animalModalTitle').innerText = "पशु बिक्री हेतु जोड़ें";
             document.getElementById('animalEditKey').value = '';
@@ -939,13 +1019,11 @@
             document.getElementById('anWa').value = customerProfile.phone || '';
             document.getElementById('addAnimalModal').classList.remove('hidden');
         }
-
         function deleteAnimalPost(k) {
             if(confirm("क्या आपका पशु बिक गया है या आप इसे हटाना चाहते हैं?")) {
                 db.ref(`animals/${k}`).remove().then(() => alert("पशु विज्ञापन हटा दिया गया!"));
             }
         }
-
         function saveAnimalListing() {
             const type = document.getElementById('anType').value.trim();
             const title = document.getElementById('anTitle').value.trim();
@@ -954,27 +1032,21 @@
             const seller = document.getElementById('anSeller').value.trim();
             const phone = document.getElementById('anPhone').value.trim();
             const wa = document.getElementById('anWa').value.trim();
-
             if(!type || !title || !price || !phone) return alert("कृपया पशु की श्रेणी, नस्ल, कीमत और फोन नंबर भरें!");
 
             const proceedSave = (imgUrl) => {
-                const payload = {
+                db.ref('animals').push().set({
                     uid: auth.currentUser.uid, type, title, price, details, seller, phone, whatsapp: wa || phone,
                     img: imgUrl || 'https://images.unsplash.com/photo-1546445317-29f4545e9d53?w=300',
                     createdAt: new Date().toISOString()
-                };
-                db.ref('animals').push().set(payload).then(() => {
-                    alert("पशु सफलता पूर्वक बिक्री हेतु लिस्ट हो गया!");
-                    closeModals();
-                });
+                }).then(() => { alert("पशु बिक्री हेतु लिस्ट हो गया!"); closeModals(); });
             };
-
             const file = document.getElementById('anImg').files[0];
             if(file) compressImage(file, img => proceedSave(img));
             else proceedSave(null);
         }
 
-        // --- 5. TEACHERS & SCHOOLS TOGGLE ---
+        // --- TEACHERS & SCHOOLS TOGGLE ---
         function setTeacherMode(mode) {
             const bg = document.getElementById('sliderBgTeacher');
             const btnT = document.getElementById('btnTeachTeachers');
@@ -996,7 +1068,6 @@
                 if(paneS) paneS.classList.remove('hidden');
             }
         }
-
         function renderTeacherCategories() {
             const subs = [
                 { id: 'all', name: 'Home (सभी)' }, { id: 'Mathematics', name: 'Mathematics' }, { id: 'Science', name: 'Science' },
@@ -1078,10 +1149,7 @@
                     c.innerHTML += `
                         <div class="bg-white p-4 rounded-2xl border border-purple-100 shadow-xs flex flex-col justify-between">
                             <div>
-                                <div class="flex justify-between items-start">
-                                    <h4 class="font-extrabold text-sm text-purple-900">${v.schoolName}</h4>
-                                    <span class="text-[10px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded">Vacancy</span>
-                                </div>
+                                <div class="flex justify-between items-start"><h4 class="font-extrabold text-sm text-purple-900">${v.schoolName}</h4><span class="text-[10px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded">Vacancy</span></div>
                                 <p class="text-xs font-bold text-purple-700 mt-1">आवश्यक विषय: ${v.subject}</p>
                                 <p class="text-xs text-gray-600 mt-0.5">सैलरी: ${v.salary || 'Negotiable'}</p>
                                 <p class="text-xs text-gray-500 bg-gray-50 p-2 rounded-xl mt-2 leading-relaxed">${v.details || 'विवरण नहीं'}</p>
@@ -1132,7 +1200,7 @@
             });
         }
 
-        // --- 3. BOOKS (INDIVIDUAL CLASS CATEGORIES 1, 2, 3...) ---
+        // --- 4. BOOKS WITH DYNAMIC CLASS CATEGORIES & +- CART ---
         function loadBooksData() { 
             db.ref('books').on('value', s => { 
                 const d = s.val() || {}; 
@@ -1175,18 +1243,29 @@
                 const matchClass = (currentBookClass === 'all') || (p.classCat === currentBookClass);
                 return matchMed && matchClass;
             });
-            list.innerHTML = filtered.map(b => `
+            list.innerHTML = filtered.map(b => {
+                const qty = booksCart[b.id] ? booksCart[b.id].qty : 0;
+                const btnOrBadge = qty > 0 ? `
+                    <div class="qty-badge bg-blue-600">
+                        <button onclick="changeCartQty('BOOK', '${b.id}', -1)">-</button>
+                        <span>${qty}</span>
+                        <button onclick="changeCartQty('BOOK', '${b.id}', 1)">+</button>
+                    </div>
+                ` : `
+                    <button onclick="addCartItem('BOOK', '${b.id}', '${b.title.replace(/'/g,"\\'")}', ${b.price}, ${b.deliveryCharge||20}, '${b.payMode||'BOTH'}')" class="bg-blue-600 text-white text-xs font-bold px-3 py-1.5 rounded-xl">+ ADD</button>
+                `;
+
+                return `
                 <div class="bg-white p-2.5 rounded-2xl border border-blue-100 flex flex-col justify-between shadow-xs">
                     <img src="${b.img}" class="h-28 w-full object-contain mb-2">
                     <h4 class="font-bold text-xs line-clamp-2 text-gray-800">${b.title}</h4>
                     <span class="text-[10px] text-blue-600 font-bold mt-1">${b.classCat || 'All'}</span>
-                    <div class="mt-2 flex justify-between items-center"><span class="font-bold text-sm text-blue-700">₹${b.price}</span><button onclick="buyBook('${b.id}')" class="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-xl">BUY</button></div>
-                </div>
-            `).join('') || '<p class="text-center text-gray-400 py-6 text-xs col-span-2">No books found.</p>';
+                    <div class="mt-2 flex justify-between items-center"><span class="font-bold text-sm text-blue-700">₹${b.price}</span>${btnOrBadge}</div>
+                </div>`;
+            }).join('') || '<p class="text-center text-gray-400 py-6 text-xs col-span-2">No books found.</p>';
         }
-        function buyBook(id) { selectedBook = allBooks.find(b => b.id === id); openUniversalCheckout('BOOK'); }
 
-        // --- CHECKOUT & ORDERS ---
+        // --- CHECKOUT & 1. DYNAMIC PAYMENT METHODS (COD/ONLINE/BOTH) ---
         function applyCoupon() {
             const c = (document.getElementById('coupon-input').value||'').trim().toUpperCase();
             let sub = parseInt(document.getElementById('chk-sub').innerText.replace('₹','')) || 0;
@@ -1200,33 +1279,82 @@
             document.getElementById('chk-total').innerText = `₹${Math.max(0, sub - appliedDiscountAmount + del)}`;
         }
 
-        function openUniversalCheckout(type) {
-            currentOrderType = type;
+        function renderCheckoutCartItems() {
             let sub = 0, del = 0, itemsHTML = '';
-            appliedCouponCode = ''; appliedDiscountAmount = 0;
-            document.getElementById('chk-discount-row').style.display = 'none';
+            let cartRef = (currentOrderType === 'GROCERY') ? groceryCart : ((currentOrderType === 'FOOD') ? foodCart : booksCart);
+            
+            // 1. Determine Payment Mode from Items (Admin Set Mode)
+            let allowCOD = true;
+            let allowOnline = true;
 
-            if(type === 'GROCERY') {
-                for(let k in groceryCart) { sub += groceryCart[k].price * groceryCart[k].qty; del += (groceryCart[k].del * groceryCart[k].qty); itemsHTML += `<div class="flex justify-between"><span>${groceryCart[k].name} x${groceryCart[k].qty}</span><b>₹${groceryCart[k].price * groceryCart[k].qty}</b></div>`; }
-            } else if(type === 'FOOD') {
-                foodCart.forEach(i => { sub += i.price * i.quantity; del = i.del; itemsHTML += `<div class="flex justify-between"><span>${i.name} x${i.quantity}</span><b>₹${i.price * i.quantity}</b></div>`; });
-            } else if(type === 'BOOK') {
-                sub = parseInt(selectedBook.price); del = parseInt(selectedBook.deliveryCharge||0);
-                itemsHTML = `<div class="flex justify-between"><span>${selectedBook.title}</span><b>₹${sub}</b></div>`;
+            const keys = Object.keys(cartRef);
+            if (!keys.length) {
+                closeModals();
+                return;
             }
+
+            keys.forEach(k => {
+                const it = cartRef[k];
+                sub += it.price * it.qty;
+                del += (it.del * it.qty);
+
+                if (it.payMode === 'COD') allowOnline = false;
+                if (it.payMode === 'ONLINE') allowCOD = false;
+
+                itemsHTML += `
+                    <div class="flex justify-between items-center bg-gray-50 p-2 rounded-xl border border-gray-100">
+                        <div class="flex-1 pr-2">
+                            <span class="font-bold text-xs text-gray-800">${it.name}</span>
+                            <span class="block text-[11px] text-blue-600 font-black">₹${it.price * it.qty}</span>
+                        </div>
+                        <div class="qty-badge bg-blue-600">
+                            <button onclick="changeCartQty('${currentOrderType}', '${it.id}', -1)">-</button>
+                            <span>${it.qty}</span>
+                            <button onclick="changeCartQty('${currentOrderType}', '${it.id}', 1)">+</button>
+                        </div>
+                    </div>
+                `;
+            });
 
             document.getElementById('chk-items-list').innerHTML = itemsHTML;
             document.getElementById('chk-sub').innerText = `₹${sub}`;
             document.getElementById('chk-del').innerText = `+₹${del}`;
-            document.getElementById('chk-total').innerText = `₹${sub + del}`;
+            document.getElementById('chk-total').innerText = `₹${Math.max(0, sub - appliedDiscountAmount + del)}`;
+
+            // 1. DYNAMIC PAYMENT METHOD VISIBILITY IN CHECKOUT
+            const optCod = document.getElementById('opt-cod');
+            const optOnline = document.getElementById('opt-online');
+            const radCod = optCod.querySelector('input');
+            const radOnline = optOnline.querySelector('input');
+
+            optCod.style.display = allowCOD ? 'block' : 'none';
+            optOnline.style.display = allowOnline ? 'block' : 'none';
+
+            if (!allowCOD && allowOnline) {
+                radOnline.checked = true;
+            } else if (allowCOD && !allowOnline) {
+                radCod.checked = true;
+            } else {
+                radCod.checked = true;
+            }
+        }
+
+        function openUniversalCheckout(type) {
+            currentOrderType = type;
+            appliedCouponCode = ''; appliedDiscountAmount = 0;
+            document.getElementById('chk-discount-row').style.display = 'none';
+
             document.getElementById('chk-name').value = customerProfile.name || '';
             document.getElementById('chk-phone').value = customerProfile.phone || '';
             document.getElementById('chk-address').value = customerProfile.address || '';
+            
+            renderCheckoutCartItems();
             document.getElementById('universalCheckoutModal').classList.remove('hidden');
+            adjustFloatingNav();
         }
 
         function processCheckout() {
-            const method = document.querySelector('input[name="payMethod"]:checked').value;
+            const method = document.querySelector('input[name="payMethod"]:checked')?.value || 'COD';
             const n = document.getElementById('chk-name').value.trim(), p = document.getElementById('chk-phone').value.trim(), a = document.getElementById('chk-address').value.trim(), notes = document.getElementById('chk-notes').value.trim();
             if(!n || !p || !a) return alert("Delivery details required!");
             let sub = parseInt(document.getElementById('chk-sub').innerText.replace('₹','')) || 0;
@@ -1242,10 +1370,8 @@
         }
 
         function saveOrder(txnId, n, p, a, sub, del, total, payMethod, notes) {
-            let items = [];
-            if(currentOrderType === 'GROCERY') items = Object.values(groceryCart).map(x => ({ name: x.name, price: x.price, quantity: x.qty }));
-            else if(currentOrderType === 'FOOD') items = foodCart.map(x => ({ name: x.name, price: x.price, quantity: x.quantity }));
-            else if(currentOrderType === 'BOOK') items = [{ name: selectedBook.title, price: selectedBook.price, quantity: 1 }];
+            let cartRef = (currentOrderType === 'GROCERY') ? groceryCart : ((currentOrderType === 'FOOD') ? foodCart : booksCart);
+            let items = Object.values(cartRef).map(x => ({ name: x.name, price: x.price, quantity: x.qty }));
 
             db.ref('orders').push().set({
                 orderId: Date.now().toString(), customerUid: auth.currentUser.uid, orderType: currentOrderType, items,
@@ -1255,8 +1381,9 @@
                 playOrderDoneSound();
                 closeModals();
                 document.getElementById('orderSuccessModal').classList.remove('hidden');
-                if(currentOrderType === 'GROCERY') { groceryCart = {}; updateGroceryUI(); }
-                if(currentOrderType === 'FOOD') { foodCart = []; updateFoodUI(); }
+                if (currentOrderType === 'GROCERY') { groceryCart = {}; updateGroceryUI(); }
+                if (currentOrderType === 'FOOD') { foodCart = {}; updateFoodUI(); }
+                if (currentOrderType === 'BOOK') { booksCart = {}; updateBooksUI(); }
                 setTimeout(() => { document.getElementById('orderSuccessModal').classList.add('hidden'); showPanel('orders-view'); }, 2200);
             });
         }
