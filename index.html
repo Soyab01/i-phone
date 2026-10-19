@@ -113,7 +113,7 @@
         <!-- 4 FLOATING BUTTONS (ALWAYS VISIBLE & AUTO-ADJUSTING) -->
         <div class="floating-right-nav" id="floating-actions-stack">
             <div class="float-btn" onclick="showPanel('ladnun-directory-view')" title="लाडनूं निर्देशिका"><i class="fa-solid fa-landmark"></i></div>
-            <div class="float-btn" onclick="showPanel('animals-view')" title="पशु मंडी"><i class="fa-solid fa-cow"></i></div>
+            <div class="float-btn" onclick="showPanel('animals-view')" title="पशु मंडी (Animal Market)"><i class="fa-solid fa-cow"></i></div>
             <div class="float-btn" onclick="showPanel('teachers-view')" title="शिक्षक एवं स्कूल पोर्टल"><i class="fa-solid fa-chalkboard-user"></i></div>
             <div class="float-btn" onclick="showPanel('books-view')" title="Books Store"><i class="fa-solid fa-book-open"></i></div>
         </div>
@@ -136,7 +136,6 @@
                 <span>ग्रोसरी मार्ट अभी बंद है (Grocery Orders Paused)</span>
             </div>
             
-            <!-- Top Pill Switcher: Grocery vs Sabzi -->
             <div class="flex justify-center mb-3">
                 <div class="bg-white p-1 rounded-full flex w-full max-w-[320px] relative shadow-xs border border-emerald-200">
                     <div id="sliderBgMart" class="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] bg-emerald-600 rounded-full shadow-sm transition-transform duration-300"></div>
@@ -157,7 +156,6 @@
                 <span>ताज़ा सब्जी मंडी अभी बंद है (Vegetables Market Closed)</span>
             </div>
 
-            <!-- Auto-sliding Sabzi Carousel -->
             <div class="bg-white/90 p-3 rounded-2xl border border-emerald-100 mb-4 shadow-xs">
                 <div class="flex justify-between items-center mb-2">
                     <span class="text-xs font-black text-emerald-900 flex items-center gap-1.5"><i class="fa-solid fa-carrot text-emerald-600"></i> ताज़ा हरी सब्जियां (Fresh Sabzi)</span>
@@ -166,14 +164,12 @@
                 <div id="mart-veg-slider" class="flex gap-3 overflow-x-auto qmart-hide-scroll snap-x pb-1 scroll-smooth"></div>
             </div>
 
-            <!-- Pane 1: Grocery -->
             <div id="mart-grocery-pane">
                 <div id="mart-banners" class="flex gap-3 overflow-x-auto qmart-hide-scroll snap-x mb-4 scroll-smooth"></div>
                 <div id="groc-categories" class="flex gap-4 overflow-x-auto qmart-hide-scroll mb-4 pb-1"></div>
                 <div id="groc-products-container" class="space-y-5"></div>
             </div>
 
-            <!-- Pane 2: Vegetables Grid -->
             <div id="mart-veg-pane" class="hidden">
                 <h3 class="font-extrabold text-sm text-gray-800 mb-3">सभी हरी व ताज़ा सब्जियां</h3>
                 <div id="mart-veg-full-grid" class="grid grid-cols-2 gap-3 pb-8"></div>
@@ -195,7 +191,6 @@
                 <span>फूड डिलीवरी अभी बंद है (Food Orders Closed)</span>
             </div>
             
-            <!-- 2-Button Toggle: Non-Veg (Default) vs Veg -->
             <div class="flex justify-center mb-4">
                 <div class="bg-white p-1 rounded-full flex w-full max-w-[260px] relative shadow-xs border border-red-200">
                     <div id="sliderBgFood" class="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] bg-red-600 rounded-full shadow-sm transition-transform duration-300"></div>
@@ -233,12 +228,13 @@
             </div>
         </div>
 
-        <!-- 3. LOCAL SERVICES -->
+        <!-- 3. LOCAL SERVICES (100% DYNAMIC CATEGORIES LIKE ANIMALS) -->
         <div id="services-view" class="p-4 max-w-xl mx-auto hidden bg-serv-grad min-h-screen">
             <h1 class="uniform-title text-emerald-700"><i class="fa-solid fa-briefcase"></i> Local Services</h1>
-            <button onclick="document.getElementById('addServiceModal').classList.remove('hidden')" class="w-full bg-emerald-600 text-white p-3 rounded-xl font-bold shadow-md mb-4 flex justify-center items-center gap-2 text-xs">+ Register Your Service Free</button>
+            <button onclick="openAddServiceModal()" class="w-full bg-emerald-600 text-white p-3 rounded-xl font-bold shadow-md mb-4 flex justify-center items-center gap-2 text-xs">+ Register Your Service Free</button>
             <div class="mb-3">
                 <span class="text-xs font-bold text-gray-500 block mb-2 uppercase">Select Category:</span>
+                <!-- Dynamic Chips populated strictly from DB -->
                 <div id="srv-categories-chips" class="flex gap-2.5 overflow-x-auto qmart-hide-scroll pb-2"></div>
             </div>
             <div id="srv-providers-list" class="space-y-3.5 pb-20"></div>
@@ -312,7 +308,7 @@
             <div id="ward-members-list" class="space-y-3"></div>
         </div>
 
-        <!-- 7. BOOKS STORE (FIXED ALIGNED CARDS & CLASS CATEGORIES) -->
+        <!-- 7. BOOKS STORE (FIXED ALIGNED CARDS) -->
         <div id="books-view" class="p-4 max-w-xl mx-auto hidden pb-24 bg-book-grad min-h-screen">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="uniform-title text-blue-700 mb-0"><i class="fa-solid fa-book-bookmark text-blue-600"></i> System Book</h2>
@@ -393,11 +389,11 @@
             <div id="info-pages-container" class="hidden pb-20">
                 <div id="about-page" class="hidden bg-white p-5 rounded-2xl shadow-xs mb-3 text-xs leading-relaxed">
                     <h3 class="font-extrabold text-blue-600 text-sm mb-2">About Soyfa</h3>
-                    <p class="text-gray-600">Soyfa Super App लाडनूं का सर्वोत्कृष्ट डिजिटल प्लेटफ़ॉर्म है।</p>
+                    <p class="text-gray-600">Soyfa Super App लाडनूं का सर्वोत्कृष्ट डिजिटल प्लेटफ़ॉर्म है जहाँ आप Q-Mart ग्रोसरी, ताज़ा सब्जियां, फ़ूड, पशु मंडी, शिक्षक, स्कूल वैकेंसी, लोकल सेवाएँ और प्रशासनिक निर्देशिका का लाभ एक ही स्थान पर उठा सकते हैं।</p>
                 </div>
                 <div id="privacy-page" class="hidden bg-white p-5 rounded-2xl shadow-xs mb-3 text-xs leading-relaxed">
                     <h3 class="font-extrabold text-blue-600 text-sm mb-2">Privacy Policy</h3>
-                    <p class="text-gray-600">आपकी गोपनीयता व जानकारी पूरी तरह सुरक्षित है।</p>
+                    <p class="text-gray-600">हम आपकी व्यक्तिगत जानकारी की सुरक्षा के प्रति पूरी तरह प्रतिबद्ध हैं। आपका विवरण सुरक्षित रखा जाता है।</p>
                 </div>
                 <div id="terms-page" class="hidden bg-white p-5 rounded-2xl shadow-xs mb-3 text-xs leading-relaxed">
                     <h3 class="font-extrabold text-blue-600 text-sm mb-2">Terms & Conditions</h3>
@@ -468,7 +464,7 @@
         </div>
     </div>
 
-    <!-- 4. ANIMAL POST MODAL (SELECT EXISTING OR TYPE NEW) -->
+    <!-- 4. ANIMAL POST MODAL -->
     <div id="addAnimalModal" class="universal-modal fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-sm p-5 rounded-2xl max-h-[85vh] overflow-y-auto text-xs space-y-2">
             <div class="flex justify-between items-center mb-1">
@@ -498,7 +494,7 @@
         </div>
     </div>
 
-    <!-- 5. TEACHER MODAL (SELECT EXISTING OR TYPE NEW SUBJECT) -->
+    <!-- 5. TEACHER MODAL -->
     <div id="teacherRegModal" class="universal-modal fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-sm p-5 rounded-2xl max-h-[85vh] overflow-y-auto text-xs space-y-2">
             <div class="flex justify-between items-center mb-1"><h3 class="font-bold text-sm text-indigo-900">शिक्षक प्रोफाइल जोड़ें</h3><button onclick="closeModals()" class="text-lg font-bold">&times;</button></div>
@@ -510,7 +506,7 @@
                 <option value="">-- मौजूद विषय चुनें (Select Existing) --</option>
                 <option value="__NEW__">➕ नया विषय टाइप करें (Type New Subject)</option>
             </select>
-            <input type="text" id="tSubject" placeholder="विषय लिखें (उदा. Maths, Science...)" class="w-full p-2 border rounded-lg bg-indigo-50/50 outline-none font-bold text-indigo-900">
+            <input type="text" id="tSubject" placeholder="विषय लिखें (उदा. Maths, Science, English...)" class="w-full p-2 border rounded-lg bg-indigo-50/50 outline-none font-bold text-indigo-900">
             
             <input type="text" id="tExp" placeholder="अनुभव (उदा. 4 Years Exp)" class="w-full p-2 border rounded-lg outline-none">
             <textarea id="tDesc" placeholder="योग्यता एवं अन्य विवरण..." class="w-full p-2 border rounded-lg h-14 outline-none resize-none"></textarea>
@@ -539,18 +535,18 @@
         </div>
     </div>
 
-    <!-- Register Service Modal (SELECT EXISTING OR TYPE NEW) -->
+    <!-- 3. SERVICES MODAL (DYNAMIC SELECT OR TYPE) -->
     <div id="addServiceModal" class="universal-modal fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-sm p-5 rounded-2xl max-h-[80vh] overflow-y-auto text-xs space-y-2">
             <div class="flex justify-between items-center"><h3 class="font-bold text-sm">Register Service</h3><button onclick="closeModals()" class="text-lg font-bold">&times;</button></div>
             <input type="text" id="srvRegName" placeholder="Name / Business Name" class="w-full p-2 border rounded-lg">
             
-            <label class="block text-gray-600 font-bold">कैटेगरी (चुनें या नई टाइप करें):</label>
+            <label class="block text-gray-600 font-bold">सर्विस श्रेणी (चुनें या नई टाइप करें):</label>
             <select id="srvCatSelect" onchange="syncCategorySelect(this, 'srvRegCat')" class="w-full p-2 border rounded-lg bg-white outline-none mb-1">
                 <option value="">-- मौजूद कैटेगरी चुनें (Select Existing) --</option>
                 <option value="__NEW__">➕ नई कैटेगरी टाइप करें (Type New Category)</option>
             </select>
-            <input type="text" id="srvRegCat" placeholder="कैटेगरी (उदा. Plumber, Electrician...)" class="w-full p-2 border rounded-lg">
+            <input type="text" id="srvRegCat" placeholder="कैटेगरी लिखें (उदा. नलसाज, बढ़ई, AC Repair...)" class="w-full p-2 border rounded-lg bg-emerald-50/50 font-bold text-emerald-900 outline-none">
             
             <textarea id="srvRegDesc" placeholder="Description..." class="w-full p-2 border rounded-lg h-14"></textarea>
             <input type="number" id="srvRegPhone" placeholder="Phone" class="w-full p-2 border rounded-lg">
@@ -795,7 +791,7 @@
             adjustFloatingNav();
         }
 
-        // --- CART WITH +/- ---
+        // --- UNIFIED CART WITH +/- ---
         function changeCartItemQty(type, id, change, itemObj) {
             if (change > 0) {
                 if (type === 'GROCERY') {
@@ -1019,6 +1015,7 @@
                 }).join('') + `</div></div>`;
             }).join('') || '<p class="text-center text-gray-400 py-6 text-xs">No items found.</p>';
         }
+        function addGroceryCart(id, name, price, del) { if(groceryCart[id]) groceryCart[id].qty++; else groceryCart[id] = { id, name, price, del, qty: 1 }; updateGroceryUI(); }
 
         // --- 2. FOOD DELIVERY ---
         let activeRestaurantMenuId = null;
@@ -1102,69 +1099,99 @@
             });
         }
 
-        // --- 3. SERVICES (DYNAMIC SYNC CATEGORIES) ---
+        // --- 3. SERVICES (100% DYNAMIC - NO HARDCODED ENGLISH CATEGORIES) ---
         function renderServiceCategoryChips() {
-            const defaultServCats = [
-                { id: 'all', name: 'Home / All', icon: 'fa-solid fa-house' },
-                { id: 'Plumber', name: 'Plumber', icon: 'fa-solid fa-wrench' },
-                { id: 'Electrician', name: 'Electrician', icon: 'fa-solid fa-bolt' },
-                { id: 'Carpenter', name: 'Carpenter', icon: 'fa-solid fa-hammer' },
-                { id: 'Painter', name: 'Painter', icon: 'fa-solid fa-paint-roller' },
-                { id: 'AC / Fridge', name: 'AC / Fridge', icon: 'fa-solid fa-snowflake' },
-                { id: 'Cleaning', name: 'Cleaning', icon: 'fa-solid fa-broom' }
-            ];
+            const box = document.getElementById('srv-categories-chips'); 
+            if (!box) return;
 
-            const dynamicCats = [...new Set(allSrvProvs.map(p => p.cat).filter(Boolean))];
-            dynamicCats.forEach(dc => {
-                if (!defaultServCats.some(sc => sc.id.toLowerCase() === dc.toLowerCase())) {
-                    defaultServCats.push({ id: dc, name: dc, icon: 'fa-solid fa-briefcase' });
-                }
-            });
+            // Extract ONLY unique categories from DB
+            const dynamicCats = ['all', ...new Set(allSrvProvs.map(p => p.cat).filter(Boolean))];
 
-            const c = document.getElementById('srv-categories-chips'); 
-            if(c) {
-                c.innerHTML = defaultServCats.map(x => `
-                    <button onclick="filterLocalServices('${x.id}')" class="px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap border flex items-center gap-1.5 transition ${currentSrvCat.toLowerCase() === x.id.toLowerCase() ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs' : 'bg-white text-gray-700 border-emerald-100'}">
-                        <i class="${x.icon} text-xs"></i> <span>${x.name}</span>
-                    </button>
-                `).join('');
-            }
+            box.innerHTML = dynamicCats.map(c => `
+                <button onclick="filterLocalServices('${c.replace(/'/g, "\\'")}')" class="px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap border flex items-center gap-1.5 transition ${currentSrvCat.toLowerCase() === c.toLowerCase() ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs' : 'bg-white text-gray-700 border-emerald-100'}">
+                    <i class="${c === 'all' ? 'fa-solid fa-house' : 'fa-solid fa-briefcase'} text-xs"></i> 
+                    <span>${c === 'all' ? 'सभी सेवाएं (All)' : c}</span>
+                </button>
+            `).join('');
 
+            // Also populate modal category select dropdown
             const srvSel = document.getElementById('srvCatSelect');
             if (srvSel) {
+                const catsForSelect = [...new Set(allSrvProvs.map(p => p.cat).filter(Boolean))];
                 srvSel.innerHTML = '<option value="">-- मौजूद कैटेगरी चुनें (Select Existing) --</option>' +
-                    dynamicCats.map(ct => `<option value="${ct}">${ct}</option>`).join('') +
+                    catsForSelect.map(ct => `<option value="${ct.replace(/"/g, '&quot;')}">${ct}</option>`).join('') +
                     '<option value="__NEW__">➕ नई कैटेगरी टाइप करें (Type New Category)</option>';
             }
         }
 
         function loadLocalServices() {
-            db.ref('local_services').on('value', s => {
-                const d = s.val() || {}; allSrvProvs = Object.values(d.providers || {}).filter(p => p.status === 'approved');
+            db.ref('local_services/providers').on('value', s => {
+                const d = s.val() || {}; 
+                allSrvProvs = Object.values(d).filter(p => p.status === 'approved');
                 renderServiceCategoryChips();
                 filterLocalServices(currentSrvCat);
             });
         }
 
         function filterLocalServices(catId) {
-            currentSrvCat = catId; 
+            currentSrvCat = catId || 'all'; 
             renderServiceCategoryChips();
-            const list = document.getElementById('srv-providers-list'); if(!list) return;
-            const filtered = allSrvProvs.filter(p => catId === 'all' || (p.cat || '').toLowerCase().includes(catId.toLowerCase()));
+            const list = document.getElementById('srv-providers-list'); 
+            if(!list) return;
+            
+            const filtered = allSrvProvs.filter(p => {
+                if (currentSrvCat === 'all') return true;
+                return (p.cat || '').toLowerCase() === currentSrvCat.toLowerCase();
+            });
+
             list.innerHTML = filtered.map(p => `
                 <div class="bg-white p-3.5 rounded-2xl border border-emerald-50 shadow-xs flex flex-col gap-2">
-                    <div class="flex gap-3 items-center"><img src="${p.img||'https://cdn-icons-png.flaticon.com/512/149/149071.png'}" class="w-12 h-12 rounded-full border border-emerald-500 shadow-xs"><div><h3 class="font-extrabold text-sm text-gray-900">${p.name}</h3><span class="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded-md">${p.cat}</span></div></div>
-                    <p class="text-xs text-gray-600 bg-gray-50 p-2 rounded-xl">${p.desc}</p>
-                    <div class="flex gap-2 mt-1"><a href="tel:${p.phone}" class="flex-1 bg-gray-900 text-white text-center py-2 rounded-xl text-xs font-bold">Call</a><a href="https://wa.me/91${p.whatsapp}" target="_blank" class="flex-1 bg-green-500 text-white text-center py-2 rounded-xl text-xs font-bold">WhatsApp</a></div>
+                    <div class="flex gap-3 items-center">
+                        <img src="${p.img || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}" class="w-12 h-12 rounded-full border border-emerald-500 shadow-xs object-cover">
+                        <div>
+                            <h3 class="font-extrabold text-sm text-gray-900">${p.name}</h3>
+                            <span class="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded-md">${p.cat}</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-600 bg-gray-50 p-2 rounded-xl">${p.desc || 'कोई विवरण नहीं'}</p>
+                    <div class="flex gap-2 mt-1">
+                        <a href="tel:${p.phone}" class="flex-1 bg-gray-900 text-white text-center py-2 rounded-xl text-xs font-bold active:scale-95 transition">Call</a>
+                        <a href="https://wa.me/91${p.whatsapp || p.phone}" target="_blank" class="flex-1 bg-green-500 text-white text-center py-2 rounded-xl text-xs font-bold active:scale-95 transition">WhatsApp</a>
+                    </div>
                 </div>
-            `).join('') || '<p class="text-center text-gray-400 py-6 text-xs">No providers found.</p>';
+            `).join('') || '<p class="text-center text-gray-400 py-6 text-xs">इस श्रेणी में कोई सर्विस प्रदाता उपलब्ध नहीं हैं।</p>';
+        }
+
+        function openAddServiceModal() {
+            if (document.getElementById('srvRegName')) document.getElementById('srvRegName').value = '';
+            if (document.getElementById('srvCatSelect')) document.getElementById('srvCatSelect').value = '';
+            if (document.getElementById('srvRegCat')) document.getElementById('srvRegCat').value = '';
+            if (document.getElementById('srvRegDesc')) document.getElementById('srvRegDesc').value = '';
+            if (document.getElementById('srvRegPhone')) document.getElementById('srvRegPhone').value = customerProfile.phone || '';
+            if (document.getElementById('srvRegWa')) document.getElementById('srvRegWa').value = customerProfile.phone || '';
+            if (document.getElementById('srvRegImg')) document.getElementById('srvRegImg').value = '';
+            document.getElementById('addServiceModal').classList.remove('hidden');
         }
 
         function submitService() {
-            const name = document.getElementById('srvRegName').value, cat = document.getElementById('srvRegCat').value, desc = document.getElementById('srvRegDesc').value, phone = document.getElementById('srvRegPhone').value, wa = document.getElementById('srvRegWa').value;
-            if(!name||!cat||!phone) return alert("Fill required details!");
+            const name = document.getElementById('srvRegName').value.trim();
+            const cat = document.getElementById('srvRegCat').value.trim();
+            const desc = document.getElementById('srvRegDesc').value.trim();
+            const phone = document.getElementById('srvRegPhone').value.trim();
+            const wa = document.getElementById('srvRegWa').value.trim();
+
+            if(!name || !cat || !phone) return alert("कृपया नाम, सर्विस कैटेगरी और फोन नंबर अवश्य भरें!");
+            
             compressImage(document.getElementById('srvRegImg').files[0], img => {
-                db.ref('local_services/providers').push().set({ name, cat, desc, phone, whatsapp: wa, img, status: 'pending', uid: (auth.currentUser ? auth.currentUser.uid : 'u_' + Date.now()) }).then(() => { alert("Submitted for approval!"); closeModals(); });
+                db.ref('local_services/providers').push().set({
+                    name, cat, desc, phone, whatsapp: wa || phone, 
+                    img: img || 'https://cdn-icons-png.flaticon.com/512/149/149071.png', 
+                    status: 'pending', 
+                    uid: (auth.currentUser ? auth.currentUser.uid : 'u_' + Date.now()) 
+                }).then(() => { 
+                    alert("सर्विस सफलतापूर्वक सत्यापन हेतु जमा कर दी गई है!"); 
+                    closeModals(); 
+                });
             });
         }
 
@@ -1369,15 +1396,11 @@
                     '<option value="__NEW__">➕ नया विषय टाइप करें (Type New Subject)</option>';
             }
         }
-
         function loadTeachers() {
             db.ref('ladnun_teachers').on('value', s => {
-                allTeachers = s.val() || {}; 
-                renderTeacherCategories();
-                filterTeachers(currentTeacherSub);
+                allTeachers = s.val() || {}; filterTeachers(currentTeacherSub);
             });
         }
-
         function filterTeachers(subId) {
             currentTeacherSub = subId; renderTeacherCategories();
             const l = document.getElementById('teachers-list'); if(!l) return; l.innerHTML = '';
@@ -1411,13 +1434,7 @@
                 `;
             });
         }
-
-        function openTeacherRegModal() { 
-            document.getElementById('tSubject').value = ''; 
-            if (document.getElementById('tSubjectSelect')) document.getElementById('tSubjectSelect').value = '';
-            document.getElementById('teacherRegModal').classList.remove('hidden'); 
-        }
-
+        function openTeacherRegModal() { document.getElementById('tSubject').value = ''; document.getElementById('teacherRegModal').classList.remove('hidden'); }
         function saveTeacherProfile() {
             const name = document.getElementById('tName').value.trim();
             const subject = document.getElementById('tSubject').value.trim();
@@ -1499,7 +1516,7 @@
             });
         }
 
-        // --- 7. BOOKS (FIXED PROFESSIONAL ALIGNMENT & DYNAMIC CLASS CATEGORIES) ---
+        // --- 7. BOOKS (ALIGNED CARDS) ---
         function loadBooksData() { 
             db.ref('books').on('value', s => { 
                 const d = s.val() || {}; 
@@ -1535,7 +1552,6 @@
             filterBooks();
         }
 
-        // FIXED BOOK CARD RENDERING (CLEAN ALIGNMENT & NO TEXT OVERFLOW)
         function filterBooks() {
             const list = document.getElementById('prodList');
             const filtered = allBooks.filter(p => {
@@ -1575,7 +1591,7 @@
             }).join('') || '<p class="text-center text-gray-400 py-6 text-xs col-span-2">No books found.</p>';
         }
 
-        // --- CHECKOUT & DYNAMIC PAYMENT MODES ---
+        // --- CHECKOUT & ORDERS ---
         function applyCoupon() {
             const c = (document.getElementById('coupon-input').value||'').trim().toUpperCase();
             let sub = parseInt(document.getElementById('chk-sub').innerText.replace('₹','')) || 0;
