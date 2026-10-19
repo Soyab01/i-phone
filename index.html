@@ -25,7 +25,7 @@
         .qmart-hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
         .uniform-title { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
 
-        /* Theme Gradients */
+        /* Gradients */
         .bg-mart-grad { background: linear-gradient(180deg, #ecfdf5 0%, #f0fdf4 25%, #ffffff 80%); }
         .bg-food-grad { background: linear-gradient(180deg, #fff7ed 0%, #fff1f2 30%, #ffffff 85%); }
         .bg-serv-grad { background: linear-gradient(180deg, #f0fdfa 0%, #f0fdf4 30%, #ffffff 85%); }
@@ -36,14 +36,14 @@
         .bg-order-grad { background: linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 35%, #ffffff 85%); }
         .bg-prof-grad { background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 35%, #ffffff 85%); }
 
-        /* Blue Bottom Nav */
+        /* Bottom Nav */
         .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: var(--nav-height); background: #ffffff; box-shadow: 0 -4px 25px rgba(37, 99, 235, 0.12); display: flex; justify-content: space-around; align-items: center; z-index: 9000; border-top: 1.5px solid #e0e7ff; border-radius: 22px 22px 0 0; max-width: 650px; margin: 0 auto; padding: 0 6px; }
         .nav-item { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #94a3b8; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.3s; padding: 4px 0; }
         .nav-item i { font-size: 20px; margin-bottom: 2px; display: block; }
         .nav-item.active { color: var(--nav-blue); transform: translateY(-5px); }
         .nav-item.active i { transform: scale(1.2); filter: drop-shadow(0 4px 8px rgba(37,99,235,0.4)); color: var(--nav-blue); }
 
-        /* Floating Buttons Auto-adjust */
+        /* Floating Buttons: Always Visible & Auto-Adjust */
         .floating-right-nav { 
             position: fixed; 
             right: 15px; 
@@ -58,9 +58,10 @@
         .float-btn { width: 46px; height: 46px; background: rgba(255,255,255,0.96); backdrop-filter: blur(6px); border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 8px 20px rgba(37,99,235,0.22); cursor: pointer; font-size: 18px; transition: 0.3s; border: 2px solid var(--nav-blue); color: var(--nav-blue); }
         .float-btn:hover { transform: scale(1.1); }
 
-        /* Qty Badge */
-        .qty-badge { display: flex; align-items: center; justify-content: space-between; border-radius: 12px; padding: 2px 6px; font-weight: 800; font-size: 11px; gap: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-        .qty-badge button { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-weight: 900; background: rgba(255,255,255,0.25); border-radius: 8px; transition: 0.15s; font-size: 14px; }
+        /* Qty Badge for +/- */
+        .qty-badge { display: flex; align-items: center; justify-content: space-between; border-radius: 12px; padding: 2px 5px; font-weight: 800; font-size: 11px; gap: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); width: 100%; }
+        .qty-badge button { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-weight: 900; background: rgba(255,255,255,0.25); border-radius: 6px; transition: 0.15s; font-size: 13px; }
+        .qty-badge button:active { transform: scale(0.9); }
 
         .track-line { position: relative; height: 5px; background: #e2e8f0; margin: 26px 10px 12px 10px; border-radius: 4px; }
         .track-fill { position: absolute; left: 0; top: 0; height: 100%; border-radius: 4px; transition: width 0.8s ease-in-out; }
@@ -71,7 +72,7 @@
 
     <audio id="order-done-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-positive-notification-951.mp3" preload="auto"></audio>
 
-    <!-- AUTH PANEL (SIGNUP DEFAULT) -->
+    <!-- AUTH PANEL (DEFAULT: SIGNUP) -->
     <div id="auth-panel" class="flex justify-center items-center min-h-screen flex-col p-5 bg-gradient-to-br from-blue-100 via-blue-200 to-indigo-200">
         <div class="bg-white p-7 rounded-3xl shadow-xl w-full max-w-sm text-center" id="signup-box">
             <h1 class="uniform-title justify-center text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 mb-2">Join Soyfa</h1>
@@ -103,7 +104,7 @@
     <!-- MAIN APP PANEL -->
     <div id="app-panel" class="hidden">
 
-        <!-- 📢 LIVE RUNNING ANNOUNCEMENT TICKER (CONTROLLED BY ADMIN) -->
+        <!-- 📢 LIVE RUNNING ANNOUNCEMENT TICKER -->
         <div id="announcement-bar" class="hidden bg-gradient-to-r from-blue-600 to-indigo-700 text-white text-xs font-bold px-3 py-1.5 flex items-center shadow-md sticky top-0 z-50">
             <i class="fa-solid fa-bullhorn text-amber-300 mr-2 text-sm"></i>
             <marquee id="announcement-text" class="font-medium tracking-wide"></marquee>
@@ -112,7 +113,7 @@
         <!-- 4 FLOATING BUTTONS (ALWAYS VISIBLE & AUTO-ADJUSTING) -->
         <div class="floating-right-nav" id="floating-actions-stack">
             <div class="float-btn" onclick="showPanel('ladnun-directory-view')" title="लाडनूं निर्देशिका"><i class="fa-solid fa-landmark"></i></div>
-            <div class="float-btn" onclick="showPanel('animals-view')" title="पशु मंडी (Animal Market)"><i class="fa-solid fa-cow"></i></div>
+            <div class="float-btn" onclick="showPanel('animals-view')" title="पशु मंडी"><i class="fa-solid fa-cow"></i></div>
             <div class="float-btn" onclick="showPanel('teachers-view')" title="शिक्षक एवं स्कूल पोर्टल"><i class="fa-solid fa-chalkboard-user"></i></div>
             <div class="float-btn" onclick="showPanel('books-view')" title="Books Store"><i class="fa-solid fa-book-open"></i></div>
         </div>
@@ -129,18 +130,18 @@
                 </div>
             </header>
 
-            <!-- MART CLOSED ALERT BANNER -->
+            <!-- MART CLOSED ALERT -->
             <div id="mart-closed-banner" class="hidden bg-red-600 text-white text-xs font-bold p-2.5 rounded-2xl text-center mb-3 shadow flex items-center justify-center gap-2">
                 <i class="fa-solid fa-store-slash text-sm"></i> 
-                <span>ग्रोसरी मार्ट अभी बंद है (Grocery Orders Temporarily Closed)</span>
+                <span>ग्रोसरी मार्ट अभी बंद है (Grocery Orders Paused)</span>
             </div>
             
             <!-- Top Pill Switcher: Grocery vs Sabzi -->
             <div class="flex justify-center mb-3">
                 <div class="bg-white p-1 rounded-full flex w-full max-w-[320px] relative shadow-xs border border-emerald-200">
                     <div id="sliderBgMart" class="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] bg-emerald-600 rounded-full shadow-sm transition-transform duration-300"></div>
-                    <button onclick="setMartMode('grocery')" id="btnMartGroc" class="flex-1 py-1.5 text-xs font-bold text-white relative z-10 transition">🛒 ग्रोसरी (Grocery)</button>
-                    <button onclick="setMartMode('vegetables')" id="btnMartVeg" class="flex-1 py-1.5 text-xs font-bold text-emerald-900 relative z-10 transition">🥦 ताज़ा सब्जियां (Sabzi)</button>
+                    <button onclick="setMartMode('grocery')" id="btnMartGroc" class="flex-1 py-1.5 text-xs font-bold text-white relative z-10 transition">🛒 ग्रोसरी</button>
+                    <button onclick="setMartMode('vegetables')" id="btnMartVeg" class="flex-1 py-1.5 text-xs font-bold text-emerald-900 relative z-10 transition">🥦 ताज़ा सब्जियां</button>
                 </div>
             </div>
 
@@ -150,7 +151,7 @@
                 <button onclick="startVoiceSearch('mart-search', filterMart)" class="absolute right-3 text-emerald-600 bg-emerald-50 w-7 h-7 rounded-full flex items-center justify-center text-sm shadow-xs"><i class="fa-solid fa-microphone"></i></button>
             </div>
 
-            <!-- SABZI CLOSED ALERT BANNER -->
+            <!-- VEG CLOSED ALERT -->
             <div id="veg-closed-banner" class="hidden bg-red-600 text-white text-xs font-bold p-2.5 rounded-2xl text-center mb-3 shadow flex items-center justify-center gap-2">
                 <i class="fa-solid fa-store-slash text-sm"></i> 
                 <span>ताज़ा सब्जी मंडी अभी बंद है (Vegetables Market Closed)</span>
@@ -178,7 +179,6 @@
                 <div id="mart-veg-full-grid" class="grid grid-cols-2 gap-3 pb-8"></div>
             </div>
 
-            <!-- Cart Float Bar -->
             <div id="groc-checkout-bar" class="fixed bottom-[75px] left-4 right-4 bg-emerald-700 text-white p-3.5 rounded-2xl shadow-xl z-40 hidden flex justify-between items-center cursor-pointer max-w-xl mx-auto" onclick="openUniversalCheckout('GROCERY')">
                 <div><p class="text-sm font-extrabold"><span id="groc-item-count">0</span> Items | ₹<span id="groc-final-total">0</span></p><p class="text-[10px] opacity-90">View Cart</p></div>
                 <div class="font-bold text-sm flex items-center gap-2">Proceed <i class="fa-solid fa-arrow-right"></i></div>
@@ -189,7 +189,7 @@
         <div id="home-view" class="container-food p-4 hidden max-w-xl mx-auto bg-food-grad min-h-screen">
             <h1 class="uniform-title text-red-500"><i class="fa-solid fa-burger text-orange-500"></i> Soyfa Food</h1>
 
-            <!-- FOOD CLOSED ALERT BANNER -->
+            <!-- FOOD CLOSED ALERT -->
             <div id="food-closed-banner" class="hidden bg-red-600 text-white text-xs font-bold p-2.5 rounded-2xl text-center mb-3 shadow flex items-center justify-center gap-2">
                 <i class="fa-solid fa-utensils text-sm"></i> 
                 <span>फूड डिलीवरी अभी बंद है (Food Orders Closed)</span>
@@ -312,14 +312,14 @@
             <div id="ward-members-list" class="space-y-3"></div>
         </div>
 
-        <!-- 7. BOOKS STORE (CLASS-WISE) -->
+        <!-- 7. BOOKS STORE (FIXED ALIGNED CARDS & CLASS CATEGORIES) -->
         <div id="books-view" class="p-4 max-w-xl mx-auto hidden pb-24 bg-book-grad min-h-screen">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="uniform-title text-blue-700 mb-0"><i class="fa-solid fa-book-bookmark text-blue-600"></i> System Book</h2>
                 <button onclick="showPanel('grocery-view')" class="bg-white w-8 h-8 rounded-full flex items-center justify-center text-gray-600 shadow-xs"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
-            <!-- BOOKS CLOSED ALERT BANNER -->
+            <!-- BOOKS CLOSED ALERT -->
             <div id="books-closed-banner" class="hidden bg-red-600 text-white text-xs font-bold p-2.5 rounded-2xl text-center mb-3 shadow flex items-center justify-center gap-2">
                 <i class="fa-solid fa-book text-sm"></i> 
                 <span>बुक स्टोर अभी बंद है (Book Store Orders Closed)</span>
@@ -338,6 +338,7 @@
                 <div id="book-class-categories" class="flex gap-2 overflow-x-auto pb-2 qmart-hide-scroll"></div>
             </div>
 
+            <!-- FIXED ALIGNED CARDS GRID -->
             <div id="prodList" class="grid grid-cols-2 gap-3.5 pb-10"></div>
             
             <div id="book-checkout-bar" class="fixed bottom-[75px] left-4 right-4 bg-blue-700 text-white p-3.5 rounded-2xl shadow-xl z-40 hidden flex justify-between items-center cursor-pointer max-w-xl mx-auto" onclick="openUniversalCheckout('BOOK')">
@@ -467,7 +468,7 @@
         </div>
     </div>
 
-    <!-- Animal Modal -->
+    <!-- 4. ANIMAL POST MODAL (SELECT EXISTING OR TYPE NEW) -->
     <div id="addAnimalModal" class="universal-modal fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-sm p-5 rounded-2xl max-h-[85vh] overflow-y-auto text-xs space-y-2">
             <div class="flex justify-between items-center mb-1">
@@ -475,8 +476,14 @@
                 <button onclick="closeModals()" class="text-lg font-bold text-gray-400 hover:text-gray-700">&times;</button>
             </div>
             <input type="hidden" id="animalEditKey" value="">
-            <label class="block text-gray-600 font-bold">पशु की श्रेणी (Category):</label>
-            <input type="text" id="anType" placeholder="श्रेणी लिखें (उदा. गाय, भैंस, बकरा, घोड़ा...)" class="w-full p-2 border rounded-lg bg-amber-50/50 outline-none font-bold text-amber-900">
+            
+            <label class="block text-gray-600 font-bold">पशु श्रेणी (चुनें या नई टाइप करें):</label>
+            <select id="anTypeSelect" onchange="syncCategorySelect(this, 'anType')" class="w-full p-2 border rounded-lg bg-white outline-none mb-1">
+                <option value="">-- मौजूद श्रेणी चुनें (Select Existing) --</option>
+                <option value="__NEW__">➕ नई श्रेणी टाइप करें (Type New Category)</option>
+            </select>
+            <input type="text" id="anType" placeholder="श्रेणी लिखें (उदा. गाय, भैंस, बकरा...)" class="w-full p-2 border rounded-lg bg-amber-50/50 outline-none font-bold text-amber-900">
+            
             <input type="text" id="anTitle" placeholder="शीर्षक/नस्ल (उदा. साहीवाल गाय)" class="w-full p-2 border rounded-lg outline-none">
             <input type="number" id="anPrice" placeholder="कीमत (₹)" class="w-full p-2 border rounded-lg outline-none">
             <input type="text" id="anDetails" placeholder="दूध क्षमता / उम्र / अन्य विवरण..." class="w-full p-2 border rounded-lg outline-none">
@@ -491,13 +498,20 @@
         </div>
     </div>
 
-    <!-- Teacher Modal -->
+    <!-- 5. TEACHER MODAL (SELECT EXISTING OR TYPE NEW SUBJECT) -->
     <div id="teacherRegModal" class="universal-modal fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-sm p-5 rounded-2xl max-h-[85vh] overflow-y-auto text-xs space-y-2">
             <div class="flex justify-between items-center mb-1"><h3 class="font-bold text-sm text-indigo-900">शिक्षक प्रोफाइल जोड़ें</h3><button onclick="closeModals()" class="text-lg font-bold">&times;</button></div>
             <input type="hidden" id="teacherEditKey" value="">
             <input type="text" id="tName" placeholder="शिक्षक का नाम" class="w-full p-2 border rounded-lg outline-none">
-            <input type="text" id="tSubject" placeholder="विषय टाइप करें (उदा. Maths, Science, English...)" class="w-full p-2 border rounded-lg bg-indigo-50/50 outline-none font-bold text-indigo-900">
+            
+            <label class="block text-gray-600 font-bold">विषय (चुनें या नया टाइप करें):</label>
+            <select id="tSubjectSelect" onchange="syncCategorySelect(this, 'tSubject')" class="w-full p-2 border rounded-lg bg-white outline-none mb-1">
+                <option value="">-- मौजूद विषय चुनें (Select Existing) --</option>
+                <option value="__NEW__">➕ नया विषय टाइप करें (Type New Subject)</option>
+            </select>
+            <input type="text" id="tSubject" placeholder="विषय लिखें (उदा. Maths, Science...)" class="w-full p-2 border rounded-lg bg-indigo-50/50 outline-none font-bold text-indigo-900">
+            
             <input type="text" id="tExp" placeholder="अनुभव (उदा. 4 Years Exp)" class="w-full p-2 border rounded-lg outline-none">
             <textarea id="tDesc" placeholder="योग्यता एवं अन्य विवरण..." class="w-full p-2 border rounded-lg h-14 outline-none resize-none"></textarea>
             <input type="number" id="tPhone" placeholder="Calling Phone" class="w-full p-2 border rounded-lg outline-none">
@@ -525,12 +539,19 @@
         </div>
     </div>
 
-    <!-- Register Service Modal -->
+    <!-- Register Service Modal (SELECT EXISTING OR TYPE NEW) -->
     <div id="addServiceModal" class="universal-modal fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-sm p-5 rounded-2xl max-h-[80vh] overflow-y-auto text-xs space-y-2">
             <div class="flex justify-between items-center"><h3 class="font-bold text-sm">Register Service</h3><button onclick="closeModals()" class="text-lg font-bold">&times;</button></div>
             <input type="text" id="srvRegName" placeholder="Name / Business Name" class="w-full p-2 border rounded-lg">
-            <input type="text" id="srvRegCat" placeholder="Category" class="w-full p-2 border rounded-lg">
+            
+            <label class="block text-gray-600 font-bold">कैटेगरी (चुनें या नई टाइप करें):</label>
+            <select id="srvCatSelect" onchange="syncCategorySelect(this, 'srvRegCat')" class="w-full p-2 border rounded-lg bg-white outline-none mb-1">
+                <option value="">-- मौजूद कैटेगरी चुनें (Select Existing) --</option>
+                <option value="__NEW__">➕ नई कैटेगरी टाइप करें (Type New Category)</option>
+            </select>
+            <input type="text" id="srvRegCat" placeholder="कैटेगरी (उदा. Plumber, Electrician...)" class="w-full p-2 border rounded-lg">
+            
             <textarea id="srvRegDesc" placeholder="Description..." class="w-full p-2 border rounded-lg h-14"></textarea>
             <input type="number" id="srvRegPhone" placeholder="Phone" class="w-full p-2 border rounded-lg">
             <input type="number" id="srvRegWa" placeholder="WhatsApp" class="w-full p-2 border rounded-lg">
@@ -558,9 +579,19 @@
         let allAnimals = {}, currentAnimalFilter = 'all';
         let currentFoodVegFilter = 'nonveg'; 
         let currentMartMode = 'grocery';
-
-        // 🔴 MARKET STATUS (OPEN/CLOSED)
         let marketStatus = { mart: 'open', vegetables: 'open', food: 'open', books: 'open' };
+
+        // SYNC CATEGORY HELPER (SELECT OR TYPE)
+        function syncCategorySelect(selectEl, inputId) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            if (selectEl.value === '__NEW__') {
+                input.value = '';
+                input.focus();
+            } else if (selectEl.value !== '') {
+                input.value = selectEl.value;
+            }
+        }
 
         function compressImage(file, cb) {
             if(!file) return cb(null);
@@ -621,7 +652,6 @@
             }, 3500);
         }
 
-        // 📢 LOAD ANNOUNCEMENT TICKER FROM FIREBASE
         function loadAnnouncement() {
             db.ref('announcement').on('value', s => {
                 const data = s.val();
@@ -636,7 +666,6 @@
             });
         }
 
-        // 🔴 LOAD MARKET STATUS (OPEN/CLOSED)
         function loadMarketStatus() {
             db.ref('market_status').on('value', s => {
                 marketStatus = s.val() || { mart: 'open', vegetables: 'open', food: 'open', books: 'open' };
@@ -661,8 +690,6 @@
             startFoodAutoSlide(); 
             startMartAutoSlide();
             populateWards(); 
-            renderServiceCategoryChips();
-            renderTeacherCategories();
             loadAnimals();
             loadAnnouncement();
             loadMarketStatus();
@@ -768,9 +795,8 @@
             adjustFloatingNav();
         }
 
-        // ==================== UNIFIED + / - CART FUNCTIONALITY (CHECK MARKET STATUS) ====================
+        // --- CART WITH +/- ---
         function changeCartItemQty(type, id, change, itemObj) {
-            // Check if market is closed
             if (change > 0) {
                 if (type === 'GROCERY') {
                     if (itemObj && itemObj.isVeg && marketStatus.vegetables === 'closed') {
@@ -787,7 +813,6 @@
 
             let cart = (type === 'GROCERY') ? groceryCart : ((type === 'FOOD') ? foodCart : booksCart);
             
-            // Food restaurant change check
             if (type === 'FOOD' && itemObj && itemObj.restaurantId) {
                 const keys = Object.keys(foodCart);
                 if (keys.length > 0 && foodCart[keys[0]].restaurantId !== itemObj.restaurantId) {
@@ -816,7 +841,6 @@
                 }
             }
 
-            // Refresh UI
             if (type === 'GROCERY') {
                 updateGroceryUI();
                 filterMart(document.getElementById('mart-search')?.value || '');
@@ -845,7 +869,7 @@
 
         function updateFoodUI() {
             let total = 0, count = 0, del = 0;
-            for (let k in foodCart) { total += foodCart[k].price * foodCart[k].qty; count += foodCart[k].qty; del = foodCart[k].del; }
+            for (let k in foodCart) { total += foodCart[k].price * foodCart[k].qty; count += foodCart[k].qty; del += foodCart[k].del; }
             document.getElementById('food-cart-total-display').textContent = total ? total + del : 0;
             document.getElementById('food-checkout-bar').classList.toggle('hidden', count === 0);
             adjustFloatingNav();
@@ -909,10 +933,10 @@
             if(!container) return;
             const vegList = Object.values(vegData);
             const defaultVeg = [
-                { id: 'v1', name: 'देसी टमाटर', price: 30, weight: '1 kg', img: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=300', payMode: 'BOTH' },
-                { id: 'v2', name: 'हरी मिर्च', price: 20, weight: '250g', img: 'https://images.unsplash.com/photo-1588252303782-cb80119abd6d?w=300', payMode: 'BOTH' },
-                { id: 'v3', name: 'नया आलू', price: 25, weight: '1 kg', img: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=300', payMode: 'BOTH' },
-                { id: 'v4', name: 'प्याज', price: 35, weight: '1 kg', img: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=300', payMode: 'BOTH' }
+                { id: 'v1', name: 'देसी टमाटर', price: 30, weight: '1 kg', img: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=300' },
+                { id: 'v2', name: 'हरी मिर्च', price: 20, weight: '250g', img: 'https://images.unsplash.com/photo-1588252303782-cb80119abd6d?w=300' },
+                { id: 'v3', name: 'नया आलू', price: 25, weight: '1 kg', img: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=300' },
+                { id: 'v4', name: 'प्याज', price: 35, weight: '1 kg', img: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=300' }
             ];
             const finalVeg = vegList.length ? vegList : defaultVeg;
 
@@ -1078,9 +1102,9 @@
             });
         }
 
-        // --- 3. SERVICES ---
+        // --- 3. SERVICES (DYNAMIC SYNC CATEGORIES) ---
         function renderServiceCategoryChips() {
-            const servCats = [
+            const defaultServCats = [
                 { id: 'all', name: 'Home / All', icon: 'fa-solid fa-house' },
                 { id: 'Plumber', name: 'Plumber', icon: 'fa-solid fa-wrench' },
                 { id: 'Electrician', name: 'Electrician', icon: 'fa-solid fa-bolt' },
@@ -1089,21 +1113,42 @@
                 { id: 'AC / Fridge', name: 'AC / Fridge', icon: 'fa-solid fa-snowflake' },
                 { id: 'Cleaning', name: 'Cleaning', icon: 'fa-solid fa-broom' }
             ];
-            const c = document.getElementById('srv-categories-chips'); if(!c) return;
-            c.innerHTML = servCats.map(x => `
-                <button onclick="filterLocalServices('${x.id}')" class="px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap border flex items-center gap-1.5 transition ${currentSrvCat === x.id ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs' : 'bg-white text-gray-700 border-emerald-100'}">
-                    <i class="${x.icon} text-xs"></i> <span>${x.name}</span>
-                </button>
-            `).join('');
+
+            const dynamicCats = [...new Set(allSrvProvs.map(p => p.cat).filter(Boolean))];
+            dynamicCats.forEach(dc => {
+                if (!defaultServCats.some(sc => sc.id.toLowerCase() === dc.toLowerCase())) {
+                    defaultServCats.push({ id: dc, name: dc, icon: 'fa-solid fa-briefcase' });
+                }
+            });
+
+            const c = document.getElementById('srv-categories-chips'); 
+            if(c) {
+                c.innerHTML = defaultServCats.map(x => `
+                    <button onclick="filterLocalServices('${x.id}')" class="px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap border flex items-center gap-1.5 transition ${currentSrvCat.toLowerCase() === x.id.toLowerCase() ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs' : 'bg-white text-gray-700 border-emerald-100'}">
+                        <i class="${x.icon} text-xs"></i> <span>${x.name}</span>
+                    </button>
+                `).join('');
+            }
+
+            const srvSel = document.getElementById('srvCatSelect');
+            if (srvSel) {
+                srvSel.innerHTML = '<option value="">-- मौजूद कैटेगरी चुनें (Select Existing) --</option>' +
+                    dynamicCats.map(ct => `<option value="${ct}">${ct}</option>`).join('') +
+                    '<option value="__NEW__">➕ नई कैटेगरी टाइप करें (Type New Category)</option>';
+            }
         }
+
         function loadLocalServices() {
             db.ref('local_services').on('value', s => {
                 const d = s.val() || {}; allSrvProvs = Object.values(d.providers || {}).filter(p => p.status === 'approved');
+                renderServiceCategoryChips();
                 filterLocalServices(currentSrvCat);
             });
         }
+
         function filterLocalServices(catId) {
-            currentSrvCat = catId; renderServiceCategoryChips();
+            currentSrvCat = catId; 
+            renderServiceCategoryChips();
             const list = document.getElementById('srv-providers-list'); if(!list) return;
             const filtered = allSrvProvs.filter(p => catId === 'all' || (p.cat || '').toLowerCase().includes(catId.toLowerCase()));
             list.innerHTML = filtered.map(p => `
@@ -1114,6 +1159,7 @@
                 </div>
             `).join('') || '<p class="text-center text-gray-400 py-6 text-xs">No providers found.</p>';
         }
+
         function submitService() {
             const name = document.getElementById('srvRegName').value, cat = document.getElementById('srvRegCat').value, desc = document.getElementById('srvRegDesc').value, phone = document.getElementById('srvRegPhone').value, wa = document.getElementById('srvRegWa').value;
             if(!name||!cat||!phone) return alert("Fill required details!");
@@ -1122,7 +1168,7 @@
             });
         }
 
-        // --- 4. PASHU MANDI ---
+        // --- 4. PASHU MANDI (DYNAMIC CATEGORIES) ---
         function loadAnimals() {
             db.ref('animals').on('value', s => {
                 allAnimals = s.val() || {};
@@ -1140,6 +1186,14 @@
                     ${c === 'all' ? 'सभी पशु' : c}
                 </button>
             `).join('');
+
+            const anSel = document.getElementById('anTypeSelect');
+            if (anSel) {
+                const cats = [...new Set(Object.values(allAnimals).map(a => a.type).filter(Boolean))];
+                anSel.innerHTML = '<option value="">-- मौजूद श्रेणी चुनें (Select Existing) --</option>' +
+                    cats.map(ct => `<option value="${ct}">${ct}</option>`).join('') +
+                    '<option value="__NEW__">➕ नई श्रेणी टाइप करें (Type New Category)</option>';
+            }
         }
 
         function filterAnimals(cat) {
@@ -1185,6 +1239,7 @@
         function openAnimalPostModal() {
             if (document.getElementById('animalModalTitle')) document.getElementById('animalModalTitle').innerText = "पशु बिक्री हेतु जोड़ें";
             if (document.getElementById('animalEditKey')) document.getElementById('animalEditKey').value = '';
+            if (document.getElementById('anTypeSelect')) document.getElementById('anTypeSelect').value = '';
             if (document.getElementById('anType')) document.getElementById('anType').value = '';
             if (document.getElementById('anTitle')) document.getElementById('anTitle').value = '';
             if (document.getElementById('anPrice')) document.getElementById('anPrice').value = '';
@@ -1297,22 +1352,32 @@
         }
 
         function renderTeacherCategories() {
-            const subs = [
-                { id: 'all', name: 'Home (सभी)' }, { id: 'Mathematics', name: 'Mathematics' }, { id: 'Science', name: 'Science' },
-                { id: 'English', name: 'English' }, { id: 'Hindi', name: 'Hindi' }, { id: 'Sanskrit', name: 'Sanskrit' }, { id: 'Primary', name: 'Primary (1-5)' }
-            ];
             const box = document.getElementById('teacher-categories'); if(!box) return;
-            box.innerHTML = subs.map(s => `
-                <button onclick="filterTeachers('${s.id}')" class="px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap border transition ${currentTeacherSub === s.id ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs' : 'bg-white text-gray-700 border-indigo-100'}">
-                    ${s.name}
+            const uniqueSubs = ['all', ...new Set(Object.values(allTeachers).map(t => t.subject).filter(Boolean))];
+            
+            box.innerHTML = uniqueSubs.map(s => `
+                <button onclick="filterTeachers('${s}')" class="px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap border transition ${currentTeacherSub === s ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs' : 'bg-white text-gray-700 border-indigo-100'}">
+                    ${s === 'all' ? 'Home (सभी)' : s}
                 </button>
             `).join('');
+
+            const tSubSel = document.getElementById('tSubjectSelect');
+            if (tSubSel) {
+                const subs = [...new Set(Object.values(allTeachers).map(t => t.subject).filter(Boolean))];
+                tSubSel.innerHTML = '<option value="">-- मौजूद विषय चुनें (Select Existing) --</option>' +
+                    subs.map(sb => `<option value="${sb}">${sb}</option>`).join('') +
+                    '<option value="__NEW__">➕ नया विषय टाइप करें (Type New Subject)</option>';
+            }
         }
+
         function loadTeachers() {
             db.ref('ladnun_teachers').on('value', s => {
-                allTeachers = s.val() || {}; filterTeachers(currentTeacherSub);
+                allTeachers = s.val() || {}; 
+                renderTeacherCategories();
+                filterTeachers(currentTeacherSub);
             });
         }
+
         function filterTeachers(subId) {
             currentTeacherSub = subId; renderTeacherCategories();
             const l = document.getElementById('teachers-list'); if(!l) return; l.innerHTML = '';
@@ -1346,7 +1411,13 @@
                 `;
             });
         }
-        function openTeacherRegModal() { document.getElementById('tSubject').value = ''; document.getElementById('teacherRegModal').classList.remove('hidden'); }
+
+        function openTeacherRegModal() { 
+            document.getElementById('tSubject').value = ''; 
+            if (document.getElementById('tSubjectSelect')) document.getElementById('tSubjectSelect').value = '';
+            document.getElementById('teacherRegModal').classList.remove('hidden'); 
+        }
+
         function saveTeacherProfile() {
             const name = document.getElementById('tName').value.trim();
             const subject = document.getElementById('tSubject').value.trim();
@@ -1428,7 +1499,7 @@
             });
         }
 
-        // --- BOOKS ---
+        // --- 7. BOOKS (FIXED PROFESSIONAL ALIGNMENT & DYNAMIC CLASS CATEGORIES) ---
         function loadBooksData() { 
             db.ref('books').on('value', s => { 
                 const d = s.val() || {}; 
@@ -1464,6 +1535,7 @@
             filterBooks();
         }
 
+        // FIXED BOOK CARD RENDERING (CLEAN ALIGNMENT & NO TEXT OVERFLOW)
         function filterBooks() {
             const list = document.getElementById('prodList');
             const filtered = allBooks.filter(p => {
@@ -1471,24 +1543,34 @@
                 const matchClass = (currentBookClass === 'all') || (p.classCat === currentBookClass);
                 return matchMed && matchClass;
             });
+
             list.innerHTML = filtered.map(b => {
                 const qty = booksCart[b.id] ? booksCart[b.id].qty : 0;
                 const btnOrBadge = qty > 0 ? `
-                    <div class="qty-badge bg-blue-600 text-white w-full">
+                    <div class="qty-badge bg-blue-600 text-white">
                         <button onclick="changeCartItemQty('BOOK', '${b.id}', -1)">-</button>
                         <span>${qty}</span>
                         <button onclick="changeCartItemQty('BOOK', '${b.id}', 1)">+</button>
                     </div>
                 ` : `
-                    <button onclick="changeCartItemQty('BOOK', '${b.id}', 1, {name:'${b.title.replace(/'/g,"\\'")}', price:${b.price}, del:${b.deliveryCharge||20}, payMode:'${b.payMode||'BOTH'}'})" class="w-full bg-blue-600 text-white text-xs font-bold py-1.5 rounded-xl active:scale-95 transition">+ ADD</button>
+                    <button onclick="changeCartItemQty('BOOK', '${b.id}', 1, {name:'${b.title.replace(/'/g,"\\'")}', price:${b.price}, del:${b.deliveryCharge||20}, payMode:'${b.payMode||'BOTH'}'})" class="w-full bg-blue-600 text-white text-xs font-bold py-1.5 rounded-xl active:scale-95 transition shadow-xs">+ ADD</button>
                 `;
 
                 return `
-                <div class="bg-white p-2.5 rounded-2xl border border-blue-100 flex flex-col justify-between shadow-xs">
-                    <img src="${b.img}" class="h-28 w-full object-contain mb-2">
-                    <h4 class="font-bold text-xs line-clamp-2 text-gray-800">${b.title}</h4>
-                    <span class="text-[10px] text-blue-600 font-bold mt-1">${b.classCat || 'All'}</span>
-                    <div class="mt-2 flex justify-between items-center"><span class="font-bold text-sm text-blue-700">₹${b.price}</span>${btnOrBadge}</div>
+                <div class="bg-white p-3 rounded-2xl border border-blue-100 shadow-xs flex flex-col justify-between h-full hover:shadow-md transition">
+                    <div>
+                        <div class="h-32 w-full bg-blue-50/40 rounded-xl overflow-hidden mb-2.5 flex items-center justify-center p-2">
+                            <img src="${b.img}" class="max-h-full max-w-full object-contain" onerror="this.src='https://via.placeholder.com/150'">
+                        </div>
+                        <span class="text-[10px] bg-blue-50 text-blue-700 font-bold px-2 py-0.5 rounded-md inline-block mb-1">${b.classCat || 'General'}</span>
+                        <h4 class="font-bold text-xs text-gray-800 leading-snug line-clamp-2 h-8">${b.title}</h4>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
+                        <span class="font-black text-sm text-blue-700">₹${b.price}</span>
+                        <div class="w-24">
+                            ${btnOrBadge}
+                        </div>
+                    </div>
                 </div>`;
             }).join('') || '<p class="text-center text-gray-400 py-6 text-xs col-span-2">No books found.</p>';
         }
@@ -1534,7 +1616,7 @@
                             <span class="font-bold text-xs text-gray-800">${it.name}</span>
                             <span class="block text-[11px] text-blue-600 font-black">₹${it.price * it.qty} (₹${it.price} each)</span>
                         </div>
-                        <div class="qty-badge bg-blue-600 text-white">
+                        <div class="qty-badge bg-blue-600 text-white w-20">
                             <button onclick="changeCartItemQty('${currentOrderType}', '${it.id}', -1)">-</button>
                             <span class="px-1 font-black">${it.qty}</span>
                             <button onclick="changeCartItemQty('${currentOrderType}', '${it.id}', 1)">+</button>
@@ -1566,7 +1648,6 @@
         }
 
         function openUniversalCheckout(type) {
-            // Check if market is closed
             if (type === 'GROCERY' && marketStatus.mart === 'closed') {
                 return alert("ग्रोसरी मार्ट अभी बंद है! नए ऑर्डर स्वीकार नहीं किए जा रहे हैं।");
             } else if (type === 'FOOD' && marketStatus.food === 'closed') {
