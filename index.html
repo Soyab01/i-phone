@@ -43,7 +43,7 @@
         .nav-item.active { color: var(--nav-blue); transform: translateY(-5px); }
         .nav-item.active i { transform: scale(1.2); filter: drop-shadow(0 4px 8px rgba(37,99,235,0.4)); color: var(--nav-blue); }
 
-        /* Floating Buttons: Always Visible & Auto-Adjust */
+        /* Floating Buttons Auto-adjust */
         .floating-right-nav { 
             position: fixed; 
             right: 15px; 
@@ -58,10 +58,9 @@
         .float-btn { width: 46px; height: 46px; background: rgba(255,255,255,0.96); backdrop-filter: blur(6px); border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 8px 20px rgba(37,99,235,0.22); cursor: pointer; font-size: 18px; transition: 0.3s; border: 2px solid var(--nav-blue); color: var(--nav-blue); }
         .float-btn:hover { transform: scale(1.1); }
 
-        /* Qty Badge for +/- */
-        .qty-badge { display: flex; align-items: center; justify-content: space-between; border-radius: 12px; padding: 2px 5px; font-weight: 800; font-size: 11px; gap: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); width: 100%; }
-        .qty-badge button { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-weight: 900; background: rgba(255,255,255,0.25); border-radius: 6px; transition: 0.15s; font-size: 13px; }
-        .qty-badge button:active { transform: scale(0.9); }
+        /* Qty Badge */
+        .qty-badge { display: flex; align-items: center; justify-content: space-between; border-radius: 12px; padding: 2px 6px; font-weight: 800; font-size: 11px; gap: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+        .qty-badge button { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-weight: 900; background: rgba(255,255,255,0.25); border-radius: 8px; transition: 0.15s; font-size: 14px; }
 
         .track-line { position: relative; height: 5px; background: #e2e8f0; margin: 26px 10px 12px 10px; border-radius: 4px; }
         .track-fill { position: absolute; left: 0; top: 0; height: 100%; border-radius: 4px; transition: width 0.8s ease-in-out; }
@@ -136,11 +135,12 @@
                 <span>ग्रोसरी मार्ट अभी बंद है (Grocery Orders Paused)</span>
             </div>
             
+            <!-- Top Pill Switcher: Grocery vs Sabzi -->
             <div class="flex justify-center mb-3">
                 <div class="bg-white p-1 rounded-full flex w-full max-w-[320px] relative shadow-xs border border-emerald-200">
                     <div id="sliderBgMart" class="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] bg-emerald-600 rounded-full shadow-sm transition-transform duration-300"></div>
-                    <button onclick="setMartMode('grocery')" id="btnMartGroc" class="flex-1 py-1.5 text-xs font-bold text-white relative z-10 transition">🛒 ग्रोसरी</button>
-                    <button onclick="setMartMode('vegetables')" id="btnMartVeg" class="flex-1 py-1.5 text-xs font-bold text-emerald-900 relative z-10 transition">🥦 ताज़ा सब्जियां</button>
+                    <button onclick="setMartMode('grocery')" id="btnMartGroc" class="flex-1 py-1.5 text-xs font-bold text-white relative z-10 transition">🛒 ग्रोसरी (Grocery)</button>
+                    <button onclick="setMartMode('vegetables')" id="btnMartVeg" class="flex-1 py-1.5 text-xs font-bold text-emerald-900 relative z-10 transition">🥦 ताज़ा सब्जियां (Sabzi)</button>
                 </div>
             </div>
 
@@ -156,6 +156,7 @@
                 <span>ताज़ा सब्जी मंडी अभी बंद है (Vegetables Market Closed)</span>
             </div>
 
+            <!-- Auto-sliding Sabzi Carousel -->
             <div class="bg-white/90 p-3 rounded-2xl border border-emerald-100 mb-4 shadow-xs">
                 <div class="flex justify-between items-center mb-2">
                     <span class="text-xs font-black text-emerald-900 flex items-center gap-1.5"><i class="fa-solid fa-carrot text-emerald-600"></i> ताज़ा हरी सब्जियां (Fresh Sabzi)</span>
@@ -164,17 +165,20 @@
                 <div id="mart-veg-slider" class="flex gap-3 overflow-x-auto qmart-hide-scroll snap-x pb-1 scroll-smooth"></div>
             </div>
 
+            <!-- Pane 1: Grocery -->
             <div id="mart-grocery-pane">
                 <div id="mart-banners" class="flex gap-3 overflow-x-auto qmart-hide-scroll snap-x mb-4 scroll-smooth"></div>
                 <div id="groc-categories" class="flex gap-4 overflow-x-auto qmart-hide-scroll mb-4 pb-1"></div>
                 <div id="groc-products-container" class="space-y-5"></div>
             </div>
 
+            <!-- Pane 2: Vegetables Grid -->
             <div id="mart-veg-pane" class="hidden">
                 <h3 class="font-extrabold text-sm text-gray-800 mb-3">सभी हरी व ताज़ा सब्जियां</h3>
                 <div id="mart-veg-full-grid" class="grid grid-cols-2 gap-3 pb-8"></div>
             </div>
 
+            <!-- Cart Float Bar -->
             <div id="groc-checkout-bar" class="fixed bottom-[75px] left-4 right-4 bg-emerald-700 text-white p-3.5 rounded-2xl shadow-xl z-40 hidden flex justify-between items-center cursor-pointer max-w-xl mx-auto" onclick="openUniversalCheckout('GROCERY')">
                 <div><p class="text-sm font-extrabold"><span id="groc-item-count">0</span> Items | ₹<span id="groc-final-total">0</span></p><p class="text-[10px] opacity-90">View Cart</p></div>
                 <div class="font-bold text-sm flex items-center gap-2">Proceed <i class="fa-solid fa-arrow-right"></i></div>
@@ -191,6 +195,7 @@
                 <span>फूड डिलीवरी अभी बंद है (Food Orders Closed)</span>
             </div>
             
+            <!-- 2-Button Toggle: Non-Veg (Default) vs Veg -->
             <div class="flex justify-center mb-4">
                 <div class="bg-white p-1 rounded-full flex w-full max-w-[260px] relative shadow-xs border border-red-200">
                     <div id="sliderBgFood" class="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] bg-red-600 rounded-full shadow-sm transition-transform duration-300"></div>
@@ -215,26 +220,35 @@
             <div id="restaurants-list" class="space-y-4"></div>
         </div>
 
-        <!-- Food Menu Details -->
+        <!-- 2. FOOD MENU DETAILS (ZOMATO-INSPIRED DESIGN WITH FULL IMAGE & BADGE) -->
         <div id="menu-view" class="container-food p-4 hidden max-w-xl mx-auto bg-food-grad min-h-screen">
-            <button class="bg-white px-3 py-1.5 rounded-full text-xs font-bold shadow mb-3 text-gray-600 flex items-center gap-1.5" onclick="showPanel('home-view')"><i class="fa-solid fa-arrow-left"></i> Back</button>
-            <img id="menu-restaurant-image" src="" class="w-full h-44 object-cover rounded-2xl shadow mb-3">
-            <h2 id="menu-restaurant-name" class="text-xl font-bold text-gray-800">Restaurant</h2>
-            <p id="menu-restaurant-cuisine" class="text-xs text-gray-500 mb-4"></p>
-            <div id="menu-items-list" class="space-y-3 mb-20"></div>
+            <button class="bg-white px-3.5 py-1.5 rounded-full text-xs font-bold shadow mb-3 text-gray-600 flex items-center gap-1.5 active:scale-95 transition" onclick="showPanel('home-view')">
+                <i class="fa-solid fa-arrow-left"></i> Back to Restaurants
+            </button>
+            
+            <div class="bg-white rounded-3xl p-4 shadow-sm border border-red-50 mb-4">
+                <img id="menu-restaurant-image" src="" class="w-full h-44 object-cover rounded-2xl shadow mb-3">
+                <h2 id="menu-restaurant-name" class="text-xl font-black text-gray-900">Restaurant</h2>
+                <p id="menu-restaurant-cuisine" class="text-xs text-gray-500 mt-0.5"></p>
+            </div>
+
+            <h3 class="font-black text-sm text-gray-800 mb-3 px-1">Recommended Menu Items</h3>
+            
+            <!-- Zomato-style Dish List Container -->
+            <div id="menu-items-list" class="space-y-3.5 mb-24"></div>
+
             <div id="food-checkout-bar" class="fixed bottom-[75px] left-4 right-4 bg-red-500 text-white p-3.5 rounded-2xl shadow-xl z-40 hidden flex justify-between items-center cursor-pointer max-w-xl mx-auto" onclick="openUniversalCheckout('FOOD')">
                 <p class="text-sm font-extrabold"><i class="fa-solid fa-burger"></i> Cart (₹<span id="food-cart-total-display">0</span>)</p>
                 <div class="font-bold text-sm flex items-center gap-2">Proceed <i class="fa-solid fa-arrow-right"></i></div>
             </div>
         </div>
 
-        <!-- 3. LOCAL SERVICES (100% DYNAMIC CATEGORIES LIKE ANIMALS) -->
+        <!-- 3. LOCAL SERVICES -->
         <div id="services-view" class="p-4 max-w-xl mx-auto hidden bg-serv-grad min-h-screen">
             <h1 class="uniform-title text-emerald-700"><i class="fa-solid fa-briefcase"></i> Local Services</h1>
             <button onclick="openAddServiceModal()" class="w-full bg-emerald-600 text-white p-3 rounded-xl font-bold shadow-md mb-4 flex justify-center items-center gap-2 text-xs">+ Register Your Service Free</button>
             <div class="mb-3">
                 <span class="text-xs font-bold text-gray-500 block mb-2 uppercase">Select Category:</span>
-                <!-- Dynamic Chips populated strictly from DB -->
                 <div id="srv-categories-chips" class="flex gap-2.5 overflow-x-auto qmart-hide-scroll pb-2"></div>
             </div>
             <div id="srv-providers-list" class="space-y-3.5 pb-20"></div>
@@ -252,7 +266,6 @@
                 <i class="fa-solid fa-plus-circle text-sm"></i> + अपना पशु बेचने के लिए जोड़ें
             </button>
 
-            <!-- Dynamic Category Chips -->
             <div class="mb-3">
                 <div id="animal-categories" class="flex gap-2 overflow-x-auto qmart-hide-scroll pb-1"></div>
             </div>
@@ -535,7 +548,7 @@
         </div>
     </div>
 
-    <!-- 3. SERVICES MODAL (DYNAMIC SELECT OR TYPE) -->
+    <!-- 3. SERVICES MODAL -->
     <div id="addServiceModal" class="universal-modal fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-sm p-5 rounded-2xl max-h-[80vh] overflow-y-auto text-xs space-y-2">
             <div class="flex justify-between items-center"><h3 class="font-bold text-sm">Register Service</h3><button onclick="closeModals()" class="text-lg font-bold">&times;</button></div>
@@ -577,7 +590,6 @@
         let currentMartMode = 'grocery';
         let marketStatus = { mart: 'open', vegetables: 'open', food: 'open', books: 'open' };
 
-        // SYNC CATEGORY HELPER (SELECT OR TYPE)
         function syncCategorySelect(selectEl, inputId) {
             const input = document.getElementById(inputId);
             if (!input) return;
@@ -686,6 +698,8 @@
             startFoodAutoSlide(); 
             startMartAutoSlide();
             populateWards(); 
+            renderServiceCategoryChips();
+            renderTeacherCategories();
             loadAnimals();
             loadAnnouncement();
             loadMarketStatus();
@@ -791,7 +805,7 @@
             adjustFloatingNav();
         }
 
-        // --- UNIFIED CART WITH +/- ---
+        // ==================== CART WITH +/- QUANTITY ====================
         function changeCartItemQty(type, id, change, itemObj) {
             if (change > 0) {
                 if (type === 'GROCERY') {
@@ -1075,26 +1089,66 @@
             showPanel('menu-view');
         }
 
+        // ==================== ZOMATO-INSPIRED DISH CARDS (WITH FULL CLEAR IMAGE & ADD BUTTON) ====================
         function renderFoodMenuItems() {
             if (!activeRestaurantMenuId) return;
             const l = document.getElementById('menu-items-list');
-            l.innerHTML = 'Loading dishes...';
+            l.innerHTML = '<p class="text-center text-gray-400 py-6 text-xs">मेन्यू लोड हो रहा है...</p>';
+            
             db.ref(`menus/${activeRestaurantMenuId}`).once('value', s => {
-                const m = s.val() || {}; l.innerHTML = '';
-                Object.keys(m).forEach(k => {
-                    const isVeg = (m[k].foodType === 'veg');
+                const m = s.val() || {}; 
+                l.innerHTML = '';
+                const keys = Object.keys(m);
+                if (!keys.length) {
+                    l.innerHTML = '<p class="text-center text-gray-400 py-8 text-xs">इस रेस्टोरेंट में अभी कोई डिश उपलब्ध नहीं है।</p>';
+                    return;
+                }
+
+                keys.forEach(k => {
+                    const d = m[k];
+                    const isVeg = (d.foodType === 'veg');
                     const qty = foodCart[k] ? foodCart[k].qty : 0;
+                    const dishImg = d.img || d.imageUrl || d.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300';
+
+                    // Zomato Style Floating ADD or +/- Badge
                     const btnOrBadge = qty > 0 ? `
-                        <div class="qty-badge bg-red-600 text-white min-w-[85px]">
-                            <button onclick="changeCartItemQty('FOOD', '${k}', -1)">-</button>
-                            <span>${qty}</span>
-                            <button onclick="changeCartItemQty('FOOD', '${k}', 1)">+</button>
+                        <div class="bg-white text-red-600 border border-red-500 font-black text-xs px-2.5 py-1 rounded-xl shadow-md flex items-center justify-between gap-2.5 min-w-[85px]">
+                            <button onclick="changeCartItemQty('FOOD', '${k}', -1)" class="w-5 h-5 flex items-center justify-center font-black text-sm text-red-600 active:scale-90">-</button>
+                            <span class="text-xs font-black text-red-600">${qty}</span>
+                            <button onclick="changeCartItemQty('FOOD', '${k}', 1)" class="w-5 h-5 flex items-center justify-center font-black text-sm text-red-600 active:scale-90">+</button>
                         </div>
                     ` : `
-                        <button onclick="changeCartItemQty('FOOD', '${k}', 1, {name:'${m[k].name.replace(/'/g,"\\'")}', price:${m[k].price}, del:${m[k].deliveryCharge||50}, payMode:'${m[k].payMode||currentActiveRestPayMode}', restaurantId:'${activeRestaurantMenuId}'})" class="bg-red-500 text-white font-bold text-xs px-3.5 py-1.5 rounded-xl shadow-xs active:scale-95 transition">+ ADD</button>
+                        <button onclick="changeCartItemQty('FOOD', '${k}', 1, {name:'${d.name.replace(/'/g,"\\'")}', price:${d.price}, del:${d.deliveryCharge||50}, payMode:'${d.payMode||currentActiveRestPayMode}', restaurantId:'${activeRestaurantMenuId}'})" 
+                                class="bg-white text-red-600 border border-red-200 hover:bg-red-50 font-black text-xs px-5 py-1.5 rounded-xl shadow-md uppercase tracking-wider active:scale-95 transition">
+                            ADD
+                        </button>
                     `;
 
-                    l.innerHTML += `<div class="flex justify-between items-center bg-white p-3 rounded-2xl border border-red-50 shadow-xs"><div><h4 class="font-bold text-xs text-gray-800">${isVeg ? '🟢' : '🔴'} ${m[k].name}</h4><span class="text-red-500 font-black text-xs">₹${m[k].price}</span></div>${btnOrBadge}</div>`;
+                    l.innerHTML += `
+                        <div class="bg-white p-4 rounded-3xl border border-red-50 shadow-xs flex justify-between items-start gap-3">
+                            <!-- Left: Food Details -->
+                            <div class="flex-1 pr-1">
+                                <!-- Zomato Veg / Non-Veg Square Icon -->
+                                <div class="w-4 h-4 border ${isVeg ? 'border-emerald-600' : 'border-red-600'} rounded-xs flex items-center justify-center p-0.5 mb-1.5">
+                                    <div class="w-2 h-2 rounded-full ${isVeg ? 'bg-emerald-600' : 'bg-red-600'}"></div>
+                                </div>
+                                <h4 class="font-extrabold text-sm text-gray-900 leading-snug">${d.name}</h4>
+                                <div class="font-black text-sm text-gray-900 mt-1">₹${d.price}</div>
+                                ${d.deliveryCharge ? `<p class="text-[10px] text-gray-400 font-medium mt-0.5">पैकिंग चार्ज: ₹${d.deliveryCharge}</p>` : ''}
+                                <p class="text-[11px] text-gray-500 mt-1 line-clamp-2 leading-relaxed font-normal">${d.desc || 'स्वाद व शुद्धता से भरपूर ताज़ा तैयार डिश।'}</p>
+                            </div>
+
+                            <!-- Right: Full Visible Image + Zomato ADD Button -->
+                            <div class="relative flex flex-col items-center flex-shrink-0">
+                                <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shadow-xs border border-gray-100 bg-gray-50 flex items-center justify-center">
+                                    <img loading="lazy" src="${dishImg}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300'">
+                                </div>
+                                <div class="mt-[-16px] z-10">
+                                    ${btnOrBadge}
+                                </div>
+                            </div>
+                        </div>
+                    `;
                 });
             });
         }
@@ -1104,7 +1158,6 @@
             const box = document.getElementById('srv-categories-chips'); 
             if (!box) return;
 
-            // Extract ONLY unique categories from DB
             const dynamicCats = ['all', ...new Set(allSrvProvs.map(p => p.cat).filter(Boolean))];
 
             box.innerHTML = dynamicCats.map(c => `
@@ -1114,7 +1167,6 @@
                 </button>
             `).join('');
 
-            // Also populate modal category select dropdown
             const srvSel = document.getElementById('srvCatSelect');
             if (srvSel) {
                 const catsForSelect = [...new Set(allSrvProvs.map(p => p.cat).filter(Boolean))];
@@ -1195,7 +1247,7 @@
             });
         }
 
-        // --- 4. PASHU MANDI (DYNAMIC CATEGORIES) ---
+        // --- 4. PASHU MANDI ---
         function loadAnimals() {
             db.ref('animals').on('value', s => {
                 allAnimals = s.val() || {};
@@ -1516,7 +1568,7 @@
             });
         }
 
-        // --- 7. BOOKS (ALIGNED CARDS) ---
+        // --- 7. BOOKS ---
         function loadBooksData() { 
             db.ref('books').on('value', s => { 
                 const d = s.val() || {}; 
